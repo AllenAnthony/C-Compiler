@@ -20,7 +20,7 @@ void yyerror(char *msg);
 ','		{ return COMMA; }
 
 int		{ return INT; }
-float	{ return float; }
+float	{ return FLOAT; }
 char	{ return CHAR; }
 if		{ return IF; }
 else	{ return ELSE; }
@@ -71,6 +71,8 @@ return	{ return RETURN; }
 
 [ \t]	;
 [\n]	{ yylval.line++; }
+
+.		;
 
 %%
 
