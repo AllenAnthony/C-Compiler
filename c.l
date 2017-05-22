@@ -17,33 +17,38 @@ void yyerror(char *msg);
 '['		{ return LSB; }
 ']'		{ return RSB; }
 ';'		{ return SEMICOLON; }
+','		{ return COMMA; }
+
+int		{ return INT; }
+double  { return DOUBLE; }
+char	{ return CHAR; }
 if		{ return IF; }
 else    { return ELSE; }
 while	{ return WHILE; }
 for		{ return FOR; }
-','		{ return COMMA; }
+break   { return BREAK; }
+return  { return RETURN; }
+
 '+'		{ return PLUS; }
 '-'		{ return MINUS; }
 '*'		{ return MUL; }
 '/'		{ return DIV; }
-'>='	{ return GE; }
-'<='	{ return LE; }
-'!='	{ return EQ; }
-'=='	{ return EQ; }
+'%'		{ return MOD; }
+">="	{ return GE; }
+"<="	{ return LE; }
+"!="	{ return NEQ; }
+"=="	{ return EQ; }
 '>' 	{ return GT; }
 '<' 	{ return LT; }
-'&&'	{ return AND; }
-'||'	{ return OR; }
+"&&"	{ return AND; }
+"||"	{ return OR; }
+'!'		{ return NOT; }
 '='		{ return ASSIGN; }
-int		{ return INT; }
-double  { return DOUBLE; }
-char	{ return CHAR; }
-break   { return BREAK; }
-return  { return RETURN; }
+
 
 [a-zA-Z_][a-zA-Z_0-9]* {
 			if (strlen(yytext) > ID_MAX_LEN)
-				yyerror("ident too long");
+				yyerror("Identifier too long !");
 			else
 			{
 				int len;
