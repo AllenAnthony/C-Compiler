@@ -20,7 +20,7 @@ void yyerror(char *msg);
 ','		{ return COMMA; }
 
 int		{ return INT; }
-double	{ return DOUBLE; }
+float	{ return float; }
 char	{ return CHAR; }
 if		{ return IF; }
 else	{ return ELSE; }
