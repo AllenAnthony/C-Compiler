@@ -3,60 +3,62 @@
 #include "y.tab.h"
 #include <string.h>
 #include <stdlib.h>
+#define ID_MAX_LEN 16
+
+int line = 1;
 
 struct token{
     int row;
     void *val;
 };
-int line = 0;
 
-#define ID_MAX_LEN 16
+struct token *get_token(void *val){
+	struct token *tok;
+	tok = (struct token *)malloc(sizeof(struct token));
+	tok->row = line;
+	tok->val = val;
+	return tok;
+}
 
 void yyerror(char *msg);
 %}
 
 %%
 
-'('		{
-    struct token *tok;
-	tok = (struct token *)malloc(sizeof(struct token));
-	tok->row = line;
-	tok->col = yy
-    return LP;
-    }
-')'		{ return RP; }
-'{'		{ return LCB; }
-'}'		{ return RCB; }
-'['		{ return LSB; }
-']'		{ return RSB; }
-';'		{ return SEMICOLON; }
-','		{ return COMMA; }
+'('		{ yylval.token = get_token(NULL); return LP; }
+')'		{ yylval.token = get_token(NULL); return RP; }
+'{'		{ yylval.token = get_token(NULL); return LCB; }
+'}'		{ yylval.token = get_token(NULL); return RCB; }
+'['		{ yylval.token = get_token(NULL); return LSB; }
+']'		{ yylval.token = get_token(NULL); return RSB; }
+';'		{ yylval.token = get_token(NULL); return SEMICOLON; }
+','		{ yylval.token = get_token(NULL); return COMMA; }
 
-int		{ return INT; }
-float	{ return FLOAT; }
-char	{ return CHAR; }
-if		{ return IF; }
-else	{ return ELSE; }
-while	{ return WHILE; }
-for		{ return FOR; }
-break	{ return BREAK; }
-return	{ return RETURN; }
+int		{ yylval.token = get_token(NULL); return INT; }
+float	{ yylval.token = get_token(NULL); return FLOAT; }
+char	{ yylval.token = get_token(NULL); return CHAR; }
+if		{ yylval.token = get_token(NULL); return IF; }
+else	{ yylval.token = get_token(NULL); return ELSE; }
+while	{ yylval.token = get_token(NULL); return WHILE; }
+for		{ yylval.token = get_token(NULL); return FOR; }
+break	{ yylval.token = get_token(NULL); return BREAK; }
+return	{ yylval.token = get_token(NULL); return RETURN; }
 
-'+'		{ return PLUS; }
-'-'		{ return MINUS; }
-'*'		{ return MUL; }
-'/'		{ return DIV; }
-'%'		{ return MOD; }
-">="	{ return GE; }
-"<="	{ return LE; }
-"!="	{ return NEQ; }
-"=="	{ return EQ; }
-'>'		{ return GT; }
-'<'		{ return LT; }
-"&&"	{ return AND; }
-"||"	{ return OR; }
-'!'		{ return NOT; }
-'='		{ return ASSIGN; }
+'+'		{ yylval.token = get_token(NULL); return PLUS; }
+'-'		{ yylval.token = get_token(NULL); return MINUS; }
+'*'		{ yylval.token = get_token(NULL); return MUL; }
+'/'		{ yylval.token = get_token(NULL); return DIV; }
+'%'		{ yylval.token = get_token(NULL); return MOD; }
+">="	{ yylval.token = get_token(NULL); return GE; }
+"<="	{ yylval.token = get_token(NULL); return LE; }
+"!="	{ yylval.token = get_token(NULL); return NEQ; }
+"=="	{ yylval.token = get_token(NULL); return EQ; }
+'>'		{ yylval.token = get_token(NULL); return GT; }
+'<'		{ yylval.token = get_token(NULL); return LT; }
+"&&"	{ yylval.token = get_token(NULL); return AND; }
+"||"	{ yylval.token = get_token(NULL); return OR; }
+'!'		{ yylval.token = get_token(NULL); return NOT; }
+'='		{ yylval.token = get_token(NULL); return ASSIGN; }
 
 
 [a-zA-Z_][a-zA-Z_0-9]*	{
@@ -64,26 +66,29 @@ return	{ return RETURN; }
 				yyerror("Identifier too long !");
 			}
 			else{
-				int len;
-				len = strlen(yytext) + 1;
-				yylval.string = (__typeof__(yylval.string))
-					malloc((len * sizeof(yylval.string)));
-				memcpy(yylval.string,yytext,len);
+				int len = strlen(yytext) + 1;
+				char *id = (char *)malloc((len * sizeof(char)));
+				memcpy(id, yytext, len);
+				yylval.token = get_token((void *)id);
 				return ID;
 			}
 		}
 
 [0-9]+	{
-			yylval.intval = atoi(yytext);
+			int *val = (int *)malloc(sizeof(int));
+			*val = atoi(yytext);
+			yylval.token = get_token((void *)val);
 			return INTVAL;
 		}
 [0-9]+\.[0-9]+	{
-			yylval.realval = atof(yytext);
-			return REALVAL;
+			float *val = (float *)malloc(sizeof(float));
+			*val = atof(yytext);
+			yylval.token = get_token((void *)val);
+			return FLOATVAL;
 		}
 
 [ \t]	;
-[\n]	{ yylval.line++; }
+[\n]	{ line++; }
 
 .		;
 
