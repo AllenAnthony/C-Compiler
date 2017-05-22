@@ -10,7 +10,7 @@ void yyerror(char *msg);
 
 %%
 
-'('     { return LP; }
+'('		{ return LP; }
 ')'		{ return RP; }
 '{'		{ return LCB; }
 '}'		{ return RCB; }
@@ -20,14 +20,14 @@ void yyerror(char *msg);
 ','		{ return COMMA; }
 
 int		{ return INT; }
-double  { return DOUBLE; }
+double	{ return DOUBLE; }
 char	{ return CHAR; }
 if		{ return IF; }
-else    { return ELSE; }
+else	{ return ELSE; }
 while	{ return WHILE; }
 for		{ return FOR; }
-break   { return BREAK; }
-return  { return RETURN; }
+break	{ return BREAK; }
+return	{ return RETURN; }
 
 '+'		{ return PLUS; }
 '-'		{ return MINUS; }
@@ -38,19 +38,19 @@ return  { return RETURN; }
 "<="	{ return LE; }
 "!="	{ return NEQ; }
 "=="	{ return EQ; }
-'>' 	{ return GT; }
-'<' 	{ return LT; }
+'>'		{ return GT; }
+'<'		{ return LT; }
 "&&"	{ return AND; }
 "||"	{ return OR; }
 '!'		{ return NOT; }
 '='		{ return ASSIGN; }
 
 
-[a-zA-Z_][a-zA-Z_0-9]* {
-			if (strlen(yytext) > ID_MAX_LEN)
+[a-zA-Z_][a-zA-Z_0-9]*	{
+			if (strlen(yytext) > ID_MAX_LEN){
 				yyerror("Identifier too long !");
-			else
-			{
+			}
+			else{
 				int len;
 				len = strlen(yytext) + 1;
 				yylval.string = (__typeof__(yylval.string))
@@ -60,19 +60,20 @@ return  { return RETURN; }
 			}
 		}
 
-[0-9]+		{
+[0-9]+	{
 			yylval.intval = atoi(yytext);
 			return INTVAL;
 		}
-[0-9]+\.[0-9]+  {
+[0-9]+\.[0-9]+	{
 			yylval.realval = atof(yytext);
 			return REALVAL;
 		}
 
-[ \t]		;
-[\n]		{ yylval.line++; }
+[ \t]	;
+[\n]	{ yylval.line++; }
+
 %%
 
-int yywrap(void) {
+int yywrap(void){
 	return 1;
 }
