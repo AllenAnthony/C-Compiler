@@ -2,6 +2,13 @@
 #include "abstract_tree.h"
 #include "y.tab.h"
 #include <string.h>
+#include <stdlib.h>
+
+struct token{
+    int row;
+    void *val;
+};
+int line = 0;
 
 #define ID_MAX_LEN 16
 
@@ -10,7 +17,13 @@ void yyerror(char *msg);
 
 %%
 
-'('		{ return LP; }
+'('		{
+    struct token *tok;
+	tok = (struct token *)malloc(sizeof(struct token));
+	tok->row = line;
+	tok->col = yy
+    return LP;
+    }
 ')'		{ return RP; }
 '{'		{ return LCB; }
 '}'		{ return RCB; }
