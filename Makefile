@@ -7,10 +7,10 @@ y.tab.o: y.tab.c
 lex.yy.o: lex.yy.c
 	gcc -c lex.yy.c
 
-lex.yy.c:
+lex.yy.c: c.l
 	lex c.l
 
-y.tab.c:
+y.tab.c: c.y
 	yacc -d c.y
 
 clean:

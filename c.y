@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+int yylex(void);
 %}
 %union{
 char cval;
@@ -56,8 +57,8 @@ block: stmts
      | declares stmts
      ;
 
-stmts: stmt
-     | stmt stmts
+stmts: stmt stmts
+     |
      ;
 
 stmt : ID ASSIGN exprs SEMI
@@ -92,6 +93,6 @@ expr_comp:expr_comp AND expr_comp
 %%
 
 int main(){
-    yylex();
+    yyparse();
     return 0;
 }
