@@ -5,50 +5,93 @@ int line;
     
 %}
 
-%x character
+%x CHARACTER
+%x COMMENT_LINE
+%x COMMENT_BLOCK
+
 
 %%
 
-\(		{ disp_token(yytext); return LP; }
-\)		{ disp_token(yytext); return RP; }
-\{		{ disp_token(yytext); return LCB; }
-\}		{ disp_token(yytext); return RCB; }
-\[      { disp_token(yytext); return LSB; }
-\]		{ disp_token(yytext); return RSB; }
-;		{ disp_token(yytext); return SEMI; }
-,		{ disp_token(yytext); return COMMA; }
+"("         { disp_token(yytext); return LP; }
+")"         { disp_token(yytext); return RP; }
+"{"         { disp_token(yytext); return LCB; }
+"}"         { disp_token(yytext); return RCB; }
+"["         { disp_token(yytext); return LSB; }
+"]"         { disp_token(yytext); return RSB; }
+";"         { disp_token(yytext); return SEMI; }
+","         { disp_token(yytext); return COMMA; }
 
-int		{ disp_token(yytext); return INT; }
-float	{ disp_token(yytext); return FLOAT; }
-char	{ disp_token(yytext); return CHAR; }
-if		{ disp_token(yytext); return IF; }
-else	{ disp_token(yytext); return ELSE; }
-while	{ disp_token(yytext); return WHILE; }
-for		{ disp_token(yytext); return FOR; }
-break	{ disp_token(yytext); return BREAK; }
-return	{ disp_token(yytext); return RETURN; }
+"int"       { disp_token(yytext); return INT; }
+"float"     { disp_token(yytext); return FLOAT; }
+"char"      { disp_token(yytext); return CHAR; }
+"if"        { disp_token(yytext); return IF; }
+"else"      { disp_token(yytext); return ELSE; }
+"while"     { disp_token(yytext); return WHILE; }
+"for"       { disp_token(yytext); return FOR; }
+"break"     { disp_token(yytext); return BREAK; }
+"return"    { disp_token(yytext); return RETURN; }
 
-=		{ disp_token(yytext); return ASSIGN; }
-\+		{ disp_token(yytext); return PLUS; }
-\-		{ disp_token(yytext); return MINUS; }
-\*		{ disp_token(yytext); return MUL; }
-\/		{ disp_token(yytext); return DIV; }
-%		{ disp_token(yytext); return MOD; }
+"="         { disp_token(yytext); return ASSIGN; }
+"+"         { disp_token(yytext); return PLUS; }
+"-"         { disp_token(yytext); return MINUS; }
+"*"         { disp_token(yytext); return MUL; }
+"/"         { disp_token(yytext); return DIV; }
+"%"         { disp_token(yytext); return MOD; }
 
-">="      { disp_token(yytext); return GE; }
-"<="      { disp_token(yytext); return LE; }
-"!="      { disp_token(yytext); return NE; }
-"=="      { disp_token(yytext); return EQ; }
-">"		{ disp_token(yytext); return GT; }
-"<"		{ disp_token(yytext); return LT;}
-"&&"      { disp_token(yytext); return AND; }
-"||"      { disp_token(yytext); return OR; }
-"!"		{ disp_token(yytext); return NOT; }
+">="        { disp_token(yytext); return GE; }
+"<="        { disp_token(yytext); return LE; }
+"!="        { disp_token(yytext); return NE; }
+"=="        { disp_token(yytext); return EQ; }
+">"         { disp_token(yytext); return GT; }
+"<"         { disp_token(yytext); return LT; }
+"&&"        { disp_token(yytext); return AND; }
+"||"        { disp_token(yytext); return OR; }
+"!"         { disp_token(yytext); return NOT; }
+
+//单行注释
+"//"        {
+    BEGIN COMMENT_LINE;
+}
+<COMMENT_LINE>{
+    "\n" {
+        BEGIN INITIAL;
+    }
+    .  {
+    
+    }
+}
+
+//多行注释
+"/*"        {
+    BEGIN COMMENT_BLOCK;
+}
+
+<COMMENT_BLOCK>{
+    "*/" {
+        BEGIN INITIAL;
+    }
+    .  {
+        
+    }
+}
 
 
-<character>{
-    \'.\' {yylval.cval=*yytext; disp_token(yytext); return CVAL; }
-    \'\\n\' { yylval.cval=0x0A; disp_token(yytext); return CVAL; }
+//匹配字符， 形如'a'、'\n'
+"'"     {
+    BEGIN CHARACTER;
+}
+
+<CHARACTER>{
+    "'" {
+        BEGIN INITIAL;
+    }
+    "\n" {
+        yylval.cval=0x0A; disp_token(yytext); return CVAL;
+    }
+    
+    [^\'] {
+        yylval.cval=*yytext; disp_token(yytext); return CVAL;
+    }
 }
 
 [a-zA-Z_][a-zA-Z_0-9]*	{
@@ -57,7 +100,6 @@ return	{ disp_token(yytext); return RETURN; }
     disp_token(yytext);
     return ID;
 }
-
 
 [0-9]+	{
     yylval.fval=atoi(yytext);
@@ -80,7 +122,7 @@ return	{ disp_token(yytext); return RETURN; }
 }
 
 .		{
-    printf("Invalid token :%s\n", yytext);
+    printf("\nInvalid token :%s\n", yytext);
 };
 
 %%

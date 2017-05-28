@@ -1,5 +1,5 @@
 #!/bin/bash
+echo "---- Usage: ./test.sh <filename in ./testcase/ > -----"
 make clean
 make
-echo "---- format: ./test.sh <filename in ./testcase> -----"
 ./compiler < testcase/$1

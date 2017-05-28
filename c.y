@@ -90,7 +90,7 @@ expr : IVAL
      | ID
      ;
 
-expr_comp:expr_comp AND expr_comp
+expr_comp: expr_comp AND expr_comp
     | expr_comp OR expr_comp
     | exprs GT exprs
     | exprs LT exprs
