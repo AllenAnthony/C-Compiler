@@ -2,14 +2,14 @@ typedef struct _ABS_Exp *ABS_Exp;
 typedef struct _ABS_Dec *ABS_Dec;
 typedef struct _ABS_Type *ABS_Type;
 typedef struct _ABS_Init_Dec *ABS_Init_Dec;
-typedef struct _ABS_Ini_Dec_List *ABS_Init_Dec_list;
+typedef struct _ABS_Init_Dec_List *ABS_Init_Dec_List;
 typedef struct _ABS_Stmt *ABS_Stmt;
-typedef struct _ABS_Block_Item_List *ABS_Block_Item_list;
+typedef struct _ABS_Block_Item_List *ABS_Block_Item_List;
 typedef struct _ABS_Block_Item *ABS_Block_Item;
 typedef struct _ABS_Unit *ABS_Unit;
 typedef struct _ABS_Unit *ABS_Root;
 typedef struct _ABS_Ex_Dec *ABS_Ex_Dec;
-typedef struct _ABS_Fun_Def *ABS_Func_Def;
+typedef struct _ABS_Func_Def *ABS_Func_Def;
 typedef struct _ABS_Param_List *ABS_Param_List;
 typedef struct _ABS_Param_Dec *ABS_Param_Dec;
 typedef struct _ABS_Dec_List *ABS_Dec_List;
@@ -55,17 +55,17 @@ struct _ABS_Exp{
 
 struct _ABS_Dec{
 	ABS_Type ABS_type;
-	ABS_Init_Dec_List dec_list;
+	ABS_Init_Dec_List init_dec_list;
 };
 
 struct _ABS_Type{
 	ABS_type type;
 };
 
-struct _ABS_Ini_Dec_List{
+struct _ABS_Init_Dec_List{
 	int type;
 	ABS_Init_Dec init_dec;
-	ABS_Init_Dec_list init_dec_list;
+	ABS_Init_Dec_List init_dec_list;
 };
 
 struct _ABS_Init_Dec{
@@ -78,7 +78,7 @@ struct _ABS_Stmt{
 		ABS_Stmt stmt;
 		struct{
 			int type;
-			ABS_Block_Item_list block_item_list;
+			ABS_Block_Item_List block_item_list;
 		} compound;
 		struct{
 			int type;
@@ -102,7 +102,7 @@ struct _ABS_Stmt{
 				} For;
 			} u;
 		} iteration;
-		sturct{
+		struct{
 			int type;
 			ABS_Exp exp;
 		} jump;
@@ -111,7 +111,7 @@ struct _ABS_Stmt{
 
 struct _ABS_Block_Item_List{
 	int type;
-	ABS_Block_Item_list block_item_list;
+	ABS_Block_Item_List block_item_list;
 	ABS_Block_Item block_item;
 };
 
@@ -127,7 +127,7 @@ struct _ABS_Unit{
 	int type;
 	ABS_Ex_Dec ex_dec;
 	ABS_Unit unit;
-}
+};
 
 struct _ABS_Ex_Dec{
 	int type;
@@ -137,7 +137,7 @@ struct _ABS_Ex_Dec{
 	} u;
 };
 
-struct _ABS_Fun_Def{
+struct _ABS_Func_Def{
 	int type;
 	ABS_Type ABS_type;
 	_ABS_ID id_d;
@@ -153,7 +153,7 @@ struct _ABS_Param_List{
 };
 
 struct _ABS_Param_Dec{
-	ABS_Type type;
+	ABS_Type ABS_type;
 	_ABS_ID id_d;
 };
 
@@ -165,20 +165,20 @@ struct _ABS_Dec_List{
 
 ABS_Exp ABS_Expression(ABS_ExpType exp_type, int type, ABS_Exp exp_left, ABS_Exp exp_right);
 ABS_Exp ABS_Assignment(ABS_ExpType exp_type, int type, _ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right);
-ABS_Exp ABS_Primary(ABS_ExpType exp_type, int type, void ptr);
-ABS_Dec ABS_Declaration(ABS_Type ABS_type, ABS_Init_Dec_List dec_list);
+ABS_Exp ABS_Primary(ABS_ExpType exp_type, int type, int ptr);
+ABS_Dec ABS_Declaration(ABS_Type ABS_type, ABS_Init_Dec_List init_dec_list);
 ABS_Init_Dec_List ABS_Init_Declarator_List(int type, ABS_Init_Dec init_dec, ABS_Init_Dec_List init_dec_list);
 ABS_Stmt ABS_Statement(ABS_StmtType stmt_type, ABS_Stmt stmt);
-ABS_Stmt ABS_Compound(ABS_StmtType stmt_type, int type, ABS_Block_Item_list block_item_list);
+ABS_Stmt ABS_Compound(ABS_StmtType stmt_type, int type, ABS_Block_Item_List block_item_list);
 ABS_Stmt ABS_Expression_Statement(ABS_StmtType stmt_type, int type, ABS_Exp exp);
 ABS_Stmt ABS_Selection(ABS_StmtType stmt_type, ABS_Exp exp, ABS_Stmt stmt_if, ABS_Stmt stmt_else);
 ABS_Stmt ABS_Iteration(ABS_StmtType stmt_type, int type, ABS_Exp exp, ABS_Stmt stmt1, ABS_Stmt stmt2, ABS_Stmt stmt3);
 ABS_Stmt ABS_Jump(ABS_StmtType stmt_type, int type, ABS_Exp exp);
-ABS_Block_Item_List ABS_Block_Item_List_Func(int type, ABS_Block_Item_list block_item_list, ABS_Block_Item block_item);
+ABS_Block_Item_List ABS_Block_Item_List_Func(int type, ABS_Block_Item_List block_item_list, ABS_Block_Item block_item);
 ABS_Block_Item ABS_Block_Item_Func(int type, ABS_Dec dec, ABS_Stmt stmt);
 ABS_Unit ABS_Translation_Unit(int type, ABS_Ex_Dec ex_dec, ABS_Unit unit);
 ABS_Ex_Dec ABS_External_Declaration(int type, ABS_Func_Def func_def, ABS_Dec dec);
-ABS_Fun_Def ABS_Function_Definition(int type, ABS_Type ABS_type, _ABS_ID id_d, ABS_Param_List param_list, ABS_Dec_List dec_list, ABS_Stmt stmt);
+ABS_Func_Def ABS_Function_Definition(int type, ABS_Type ABS_type, _ABS_ID id_d, ABS_Param_List param_list, ABS_Dec_List dec_list, ABS_Stmt stmt);
 ABS_Param_List ABS_Parameter_List(int type, ABS_Param_Dec param_dec, ABS_Param_List param_list);
 ABS_Param_Dec ABS_Parameter_Declaration(ABS_Type ABS_type, _ABS_ID id_d);
 ABS_Dec_List ABS_Declaration_List(int type, ABS_Dec dec, ABS_Dec_List dec_list);
