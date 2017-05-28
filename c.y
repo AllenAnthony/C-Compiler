@@ -13,7 +13,7 @@
 %token <ival> INT
 %token <cval> CHAR
 %token <fval> FLOAT
-%token <sval> ID
+%token <sval> ID_D ID_E
 
 %token IVAL CVAL FVAL SVAL
 %token LP RP LCB RCB LSB RSB SEMI COMMA COLON
@@ -30,19 +30,20 @@
 expression
     : assignment_expression
     | logical_or_expression
-    | assignment_expression COMMA expression
-    | logical_or_expression COMMA expression
+    | expression COMMA assignment_expression
+    | expression COMMA logical_or_expression
 ;
 
 assignment_expression
-    : ID ASSIGN logical_or_expression
-    | ID ASSIGN assignment_expression
-    | ID LSB expression RSB ASSIGN logical_or_expression
-    | ID LSB expression RSB ASSIGN assignment_expression
+    : ID_E ASSIGN logical_or_expression
+    | ID_E ASSIGN assignment_expression
+    | ID_E LSB expression RSB ASSIGN logical_or_expression
+    | ID_E LSB expression RSB ASSIGN assignment_expression
 ;
 
 primary_expression
-    : IVAL
+    : ID_E
+    | IVAL
     | FVAL
     | CVAL
     | LP expression RP
@@ -90,6 +91,7 @@ declaration
     : type_specifier init_declarator_list SEMI
 ;
 
+
 type_specifier
     : INT
     | FLOAT
@@ -102,8 +104,8 @@ init_declarator_list
 ;
 
 init_declarator
-    : ID
-    | ID ASSIGN expression
+    : ID_D
+    | ID_D ASSIGN expression
 ;
 
 statement
@@ -116,7 +118,7 @@ statement
 ;
 
 labeled_statement
-    : ID COLON statement
+    : ID_E COLON statement
     | CASE logical_or_expression COLON statement
     | DEFAULT COLON statement
 ;
@@ -138,7 +140,9 @@ block_item
 
 expression_statement
     : SEMI
-    | expression SEMI
+| expression SEMI{
+    printf("ss");
+}
 ;
 
 selection_statement
@@ -170,8 +174,8 @@ external_declaration
 ;
 
 function_definition
-    : type_specifier ID LP parameter_list RP declaration_list compound_statement
-    | type_specifier ID LP parameter_list RP compound_statement
+    : type_specifier ID_D LP parameter_list RP declaration_list compound_statement
+    | type_specifier ID_D LP parameter_list RP compound_statement
 ;
 
 parameter_list
@@ -180,8 +184,7 @@ parameter_list
 ;
 
 parameter_declaration
-    : type_specifier ID
-    | type_specifier ID COMMA parameter_declaration
+    : type_specifier ID_D
 ;
 
 declaration_list
