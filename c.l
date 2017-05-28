@@ -81,7 +81,8 @@ int line;
 	}
 
 	. {
-    	printf("\nInvalid token :%s\n", yytext);
+    	printf("\nError: Syntax error\n");
+        exit(0);
 	};
 }
 

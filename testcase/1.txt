@@ -1,4 +1,21 @@
-int main(int argc){
+int main(int argci, int b, float c, char d){
     int a, b, c;
+    for(i=0; i<5; i=i+1){
+        a=a; b=3; 
+    }
+    if(3==0){
+
+    }else{
+        
+    }
+    if(a == 2){
+        a = 1;    
+    }else{
+        
+    }
+    while(1){
+        a = 5;    
+    }
+    
     return 0;
 }
