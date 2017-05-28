@@ -61,40 +61,28 @@ int line;
         disp_token(yytext);
         return RP;
     }
-    "'" {   /* 匹配字符， 形如'a'、'\n' */
-        BEGIN CHARACTER_DEC;
+    "," {
+    	disp_token(yytext);
+    	return COMMA;
     }
 
-    ([a-zA-Z_][a-zA-Z_0-9]*)    {
+    ([a-zA-Z_][a-zA-Z_0-9]*) {
         yylval.sval = malloc(strlen(yytext)+1);
         strcpy(yylval.sval, yytext);
         disp_token(yytext);
         return ID_D;
-    }    
-
-    [0-9]+  {
-        yylval.fval=atoi(yytext);
-        disp_token(yytext);
-        return IVAL;
     }
 
-    [0-9]+\.[0-9]+  {
-        yylval.fval=atof(yytext);
-        disp_token(yytext);
-        return FVAL;
-    }
-}
-<CHARACTER_DEC>{
-    "'"     {
-        BEGIN DEC;
-    }
-    "\n" {
-        yylval.cval=0x0A; disp_token(yytext); return CVAL;
-    }
-    
-    [^\'] {
-        yylval.cval=*yytext; disp_token(yytext); return CVAL;
-    }
+    [ \t] disp_token(yytext);
+
+	[\n] {
+    	disp_token(yytext);
+    	line++;
+	}
+
+	. {
+    	printf("\nInvalid token :%s\n", yytext);
+	};
 }
 
 "if"        { disp_token(yytext); return IF; }

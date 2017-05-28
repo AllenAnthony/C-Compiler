@@ -1,4 +1,4 @@
 int main(int argc){
-    int a=0, b=0, c=0;
+    int a, b, c;
     return 0;
 }

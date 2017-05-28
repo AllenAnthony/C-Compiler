@@ -105,7 +105,6 @@ init_declarator_list
 
 init_declarator
     : ID_D
-    | ID_D ASSIGN expression
 ;
 
 statement
@@ -146,8 +145,7 @@ expression_statement
 ;
 
 selection_statement
-    : IF LP expression RP statement
-    | IF LP expression RP statement ELSE statement
+    : IF LP expression RP statement ELSE statement
     | SWITCH LP expression RP statement
 ;
 
