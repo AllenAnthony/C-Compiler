@@ -20,6 +20,7 @@ int line;
 "]"         { disp_token(yytext); return RSB; }
 ";"         { disp_token(yytext); return SEMI; }
 ","         { disp_token(yytext); return COMMA; }
+":"         { disp_token(yytext); return COLON; }
 
 "int"       { disp_token(yytext); return INT; }
 "float"     { disp_token(yytext); return FLOAT; }
@@ -29,6 +30,8 @@ int line;
 "while"     { disp_token(yytext); return WHILE; }
 "for"       { disp_token(yytext); return FOR; }
 "break"     { disp_token(yytext); return BREAK; }
+"continue"  { disp_token(yytext); return CONTINUE; }
+"switch"    { disp_token(yytext); return SWITCH; }
 "return"    { disp_token(yytext); return RETURN; }
 
 "="         { disp_token(yytext); return ASSIGN; }

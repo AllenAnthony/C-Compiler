@@ -14,7 +14,7 @@ lex.yy.c: c.l util.h
 	lex c.l
 
 y.tab.c: c.y util.h
-	yacc -d c.y
+	yacc -d c.y -v
 
 clean:
-	rm -rf compiler lex.yy.c y.tab.h y.tab.c *.o
+	rm -rf compiler lex.yy.c y.tab.h y.tab.c *.o y.output
