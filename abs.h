@@ -23,8 +23,12 @@ typedef enum{
 	ABS_statement, ABS_compound, ABS_expression, ABS_selection, ABS_iteration, ABS_jump
 } ABS_StmtType;
 
+typedef enum{
+	ABS_INT, ABS_FLOAT, ABS_CHAR
+} ABS_type;
+
 struct _ABS_Exp{
-	int exp_type;
+	ABS_ExpType exp_type;
 	union{
 		struct{
 			int type;
@@ -46,38 +50,16 @@ struct _ABS_Exp{
 				ABS_Type ABS_type;
 			} u;
 		} primary;
-		struct{
-			int type;
-			ABS_Exp exp_left, exp_right;
-		} multiplicative;
-		struct{
-			int type;
-			ABS_Exp exp_left, exp_right;
-		} relational;
-		struct{
-			int type;
-			ABS_Exp exp_left, exp_right;
-		} equality;
-		struct{
-			int type;
-			ABS_Exp exp_left, exp_right;
-		} logical_and;
-		struct{
-			int type;
-			ABS_Exp exp_left, exp_right;
-		} logical_or;
 	} u;
 };
 
 struct _ABS_Dec{
 	ABS_Type ABS_type;
-	ABS_Init_Dec_list dec_list;
+	ABS_Init_Dec_List dec_list;
 };
 
 struct _ABS_Type{
-	enum{
-		ABS_INT, ABS_FLOAT, ABS_CHAR
-	} ABS_type;
+	ABS_type type;
 };
 
 struct _ABS_Ini_Dec_List{
@@ -115,8 +97,8 @@ struct _ABS_Stmt{
 				} While;
 
 				struct{
-					ABS_Stmt stmt_1, stmt_2, stmt_4
-					ABS_Exp exp_3
+					ABS_Stmt stmt_1, stmt_2, stmt_4;
+					ABS_Exp exp_3;
 				} For;
 			} u;
 		} iteration;
@@ -124,7 +106,7 @@ struct _ABS_Stmt{
 			int type;
 			ABS_Exp exp;
 		} jump;
-	}
+	} u;
 };
 
 struct _ABS_Block_Item_List{
@@ -179,3 +161,24 @@ struct _ABS_Dec_List{
 	ABS_Dec dec;
 	ABS_Dec_List dec_list;
 };
+
+ABS_Exp ABS_Expression(ABS_ExpType exp_type, int type, ABS_Exp exp_left, ABS_Exp exp_right);
+ABS_Exp ABS_Assignment(ABS_ExpType exp_type, int type, ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right);
+ABS_Exp ABS_Primary(ABS_ExpType exp_type, int type, void ptr);
+ABS_Dec ABS_Declaration(ABS_Type ABS_type, ABS_Init_Dec_List dec_list);
+ABS_Init_Dec_List ABS_Init_Declarator_List(int type, ABS_Init_Dec init_dec, ABS_Init_Dec_List init_dec_list);
+ABS_Stmt ABS_Statement(ABS_StmtType stmt_type, ABS_Stmt stmt);
+ABS_Stmt ABS_Compound(ABS_StmtType stmt_type, int type, ABS_Block_Item_list block_item_list);
+ABS_Stmt ABS_Expression_Stmt(ABS_StmtType stmt_type, int type, ABS_Exp exp);
+ABS_Stmt ABS_Selection(ABS_StmtType stmt_type, int type, ABS_Stmt stmt_if, ABS_Stmt stmt_else);
+ABS_Stmt ABS_Iteration(ABS_StmtType stmt_type, int type, ABS_Exp exp, ABS_Stmt stmt1, ABS_Stmt stmt2, ABS_Stmt stmt3);
+ABS_Stmt ABS_Jump(ABS_StmtType stmt_type, int type, ABS_Exp exp);
+ABS_Block_Item_List ABS_Block_Item_List_Func(int type, ABS_Block_Item_list block_item_list, ABS_Block_Item block_item);
+ABS_Block_Item ABS_Block_Item_Func(int type, ABS_Dec dec, ABS_Stmt stmt);
+ABS_Unit ABS_Translation_Unit(int type, ABS_Ex_Dec ex_dec, ABS_Unit unit);
+ABS_Ex_Dec ABS_External_Declaration(int type, ABS_Func_Def func_def, ABS_Dec dec);
+ABS_Fun_Def ABS_Function_Definition(int type, ABS_Type ABS_type, ABS_ID id_d, ABS_Param_List param_list, ABS_Dec_List dec_list;
+	ABS_Stmt stmt);
+ABS_Param_List ABS_Parameter_List(int type, ABS_Param_Dec param_dec, ABS_Param_List param_list);
+ABS_Param_Dec ABS_Parameter_Declaration(ABS_ID id_d);
+ABS_Dec_List ABS_Declaration_List(int type, ABS_Dec dec, ABS_Dec_List dec_list);
