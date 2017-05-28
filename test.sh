@@ -1,4 +1,5 @@
 #!/bin/bash
 make clean
 make
-./compiler < test.c
+echo "---- format: ./test.sh <filename in ./testcase> -----"
+./compiler < testcase/$1

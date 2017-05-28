@@ -1,19 +1,20 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
-int yylex(void);
+#include "util.h"
+
 %}
+
 %union{
-char cval;
-int ival;
-float fval;
-char *sval;
+    char cval;
+    int ival;
+    float fval;
+    char *sval;
 }
 
 %token <ival> INT
 %token <cval> CHAR
 %token <fval> FLOAT
 %token <sval> ID
+
 %token IVAL CVAL FVAL SVAL
 %token LP RP LCB RCB LSB RSB SEMI COMMA IF ELSE WHILE FOR BREAK RETURN ASSIGN
 %token PLUS MINUS MUL DIV MOD AND OR NOT
@@ -24,10 +25,14 @@ char *sval;
 %left AND
 %left PLUS MINUS
 %left MUL DIV MOD
+
 %%
+
+
 functions : function
           | function functions
           ;
+
 function : type ID LP params RP LCB block RCB
          ;
 
@@ -42,6 +47,7 @@ type : INT
      | FLOAT
      | CHAR
      ;
+
 value: IVAL
      | FVAL
      | CVAL
@@ -51,6 +57,7 @@ value: IVAL
 params : param
        | param COMMA params
        ;
+
 param: type ID;
 
 block: stmts
@@ -74,6 +81,7 @@ exprs : exprs PLUS exprs
       | exprs MUL exprs
       | expr
       ;
+
 expr : IVAL
      | FVAL
      | CVAL
@@ -81,6 +89,7 @@ expr : IVAL
      | MINUS expr
      | ID
      ;
+
 expr_comp:expr_comp AND expr_comp
     | expr_comp OR expr_comp
     | exprs GT exprs
@@ -90,7 +99,10 @@ expr_comp:expr_comp AND expr_comp
     | exprs EQ exprs
     | exprs NE exprs
     ;
+
+
 %%
+
 
 int main(){
     yyparse();

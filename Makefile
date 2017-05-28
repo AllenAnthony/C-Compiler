@@ -1,17 +1,20 @@
-compiler: y.tab.o lex.yy.o
-	gcc -o compiler y.tab.o lex.yy.o -ly
+compiler: y.tab.o lex.yy.o util.o
+	gcc -o compiler y.tab.o lex.yy.o util.o -ly
 
-y.tab.o: y.tab.c
+y.tab.o: y.tab.c util.h
 	gcc -c y.tab.c
 
-lex.yy.o: lex.yy.c
+lex.yy.o: lex.yy.c util.h
 	gcc -c lex.yy.c
 
-lex.yy.c: c.l
+util.o: util.c util.h
+	gcc -c util.c
+
+lex.yy.c: c.l util.h
 	lex c.l
 
-y.tab.c: c.y
+y.tab.c: c.y util.h
 	yacc -d c.y
 
 clean:
-	rm -rf compiler *.o lex.yy.c y.tab.h y.tab.c
+	rm -rf compiler lex.yy.c y.tab.h y.tab.c *.o
