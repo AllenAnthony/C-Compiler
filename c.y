@@ -108,18 +108,11 @@ init_declarator
 ;
 
 statement
-    : labeled_statement
-    | compound_statement
+    : compound_statement
     | expression_statement
     | selection_statement
     | iteration_statement
     | jump_statement
-;
-
-labeled_statement
-    : ID_E COLON statement
-    | CASE logical_or_expression COLON statement
-    | DEFAULT COLON statement
 ;
 
 compound_statement
@@ -144,7 +137,6 @@ expression_statement
 
 selection_statement
     : IF LP expression RP statement ELSE statement
-    | SWITCH LP expression RP statement
 ;
 
 iteration_statement
