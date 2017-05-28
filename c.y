@@ -22,10 +22,7 @@
 %token GE LE NE EQ GT LT
 
 %left GE LE NE EQ GT LT
-%left OR
-%left AND
-%left PLUS MINUS
-%left MUL DIV MOD
+%left COMMA
 
 %start translation_unit
 %%
@@ -106,7 +103,7 @@ init_declarator_list
 
 init_declarator
     : ID
-    | ID ASSIGN assignment_expression
+    | ID ASSIGN expression
 ;
 
 statement
@@ -173,8 +170,18 @@ external_declaration
 ;
 
 function_definition
-    : type_specifier ID declaration_list compound_statement
-    | type_specifier ID compound_statement
+    : type_specifier ID LP parameter_list RP declaration_list compound_statement
+    | type_specifier ID LP parameter_list RP compound_statement
+;
+
+parameter_list
+    : parameter_declaration
+    | parameter_list COMMA parameter_declaration
+;
+
+parameter_declaration
+    : type_specifier ID
+    | type_specifier ID COMMA parameter_declaration
 ;
 
 declaration_list

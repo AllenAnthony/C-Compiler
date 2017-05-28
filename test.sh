@@ -2,4 +2,4 @@
 echo "---- Usage: ./test.sh <filename in ./testcase/ > -----"
 make clean
 make
-./compiler < testcase/$1
+./compiler < ./testcase/$1
