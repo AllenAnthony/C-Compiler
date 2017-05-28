@@ -2,6 +2,11 @@
 
 make clean
 git add .
-git commit -m "auto commit"
+if $1
+then
+    git commit -m "auto commit"
+else
+    git commit -m $1
+fi
 git push
 
