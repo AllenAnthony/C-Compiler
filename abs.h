@@ -15,10 +15,16 @@ typedef struct _ABS_Param_Dec *ABS_Param_Dec;
 typedef struct _ABS_Dec_List *ABS_Dec_List;
 typedef char *_ABS_ID;
 
+typedef enum{
+	ABS_expression, ABS_assignment, ABS_primary, ABS_multiplicative, ABS_relational, ABS_equality, ABS_logical_and, ABS_logical_or
+} ABS_ExpType;
+
+typedef enum{
+	ABS_statement, ABS_compound, ABS_expression, ABS_selection, ABS_iteration, ABS_jump
+} ABS_StmtType;
+
 struct _ABS_Exp{
-	enum{
-		ABS_expression, ABS_assignment, ABS_primary, ABS_multiplicative, ABS_relational, ABS_equality, ABS_logical_and, ABS_logical_or
-	} ABS_ExpType;
+	int exp_type;
 	union{
 		struct{
 			int type;
@@ -85,9 +91,7 @@ struct _ABS_Init_Dec{
 };
 
 struct _ABS_Stmt{
-	enum{
-		ABS_statement, ABS_compound, ABS_expression, ABS_selection, ABS_iteration, ABS_jump
-	} ABS_StmtType;
+	int stmt_type;
 	union{
 		ABS_Stmt stmt;
 		struct{
