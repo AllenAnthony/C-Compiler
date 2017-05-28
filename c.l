@@ -48,8 +48,8 @@ int line;
 "||"        { disp_token(yytext); return OR; }
 "!"         { disp_token(yytext); return NOT; }
 
-//单行注释
-"//"        {
+
+"//"        {   /* 单行注释 */
     BEGIN COMMENT_LINE;
 }
 <COMMENT_LINE>{
@@ -61,8 +61,8 @@ int line;
     }
 }
 
-//多行注释
-"/*"        {
+
+"/*"        {   /* 多行注释 */
     BEGIN COMMENT_BLOCK;
 }
 
@@ -76,8 +76,7 @@ int line;
 }
 
 
-//匹配字符， 形如'a'、'\n'
-"'"     {
+"'"     {   /* 匹配字符， 形如'a'、'\n' */
     BEGIN CHARACTER;
 }
 
