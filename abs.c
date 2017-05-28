@@ -21,7 +21,7 @@ int type:
 	logical_or: 1,2;
 */
 
-ABS_Exp ABS_Assignment_Expression(ABS_ExpType exp_type, int type, ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right){
+ABS_Exp ABS_Assignment_Expression(ABS_ExpType exp_type, int type, _ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right){
 	ABS_Exp assgiment = check_malloc(sizeof(struct _ABS_Exp));
 	assgiment->exp_type = exp_type;
 	assgiment->u.assgiment.type = type;
@@ -35,12 +35,12 @@ ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, void val){
 	ABS_Exp primary = check_malloc(sizeof(struct _ABS_Exp));
 	primary->exp_type = exp_type;
 	switch(type){
-		case 0: primary->u.primary.u.id_e = (ABS_ID)val; break;
-		case 1: primary->u.primary.u.ival = (int)val; break;
-		case 2: primary->u.primary.u.fval = (float)val; break;
-		case 3: primary->u.primary.u.cval = (char)val; break;
-		case 4: primary->u.primary.u.exp = (ABS_EXP)val; break;
-		case 5: primary->u.primary.u.ABS_type = (ABS_Type)val; break;
+		case 1: primary->u.primary.u.id_e = (_ABS_ID)val; break;
+		case 2: primary->u.primary.u.ival = (int)val; break;
+		case 3: primary->u.primary.u.fval = (float)val; break;
+		case 4: primary->u.primary.u.cval = (char)val; break;
+		case 5: primary->u.primary.u.exp = (ABS_EXP)val; break;
+		case 6: primary->u.primary.u.ABS_type = (ABS_Type)val; break;
 	}
 	return primary;
 }
@@ -67,7 +67,7 @@ ABS_Init_Dec_List ABS_Init_Declarator_List(int type, ABS_Init_Dec init_dec, ABS_
 	return init_declarator_list;
 }
 
-ABS_Init_Dec ABS_Init_Declarator(ABS_ID id_d){
+ABS_Init_Dec ABS_Init_Declarator(_ABS_ID id_d){
 	ABS_Init_Dec init_declarator = check_malloc(sizeof(struct _ABS_Init_Dec));
 	init_declarator->id_d = id_d;
 	return init_declarator;
@@ -88,7 +88,7 @@ ABS_Stmt ABS_Compound(ABS_StmtType stmt_type, int type, ABS_Block_Item_list bloc
 	return compound;
 }
 
-ABS_Stmt ABS_Expression_Stmt(ABS_StmtType stmt_type, int type, ABS_Exp exp){
+ABS_Stmt ABS_Expression_Statement(ABS_StmtType stmt_type, int type, ABS_Exp exp){
 	ABS_Stmt expression = check_malloc(sizeof(struct _ABS_Stmt));
 	expression->stmt_type = stmt_type;
 	expression->u.expression.type = type;
@@ -96,10 +96,10 @@ ABS_Stmt ABS_Expression_Stmt(ABS_StmtType stmt_type, int type, ABS_Exp exp){
 	return expression;
 }
 
-ABS_Stmt ABS_Selection(ABS_StmtType stmt_type, int type, ABS_Stmt stmt_if, ABS_Stmt stmt_else){
+ABS_Stmt ABS_Selection(ABS_StmtType stmt_type, ABS_Exp exp, ABS_Stmt stmt_if, ABS_Stmt stmt_else){
 	ABS_Stmt selection = check_malloc(sizeof(struct _ABS_Stmt));
 	selection->stmt_type = stmt_type;
-	selection->u.selection.type = type;
+	selection->u.selection.exp = exp;
 	selection->u.selection.stmt_if = stmt_if;
 	selection->u.selection.stmt_else = stmt_else;
 	return selection;
@@ -168,8 +168,7 @@ ABS_Ex_Dec ABS_External_Declaration(int type, ABS_Func_Def func_def, ABS_Dec dec
 	return external_declaration;
 }
 
-ABS_Fun_Def ABS_Function_Definition(int type, ABS_Type ABS_type, ABS_ID id_d, ABS_Param_List param_list, ABS_Dec_List dec_list;
-	ABS_Stmt stmt){
+ABS_Fun_Def ABS_Function_Definition(int type, ABS_Type ABS_type, _ABS_ID id_d, ABS_Param_List param_list, ABS_Dec_List dec_list, ABS_Stmt stmt){
 	ABS_Fun_Def function_definition = check_malloc(sizeof(struct _ABS_Fun_Def));
 	function_definition->type = type;
 	function_definition->ABS_type = ABS_type;
@@ -189,8 +188,9 @@ ABS_Param_List ABS_Parameter_List(int type, ABS_Param_Dec param_dec, ABS_Param_L
 	return parameter_list;
 }
 
-ABS_Param_Dec ABS_Parameter_Declaration(ABS_ID id_d){
+ABS_Param_Dec ABS_Parameter_Declaration(ABS_Type ABS_type, _ABS_ID id_d){
 	ABS_Param_Dec parameter_declaration= check_malloc(sizeof(struct _ABS_Param_Dec));
+	parameter_declaration->ABS_type = ABS_type;
 	parameter_declaration->id_d = id_d;
 	return parameter_declaration
 }
