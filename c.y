@@ -139,9 +139,7 @@ block_item
 
 expression_statement
     : SEMI
-| expression SEMI{
-    printf("ss");
-}
+    | expression SEMI
 ;
 
 selection_statement
