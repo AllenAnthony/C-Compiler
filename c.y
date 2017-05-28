@@ -53,7 +53,7 @@ primary_expression
 ;
 
 multiplicative_expression
-    : primary_expressmakion
+    : primary_expression
     | multiplicative_expression MUL primary_expression
     | multiplicative_expression DIV primary_expression
     | multiplicative_expression MOD primary_expression
@@ -61,8 +61,8 @@ multiplicative_expression
 
 additive_expression
     : multiplicative_expression
-    | multiplicative_expression PLUS additive_expression
-    | multiplicative_expression MINUS additive_expression
+    | additive_expression PLUS multiplicative_expression
+    | additive_expression MINUS multiplicative_expression
 ;
 
 relational_expression
@@ -85,7 +85,7 @@ logical_and_expression
 ;
 
 logical_or_expression
-    : logical_or_expression
+    : logical_and_expression
     | logical_or_expression OR logical_and_expression
 ;
 
