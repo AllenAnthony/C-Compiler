@@ -1,6 +1,7 @@
 %{
 #include "y.tab.h"
 #include "util.h"
+#include "abs.h"
 int line;
     
 %}
@@ -8,12 +9,7 @@ int line;
 %x CHARACTER
 %x COMMENT_LINE
 %x COMMENT_BLOCK
-%x FUNCTION
-%x EXP
 %x DEC
-%x CHARACTER_DEC
-
-
 
 %%
 

@@ -1,5 +1,6 @@
 %{
 #include "util.h"
+#include "abs.h"
 ABS_Root root;
 %}
 
@@ -11,11 +12,11 @@ ABS_Root root;
     ABS_Exp exp;
     ABS_Dec dec;
     ABS_Type type;
-    ABS_Init_Dec init_dex;
-    ABS_Init_Dec_list init_dec_list;
-    ABS_Stmt stme;
-    ABS_Block_Item_list block_item_list;
-    ABS_Block_Item block_item;
+    ABS_Init_Dec init_dec;
+    ABS_Init_Dec_List init_dec_list;
+    ABS_Stmt stmt;
+    ABS_Block_Item_List block_item_list_func;
+    ABS_Block_Item block_item_func;
     ABS_Unit unit; 
     ABS_Ex_Dec ex_dec;
     ABS_Func_Def func_def;
@@ -25,12 +26,27 @@ ABS_Root root;
     _ABS_ID id;
 }
 
-%token <ival> INT
-%token <cval> CHAR
-%token <fval> FLOAT
-%token <sval> ID_D ID_E
+%token <ival> IVAL
+%token <cval> CVAL
+%token <fval> FVAL
+%token <sval> SVAL
+%token INT FLOAT CHAR
+%type <exp> expression assignment_expression primary_expression multiplicative_expression additive_expression relational_expression equality_expression logical_and_expression logical_or_expression
+%type <dec> declaration
+%type <type> type_specifier
+%type <init_dec> init_declarator
+%type <init_dec_list> init_declarator_list
+%type <stmt> statement compound_statement expression_statement selection_statement iteration_statement jump_statement
+%type <block_item_list_func> block_item_list
+%type <block_item_func> block_item
+%type <unit> translation_unit
+%type <ex_dec> external_declaration
+%type <func_def> function_definition
+%type <param_list> parameter_list
+%type <param_dec> parameter_declaration
+%type <dec_list> declaration_list
+%token <id> ID_D ID_E
 
-%token IVAL CVAL FVAL SVAL
 %token LP RP LCB RCB LSB RSB SEMI COMMA COLON
 %token IF ELSE WHILE FOR BREAK RETURN ASSIGN SWITCH CONTINUE CASE DEFAULT SIZEOF
 %token PLUS MINUS MUL DIV MOD AND OR NOT
@@ -50,19 +66,19 @@ expression
 ;
 
 assignment_expression
-    : ID_E ASSIGN logical_or_expression {$$ = ABS_Assignment_Expression(ABS_assginment, 1, $1, $3, NULL);}
-    | ID_E ASSIGN assignment_expression {$$ = ABS_Assignment_Expression(ABS_assginment, 1, $1, $3, NULL);}
-    | ID_E LSB expression RSB ASSIGN logical_or_expression {$$ = ABS_Assignment_Expression(ABS_assginment, 2, $1, $3, $6);}
-    | ID_E LSB expression RSB ASSIGN assignment_expression {$$ = ABS_Assignment_Expression(ABS_assginment, 2, $1, $3, $6);}
+    : ID_E ASSIGN logical_or_expression {$$ = ABS_Assignment_Expression(ABS_assignment, 1, $1, $3, NULL);}
+    | ID_E ASSIGN assignment_expression {$$ = ABS_Assignment_Expression(ABS_assignment, 1, $1, $3, NULL);}
+    | ID_E LSB expression RSB ASSIGN logical_or_expression {$$ = ABS_Assignment_Expression(ABS_assignment, 2, $1, $3, $6);}
+    | ID_E LSB expression RSB ASSIGN assignment_expression {$$ = ABS_Assignment_Expression(ABS_assignment, 2, $1, $3, $6);}
 ;
 
 primary_expression
-    : ID_E {$$ = ABS_Primary_Expression(ABS_primary, 1, $1);}
+    : ID_E {$$ = ABS_Primary_Expression(ABS_primary, 1, (int)$1);}
     | IVAL {$$ = ABS_Primary_Expression(ABS_primary, 2, $1);}
-    | FVAL {$$ = ABS_Primary_Expression(ABS_primary, 3, $1);}
-    | CVAL {$$ = ABS_Primary_Expression(ABS_primary, 4, $1);}
-    | LP expression RP {$$ = ABS_Primary_Expression(ABS_primary, 5, $2);}
-    | SIZEOF LP type_specifier RP {$$ = ABS_Primary_Expression(ABS_primary, 6, $3);}
+    | FVAL {$$ = ABS_Primary_Expression(ABS_primary, 3, (int)$1);}
+    | CVAL {$$ = ABS_Primary_Expression(ABS_primary, 4, (int)$1);}
+    | LP expression RP {$$ = ABS_Primary_Expression(ABS_primary, 5, (int)$2);}
+    | SIZEOF LP type_specifier RP {$$ = ABS_Primary_Expression(ABS_primary, 6, (int)$3);}
 ;
 
 multiplicative_expression
@@ -108,14 +124,14 @@ declaration
 
 
 type_specifier
-    : INT {$$ = ABS_Type_Specifier($1);}
-    | FLOAT {$$ = ABS_Type_Specifier($1);}
-    | CHAR {$$ = ABS_Type_Specifier($1);}
+    : INT {$$ = ABS_Type_Specifier(ABS_INT);}
+    | FLOAT {$$ = ABS_Type_Specifier(ABS_FLOAT);}
+    | CHAR {$$ = ABS_Type_Specifier(ABS_CHAR);}
 ;
 
 init_declarator_list
     : init_declarator {$$ = ABS_Init_Declarator_List(1, $1, NULL);}
-    | init_declarator_list COMMA init_declarator {$$ = ABS_Init_Declarator_List(2, $1, $3);}
+    | init_declarator_list COMMA init_declarator {$$ = ABS_Init_Declarator_List(2, $3, $1);}
 ;
 
 init_declarator
@@ -123,11 +139,11 @@ init_declarator
 ;
 
 statement
-    : compound_statement {$$ = ABS_Statement(ABS_statement, 1, $1);}
-    | expression_statement {$$ = ABS_Statement(ABS_statement, 2, $1);}
-    | selection_statement {$$ = ABS_Statement(ABS_statement, 3, $1);}
-    | iteration_statement {$$ = ABS_Statement(ABS_statement, 4, $1);}
-    | jump_statement {$$ = ABS_Statement(ABS_statement, 5, $1);}
+    : compound_statement {$$ = ABS_Statement(ABS_statement, $1);}
+    | expression_statement {$$ = ABS_Statement(ABS_statement, $1);}
+    | selection_statement {$$ = ABS_Statement(ABS_statement, $1);}
+    | iteration_statement {$$ = ABS_Statement(ABS_statement, $1);}
+    | jump_statement {$$ = ABS_Statement(ABS_statement, $1);}
 ;
 
 compound_statement
@@ -201,12 +217,8 @@ declaration_list
 
 %%
 
-
-
 int main(){
     yyparse();
-    
-    
-    
+
     return 0;
 }

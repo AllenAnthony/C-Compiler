@@ -1,3 +1,5 @@
+#ifndef _ABS_H_
+#define _ABS_H_
 typedef struct _ABS_Exp *ABS_Exp;
 typedef struct _ABS_Dec *ABS_Dec;
 typedef struct _ABS_Type *ABS_Type;
@@ -20,6 +22,7 @@ typedef enum {
     ABS_assignment,
     ABS_primary,
     ABS_multiplicative,
+    ABS_additive,
     ABS_relational,
     ABS_equality,
     ABS_logical_and,
@@ -27,12 +30,19 @@ typedef enum {
 } ABS_ExpType;
 
 typedef enum {
-    ABS_statement, ABS_compound, ABS_expression_statement, ABS_selection, ABS_iteration, ABS_jump
+    ABS_statement,
+    ABS_compound,
+    ABS_expression_statement,
+    ABS_selection,
+    ABS_iteration,
+    ABS_jump
 } ABS_StmtType;
 
 typedef enum {
-    ABS_INT, ABS_FLOAT, ABS_CHAR
-} ABS_type;
+    ABS_INT,
+    ABS_FLOAT,
+    ABS_CHAR
+} ABS_type_specifier;
 
 struct _ABS_Exp {
     ABS_ExpType exp_type;
@@ -66,7 +76,7 @@ struct _ABS_Dec {
 };
 
 struct _ABS_Type {
-    ABS_type type;
+    ABS_type_specifier type;
 };
 
 struct _ABS_Init_Dec_List {
@@ -207,3 +217,5 @@ ABS_Param_List ABS_Parameter_List(int type, ABS_Param_Dec param_dec, ABS_Param_L
 ABS_Param_Dec ABS_Parameter_Declaration(ABS_Type ABS_type, _ABS_ID id_d);
 
 ABS_Dec_List ABS_Declaration_List(int type, ABS_Dec dec, ABS_Dec_List dec_list);
+
+#endif //_ABS_H_
