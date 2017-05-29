@@ -1,40 +1,40 @@
-typedef struct HASH_TABLE *hashTable;
-typedef struct BINDER_ *binder;
+typedef struct HASH_TABLE *HashTable;
+typedef struct BINDER *Binder;
 
 #define TABSIZE 1024
 
 //creat a new empty hash table
-hashTable hashEmpty(void);
+HashTable HASH_create(void);
 
 //push item
-void hashPush(hashTable t, void *key, void *value);
+void HASH_push(HashTable t, void *key, void *value);
 
 //look for the value according to the key
-void *hashLook(hashTable t, void *key);
+void *HASH_look(HashTable t, void *key);
 
 // delete the latest item
-void *hashPop(hashTable t);
+void *HASH_pop(HashTable t);
 
 //print the whole table
-void hashDump(hashTable t, void (*show)(void *key, void *value));
+void HASH_dump(HashTable t, void (*show)(void *key, void *value));
 
 //hash function
-int hashFun(void *key);
+int HASH_func(void *key);
 
-void myPrint(void *value);
+void HASH_print(void *value);
 
-void show(void *key, void *value);
+void HASH_show(void *key, void *value);
 
 //item of key to value
-struct BINDER_ {
+struct BINDER {
     void *key;
     void *value;
-    binder next;
+    Binder next;
     void *preTop;
 };
 
 //hash table
 struct HASH_TABLE {
-    binder table[TABSIZE];
+    Binder table[TABSIZE];
     void *top;
 };

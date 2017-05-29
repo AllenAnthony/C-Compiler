@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include "util.h"
-#include "table.h"
+#include "hashtable.h"
+
 
 //creat a item
-static binder Binder(void *key, void *value, binder next, void *preTop) {
-    binder b = checked_malloc(sizeof(*b));
+Binder Binder_create(void *key, void *value, Binder next, void *preTop) {
+    Binder b = checked_malloc(sizeof(*b));
     b->key = key;
     b->value = value;
     b->next = next;
@@ -14,8 +15,8 @@ static binder Binder(void *key, void *value, binder next, void *preTop) {
 
 
 //creat a new empty hash table
-hashTable hashEmpty(void) {
-    hashTable t = checked_malloc(sizeof(*t));
+HashTable HASH_create(void) {
+    HashTable t = checked_malloc(sizeof(*t));
     int i;
     t->top = NULL;
     for (i = 0; i < TABSIZE; i++)
@@ -24,31 +25,32 @@ hashTable hashEmpty(void) {
 }
 
 //my hash function
-int hashFun(void *key) {
-    key = (char *) key;
-    unsigned int hashVal = 0;
-    while ((*key) != '\0') {
-        hashVal = (hashVal << 5) + (*key)
-        key++;
+int HASH_func(void *key) {
+    int hashVal = 0;
+    char *temp = (char *) key;
+
+    while ((*temp) != '\0') {
+        hashVal = (hashVal << 5) + (*temp);
+        temp++;
     }
     return hashVal % TABSIZE;
 }
 
-//push a new item 
-void hashPush(hashTable t, void *key, void *value) {
-    int index;
+//push a new item
+void HASH_push(HashTable t, void *key, void *value) {
+    unsigned index;
     assert(t && key);
-    index = hashFun(key);
-    t->table[index] = Binder(key, value, t->table[index], t->top);
+    index = HASH_func(key);
+    t->table[index] = Binder_create(key, value, t->table[index], t->top);
     t->top = key;
 }
 
 //look for the value according to the key
-void *hashLook(hashTable t, void *key) {
+void *HASH_look(HashTable t, void *key) {
     int index;
-    binder b;
+    Binder b;
     assert(t && key);
-    index = hashFun(key);
+    index = HASH_func(key);
     for (b = t->table[index]; b; b = b->next)
         if (b->key == key)
             return b->value;
@@ -56,14 +58,14 @@ void *hashLook(hashTable t, void *key) {
 }
 
 // delete the latest item
-void *hashPop(hashTable t) {
+void *HASH_pop(HashTable t) {
     void *k;
-    binder b;
+    Binder b;
     int index;
     assert(t);
     k = t->top;
     assert(k);
-    index = hashFun(k);
+    index = HASH_func(k);
     b = t->table[index];
     assert(b);
     t->table[index] = b->next;
@@ -72,34 +74,72 @@ void *hashPop(hashTable t) {
 }
 
 //print the whole hash table
-void hashDump(hashTable t, void (*show)(void *key, void *value)) {
+void HASH_dump(HashTable t, void (*show)(void *key, void *value)) {
     void *k = t->top;
-    int index = hashFun(k);
-    binder b = t->table[index];
+    int index = HASH_func(k);
+    Binder b = t->table[index];
     if (b == NULL)
         return;
     t->table[index] = b->next;
     t->top = b->preTop;
     show(b->key, b->value);
-    hashDump(t, show);
+    HASH_dump(t, show);
     assert(t->top == b->preTop && t->table[index] == b->next);
     t->top = k;
     t->table[index] = b;
 }
 
 //the print fomula
-void show(void *key, void *value) {
-    key = (char *) key;
-    while ((*key) != '\0') {
-        printf("%c", (*key));
+void HASH_show(void *key, void *value) {
+    char *temp = (char *) key;
+    while ((*temp) != '\0') {
+        printf("%s", temp);
         key++;
     }
     printf(" : ");
-    myPrint(value);
+    HASH_print(value);
     printf("\n");
 
 }
 
-void myPrint(void *value) {
-
+void HASH_print(void *value) {
+    char *temp = (char *) value;
+    printf("%s", temp);
 }
+
+
+//#define HASH_TABLE_SIZE 1024
+//
+//enum ABS_T {
+//    TYPE_INT, TYPE_FLOAT, TYPE_CHAR
+//};
+//
+//typedef struct {
+//    char *key;
+//    enum ABS_T type;
+//} Entry;
+//
+//typedef struct {
+//    int size;
+//    Entry *top;
+//} Binder;
+//
+//typedef Binder *Hashtable;
+//
+//Hashtable HASH_create() {
+//    Hashtable hashtable = (Hashtable) malloc(sizeof(Binder) * HASH_TABLE_SIZE);
+//    memset(hashtable, 0, sizeof(Binder) * HASH_TABLE_SIZE);
+//    return hashtable;
+//}
+//
+//void HASH_func(char *key){
+//
+//}
+//
+//void HASH_insert(Entry entry){
+//
+//}
+
+
+
+
