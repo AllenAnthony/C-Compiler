@@ -53,3 +53,8 @@ gen
 .gitignore
 .idea/
 cmake-build-debug/
+lex.yy.c
+*.tab.c
+*.tab.h
+*.output
+
