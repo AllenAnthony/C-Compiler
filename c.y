@@ -202,7 +202,11 @@ declaration_list
 %%
 
 
+
 int main(){
     yyparse();
+    
+    
+    
     return 0;
 }

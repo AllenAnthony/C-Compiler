@@ -35,18 +35,33 @@ ABS_Exp ABS_Assignment_Expression(ABS_ExpType exp_type, int type, _ABS_ID id_e, 
 ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, int val) {
     ABS_Exp primary = checked_malloc(sizeof(struct _ABS_Exp));
     primary->exp_type = exp_type;
+    #ifdef DEBUG
+        printf("Primary_Expression:%d\t");
+    #endif
     switch (type) {
         case 1:
             primary->u.primary.u.id_e = (_ABS_ID) val;
+            #ifdef DEBUG
+            printf("ID_E %s", (char *)val);
+            #endif
             break;
         case 2:
             primary->u.primary.u.ival = val;
+            #ifdef DEBUG
+            printf("IVAL %d", val);
+            #endif
             break;
         case 3:
             primary->u.primary.u.fval = (float) val;
+            #ifdef DEBUG
+            printf("FVAL %.2f", (float)val);
+            #endif
             break;
         case 4:
             primary->u.primary.u.cval = (char) val;
+            #ifdef DEBUG
+            printf("CVAL %c", (char)val);
+            #endif
             break;
         case 5:
             primary->u.primary.u.exp = (ABS_Exp) val;
@@ -55,6 +70,9 @@ ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, int val) {
             primary->u.primary.u.ABS_type = (ABS_Type) val;
             break;
     }
+    #ifdef DEBUG
+    printf("\n");
+    #endif
     return primary;
 }
 
@@ -63,12 +81,28 @@ ABS_Dec ABS_Declaration(ABS_Type ABS_type, ABS_Init_Dec_List init_dec_list) {
     ABS_Dec declaration = checked_malloc(sizeof(struct _ABS_Dec));
     declaration->ABS_type = ABS_type;
     declaration->init_dec_list = init_dec_list;
+    #ifdef DEBUG
+    printf("ABS_Declaration\n");
+    #endif
     return declaration;
 }
 
 ABS_Type ABS_Type_Specifier(ABS_type type) {
     ABS_Type type_specifier = checked_malloc(sizeof(struct _ABS_Type));
     type_specifier->type = type;
+    #ifdef DEBUG
+    switch(type){
+        case ABS_INT: 
+            printf("Type Int\n");
+            break;
+        case ABS_FLOAT: 
+            printf("Type Float\n");
+            break;
+        case ABS_CHAR:
+            printf("Type Char\n");
+            break;
+    }
+    #endif
     return type_specifier;
 }
 
@@ -77,12 +111,18 @@ ABS_Init_Dec_List ABS_Init_Declarator_List(int type, ABS_Init_Dec init_dec, ABS_
     init_declarator_list->type = type;
     init_declarator_list->init_dec = init_dec;
     init_declarator_list->init_dec_list = init_dec_list;
+    #ifdef DEBUG
+    printf("ABS_Init_Declarator_List: %d\n", type);
+    #endif
     return init_declarator_list;
 }
 
 ABS_Init_Dec ABS_Init_Declarator(_ABS_ID id_d) {
     ABS_Init_Dec init_declarator = checked_malloc(sizeof(struct _ABS_Init_Dec));
     init_declarator->id_d = id_d;
+    #ifdef DEBUG
+    printf("ABS_Init_Declarator: %s\n", id_d);
+    #endif
     return init_declarator;
 }
 
@@ -90,6 +130,9 @@ ABS_Stmt ABS_Statement(ABS_StmtType stmt_type, ABS_Stmt stmt) {
     ABS_Stmt statement = checked_malloc(sizeof(struct _ABS_Stmt));
     statement->stmt_type = stmt_type;
     statement->u.stmt = stmt;
+    #ifdef DEBUG
+    printf("ABS_Statement: %d\n", stmt_type);
+    #endif
     return statement;
 }
 
@@ -98,6 +141,9 @@ ABS_Stmt ABS_Compound(ABS_StmtType stmt_type, int type, ABS_Block_Item_List bloc
     compound->stmt_type = stmt_type;
     compound->u.compound.type = type;
     compound->u.compound.block_item_list = block_item_list;
+    #ifdef DEBUG
+    printf("ABS_Compound: %d\n", type);
+    #endif
     return compound;
 }
 
@@ -106,6 +152,9 @@ ABS_Stmt ABS_Expression_Statement(ABS_StmtType stmt_type, int type, ABS_Exp exp)
     expression->stmt_type = stmt_type;
     expression->u.expression.type = type;
     expression->u.expression.exp = exp;
+    #ifdef DEBUG
+    printf("ABS_Declaration\n");
+    #endif
     return expression;
 }
 
@@ -115,6 +164,9 @@ ABS_Stmt ABS_Selection(ABS_StmtType stmt_type, ABS_Exp exp, ABS_Stmt stmt_if, AB
     selection->u.selection.exp = exp;
     selection->u.selection.stmt_if = stmt_if;
     selection->u.selection.stmt_else = stmt_else;
+    #ifdef DEBUG
+    printf("ABS_Declaration\n");
+    #endif
     return selection;
 }
 
