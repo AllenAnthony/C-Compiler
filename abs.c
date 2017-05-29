@@ -98,6 +98,7 @@ ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, void* val) {
         case 6:
             primary->u.primary.u.ABS_type = (ABS_Type) val;
             break;
+        default: break;
     }
     #ifdef DEBUG
     printf("\n");
