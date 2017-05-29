@@ -20,4 +20,4 @@ abs.o: abs.h abs.c
 	gcc -c abs.c
 
 clean:
-	rm -rf compiler lex.yy.c *.tab.h *.tab.c *.o *.output
+	rm -rf compiler lex.yy.c *.tab.h *.tab.c *.o *.output cmake-build-debug
