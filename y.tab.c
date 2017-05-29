@@ -1992,7 +1992,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 205 "c.y"
-    {(yyval.param_list) = ABS_Parameter_List(1, NULL, (yyvsp[(1) - (1)].param_dec));;}
+    {(yyval.param_list) = ABS_Parameter_List(1, (yyvsp[(1) - (1)].param_dec), NULL);;}
     break;
 
   case 70:
