@@ -1,7 +1,7 @@
 %{
+#include "abs.h"
 #include "y.tab.h"
 #include "util.h"
-#include "abs.h"
 int line;
     
 %}

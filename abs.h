@@ -182,13 +182,17 @@ struct _ABS_Dec_List {
 
 ABS_Exp ABS_Expression(ABS_ExpType exp_type, int type, ABS_Exp exp_left, ABS_Exp exp_right);
 
-ABS_Exp ABS_Assignment(ABS_ExpType exp_type, int type, _ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right);
+ABS_Exp ABS_Assignment_Expression(ABS_ExpType exp_type, int type, _ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right);
 
-ABS_Exp ABS_Primary(ABS_ExpType exp_type, int type, int ptr);
+ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, int ptr);
 
 ABS_Dec ABS_Declaration(ABS_Type ABS_type, ABS_Init_Dec_List init_dec_list);
 
+ABS_Type ABS_Type_Specifier(ABS_type_specifier type);
+
 ABS_Init_Dec_List ABS_Init_Declarator_List(int type, ABS_Init_Dec init_dec, ABS_Init_Dec_List init_dec_list);
+
+ABS_Init_Dec ABS_Init_Declarator(_ABS_ID id_d);
 
 ABS_Stmt ABS_Statement(ABS_StmtType stmt_type, ABS_Stmt stmt);
 

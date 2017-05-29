@@ -319,7 +319,7 @@ ABS_Param_Dec ABS_Parameter_Declaration(ABS_Type ABS_type, _ABS_ID id_d) {
     parameter_declaration->ABS_type = ABS_type;
     parameter_declaration->id_d = id_d;
     #ifdef DEBUG
-        printf("Parameter_Declaration_%d\n", type);
+        printf("Parameter_Declaration\n");
     #endif
     return parameter_declaration;
 }

@@ -198,11 +198,11 @@ external_declaration
 
 function_definition
     : type_specifier ID_D LP parameter_list RP declaration_list compound_statement {$$ = ABS_Function_Definition(1, $1, $2, $4, $6, $7);}
-    | type_specifier ID_D LP parameter_list RP compound_statement {$$ = ABS_Function_Definition(2, $1, $2, $4, $6, NULL);}
+    | type_specifier ID_D LP parameter_list RP compound_statement {$$ = ABS_Function_Definition(2, $1, $2, $4, NULL, $6);}
 ;
 
 parameter_list
-    : parameter_declaration {$$ = ABS_Parameter_List(1, NULL, $1);}
+    : parameter_declaration {$$ = ABS_Parameter_List(1, $1, NULL);}
     | parameter_list COMMA parameter_declaration {$$ = ABS_Parameter_List(2, $3, $1);}
 ;
 

@@ -451,9 +451,9 @@ char *yytext;
 #line 1 "c.l"
 #define INITIAL 0
 #line 2 "c.l"
+#include "abs.h"
 #include "y.tab.h"
 #include "util.h"
-#include "abs.h"
 int line;
     
 #define CHARACTER 1

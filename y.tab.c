@@ -1789,7 +1789,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 134 "c.y"
-    {(yyval.init_dec_list) = ABS_Init_Declarator_List(2, (yyvsp[(1) - (3)].init_dec_list), (yyvsp[(3) - (3)].init_dec));;}
+    {(yyval.init_dec_list) = ABS_Init_Declarator_List(2, (yyvsp[(3) - (3)].init_dec), (yyvsp[(1) - (3)].init_dec_list));;}
     break;
 
   case 41:
@@ -1985,7 +1985,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 201 "c.y"
-    {(yyval.func_def) = ABS_Function_Definition(2, (yyvsp[(1) - (6)].type), (yyvsp[(2) - (6)].id), (yyvsp[(4) - (6)].param_list), (yyvsp[(6) - (6)].stmt), NULL);;}
+    {(yyval.func_def) = ABS_Function_Definition(2, (yyvsp[(1) - (6)].type), (yyvsp[(2) - (6)].id), (yyvsp[(4) - (6)].param_list), NULL, (yyvsp[(6) - (6)].stmt));;}
     break;
 
   case 69:
