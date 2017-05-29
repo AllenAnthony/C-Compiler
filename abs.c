@@ -32,6 +32,7 @@ ABS_Exp ABS_Expression(ABS_ExpType exp_type, int type, ABS_Exp exp_left, ABS_Exp
             case 8:
                 printf("Logical_Or_Expression_%d\n",type);
                 break;
+            default: break;
         }
     #endif
 }
@@ -60,7 +61,7 @@ ABS_Exp ABS_Assignment_Expression(ABS_ExpType exp_type, int type, _ABS_ID id_e, 
     return assignment;
 }
 
-ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, int val) {
+ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, void* val) {
     ABS_Exp primary = checked_malloc(sizeof(struct _ABS_Exp));
     primary->exp_type = exp_type;
     #ifdef DEBUG
@@ -74,21 +75,21 @@ ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, int val) {
             #endif
             break;
         case 2:
-            primary->u.primary.u.ival = val;
+            primary->u.primary.u.ival = *(int *)val;
             #ifdef DEBUG
-            printf("IVAL_%d", val);
+            printf("IVAL_%d", *(int *)val);
             #endif
             break;
         case 3:
-            primary->u.primary.u.fval = (float) val;
+            primary->u.primary.u.fval = *(float *) val;
             #ifdef DEBUG
-            printf("FVAL_%.2f", (float)val);
+            printf("FVAL_%.2f", *(float *)val);
             #endif
             break;
         case 4:
-            primary->u.primary.u.cval = (char) val;
+            primary->u.primary.u.cval = *(char *) val;
             #ifdef DEBUG
-            printf("CVAL_%c", (char)val);
+            printf("CVAL_%c", *(char *)val);
             #endif
             break;
         case 5:

@@ -73,12 +73,12 @@ assignment_expression
 ;
 
 primary_expression
-    : ID_E {$$ = ABS_Primary_Expression(ABS_primary, 1, (int)$1);}
-    | IVAL {$$ = ABS_Primary_Expression(ABS_primary, 2, $1);}
-    | FVAL {$$ = ABS_Primary_Expression(ABS_primary, 3, (int)$1);}
-    | CVAL {$$ = ABS_Primary_Expression(ABS_primary, 4, (int)$1);}
-    | LP expression RP {$$ = ABS_Primary_Expression(ABS_primary, 5, (int)$2);}
-    | SIZEOF LP type_specifier RP {$$ = ABS_Primary_Expression(ABS_primary, 6, (int)$3);}
+    : ID_E {$$ = ABS_Primary_Expression(ABS_primary, 1, (void *)$1);}
+    | IVAL {$$ = ABS_Primary_Expression(ABS_primary, 2, (void *)&($1));}
+    | FVAL {$$ = ABS_Primary_Expression(ABS_primary, 3, (void *)&($1));}
+    | CVAL {$$ = ABS_Primary_Expression(ABS_primary, 4, (void *)&($1));}
+    | LP expression RP {$$ = ABS_Primary_Expression(ABS_primary, 5, (void *)$2);}
+    | SIZEOF LP type_specifier RP {$$ = ABS_Primary_Expression(ABS_primary, 6, (void *)$3);}
 ;
 
 multiplicative_expression

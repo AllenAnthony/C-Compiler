@@ -1579,42 +1579,42 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 76 "c.y"
-    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 1, (int)(yyvsp[(1) - (1)].id));;}
+    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 1, (void *)(yyvsp[(1) - (1)].id));;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
 #line 77 "c.y"
-    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 2, (yyvsp[(1) - (1)].ival));;}
+    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 2, (void *)&((yyvsp[(1) - (1)].ival)));;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
 #line 78 "c.y"
-    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 3, (int)(yyvsp[(1) - (1)].fval));;}
+    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 3, (void *)&((yyvsp[(1) - (1)].fval)));;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
 #line 79 "c.y"
-    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 4, (int)(yyvsp[(1) - (1)].cval));;}
+    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 4, (void *)&((yyvsp[(1) - (1)].cval)));;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
 #line 80 "c.y"
-    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 5, (int)(yyvsp[(2) - (3)].exp));;}
+    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 5, (void *)(yyvsp[(2) - (3)].exp));;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
 #line 81 "c.y"
-    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 6, (int)(yyvsp[(3) - (4)].type));;}
+    {(yyval.exp) = ABS_Primary_Expression(ABS_primary, 6, (void *)(yyvsp[(3) - (4)].type));;}
     break;
 
   case 16:

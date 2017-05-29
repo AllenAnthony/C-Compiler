@@ -184,7 +184,7 @@ ABS_Exp ABS_Expression(ABS_ExpType exp_type, int type, ABS_Exp exp_left, ABS_Exp
 
 ABS_Exp ABS_Assignment_Expression(ABS_ExpType exp_type, int type, _ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right);
 
-ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, int ptr);
+ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, void* val);
 
 ABS_Dec ABS_Declaration(ABS_Type ABS_type, ABS_Init_Dec_List init_dec_list);
 
