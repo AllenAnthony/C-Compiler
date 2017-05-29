@@ -1,9 +1,9 @@
 int main(int argc){
-int a = 0;
-float b = 1;
-char c = 'A';
+int a;
+float b;
+char c;
 a == b;
-for(i=0; i=0; i++){
+for(i=0; i=0; i=i+1){
 
 j=0;
 }

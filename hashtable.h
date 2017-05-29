@@ -19,24 +19,22 @@ void *hashPop(hashTable t);
 void hashDump(hashTable t, void (*show)(void *key, void *value));
 
 //hash function
-int hashFun(void* key);
+int hashFun(void *key);
 
-void myPrint(void* value);
+void myPrint(void *value);
 
 void show(void *key, void *value);
 
 //item of key to value
-struct BINDER_ 
-{
-    void *key; 
-    void *value; 
-    binder next; 
+struct BINDER_ {
+    void *key;
+    void *value;
+    binder next;
     void *preTop;
 };
 
 //hash table
-struct HASH_TABLE 
-{
-  binder table[TABSIZE];
-  void *top;
+struct HASH_TABLE {
+    binder table[TABSIZE];
+    void *top;
 };
