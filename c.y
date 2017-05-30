@@ -172,11 +172,11 @@ function_definition
 ;
 
 parameter_list
-    : parameter
-    | parameter_list parameter
+    : LP parameter
+    | parameter_list COMMA parameter
 ;
 parameter
-    : LP type_specifier ID
+    : type_specifier ID
 ;
 
 %%
