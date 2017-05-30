@@ -196,7 +196,7 @@ ABS_init_declarator_list F_ABS_init_declarator_list(
                 sizeof(*init_declarator_list));
     }
     init_declarator_list->init_declarator_list.push_back(init_declarator);
-    return init_declarator;
+    return init_declarator_list;
 }
 
 
@@ -327,7 +327,7 @@ ABS_program F_ABS_program(
 ) {
     ABS_program program = (ABS_program) malloc(sizeof(*program));
     program->declaration_list = declaration_list;
-    program->function_definition_list = function_list;
+    program->function_definition_list = function_definition_list;
     return program;
 }
 
@@ -336,7 +336,7 @@ ABS_function_definition_list F_ABS_function_definition_list(
         ABS_function_definition_list function_definition_list,
         ABS_function_definition function_definition
 ) {
-    if (function_definition_list == null) {
+    if (function_definition_list == NULL) {
         function_definition_list = (ABS_function_definition_list) check_malloc(sizeof(*function_definition_list));
     }
     function_definition_list->function_definition_list.push_back(function_definition);
