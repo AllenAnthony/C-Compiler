@@ -60,8 +60,6 @@ typedef enum {
     ENUM_OR
 } ENUM_oper_type;
 
-
-
 typedef struct _ABS_ID *ABS_ID;
 typedef struct _ABS_IVAL *ABS_IVAL;
 typedef struct _ABS_FVAL *ABS_FVAL;
