@@ -251,7 +251,7 @@ struct _ABS_parameter {
     ABS_ID id;
 };
 
-ABS_ID F_ABS_ID(string id);
+ABS_ID F_ABS_ID(char* id);
 
 ABS_IVAL F_ABS_IVAL(int ival);
 

@@ -1,6 +1,6 @@
 %{
+#include "abs.hpp"
 #include "util.hpp"
-
 ABS_program ABS_root;
 %}
 
@@ -83,22 +83,22 @@ ABS_program ABS_root;
 %%
 
 expression_list
-    : expression {$$ = ABS_express_list(NULL, $1);}
-    | expression_list COMMA expression {$$ = F_ABS_express_list($1, $3);}
+    : expression {$$ = F_ABS_expression_list(NULL, $1);}
+    | expression_list COMMA expression {$$ = F_ABS_expression_list($1, $3);}
 ;
 
 expression
-    : assignment_expression {$$ = F_ABS_expression(ENUM_assignment_expression, $1);}
-    | compound_expression {$$ = F_ABS_expression(ENUM_compound_expression, $1);}
+    : assignment_expression {$$ = F_ABS_expression(ENUM_assignment_expression, $1, NULL);}
+    | compound_expression {$$ = F_ABS_expression(ENUM_compound_expression, NULL, $1);}
 ;
 
 assignment_expression
-    : ID ASSIGN compound_expression {$$ = F_ABS_assignment_expression($1, NULL, $3);}
-    | ID LSB compound_expression RSB ASSIGN compound_expression {$$ = F_ABS_assignment_expression(string($1), $3, $6);}
+    : ID ASSIGN compound_expression {$$ = F_ABS_assignment_expression(F_ABS_ID($1), NULL, $3);}
+    | ID LSB compound_expression RSB ASSIGN compound_expression {$$ = F_ABS_assignment_expression(F_ABS_ID($1), $3, $6);}
 ;
 
 primary_expression
-    : ID {$$ = F_ABS_primary_expression(ENUM_ID, $1, NULL, NULL, NULL);}
+    : ID {$$ = F_ABS_primary_expression(ENUM_ID, F_ABS_ID($1), NULL, NULL, NULL);}
     | constant {$$ = F_ABS_primary_expression(ENUM_constant, NULL, $1, NULL, NULL);}
     | LP compound_expression RP {$$ = F_ABS_primary_expression(ENUM_compound_expression, NULL, NULL, $2, NULL);}
     | function_invoking {$$ = F_ABS_primary_expression(ENUM_function_invoking, NULL, NULL, NULL, $1);}
@@ -111,12 +111,12 @@ constant
 ;
 
 function_invoking
-    : ID argue_list RP SEMI {$$ = F_ABS_function_invoking($1, $2);}
+    : ID argue_list RP SEMI {$$ = F_ABS_function_invoking(F_ABS_ID($1), $2);}
 ;
 
 argue_list
-    : LP ID {$$ = F_ABS_argue_list(NULL, $2);}
-    | argue_list COMMA ID {$$ = F_ABS_argue_list($1, $3);}
+    : LP ID {$$ = F_ABS_argue_list(NULL, F_ABS_ID($2));}
+    | argue_list COMMA ID {$$ = F_ABS_argue_list($1, F_ABS_ID($3));}
 ;
 
 compound_expression
@@ -163,8 +163,8 @@ init_declarator_list
 ;
 
 init_declarator
-    : ID {$$ = F_ABS_init_declaration($1, NULL);}
-    | ID ASSIGN constant {$$ = F_ABS_init_declaration($1, $3);}
+    : ID {$$ = F_ABS_init_declarator(F_ABS_ID($1), NULL);}
+    | ID ASSIGN constant {$$ = F_ABS_init_declarator(F_ABS_ID($1), $3);}
 ;
 
 statement_list
@@ -178,7 +178,7 @@ statement
     | selection_statement {$$ = F_ABS_statement(ENUM_selection_statement, NULL, NULL, $1, NULL, NULL, NULL);}
     | iteration_statement {$$ = F_ABS_statement(ENUM_iteration_statement, NULL, NULL, NULL, $1, NULL, NULL);}
     | jump_statement {$$ = F_ABS_statement(ENUM_jump_statement, NULL, NULL, NULL, NULL, $1, NULL);}
-    | PRINT LP compound_expression RP {$$ = F_ABS_statement(ENUM_compound_expression, NULL, NULL, NULL, NULL, NULL, $3,);}
+    | PRINT LP compound_expression RP {$$ = F_ABS_statement(ENUM_compound_expression, NULL, NULL, NULL, NULL, NULL, $3);}
 ;
 
 block_statement
@@ -223,8 +223,8 @@ function_definition_list
 ;
 
 function_definition
-    : type_specifier ID LP RP block_statement{$$=F_ABS_function_definition($1, $2, NULL, $5);}
-    | type_specifier ID parameter_list RP block_statement{$$=F_ABS_function_definition($1, $2, NULL, $5);}
+    : type_specifier ID LP RP block_statement{$$=F_ABS_function_definition($1, F_ABS_ID($2), NULL, $5);}
+    | type_specifier ID parameter_list RP block_statement{$$=F_ABS_function_definition($1, F_ABS_ID($2), NULL, $5);}
 ;
 
 parameter_list
@@ -232,7 +232,7 @@ parameter_list
     | parameter_list COMMA parameter{$$=F_ABS_parameter_list($1, $3);}
 ;
 parameter
-    : type_specifier ID{$$=F_ABS_parameter($1, $2);}
+    : type_specifier ID{$$=F_ABS_parameter($1, F_ABS_ID($2));}
 ;
 
 %%
