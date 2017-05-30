@@ -1,0 +1,3 @@
+/Users/yanhaopeng/ClionProjects/C-compiler/build/CMakeFiles/rebuild_cache.dir
+/Users/yanhaopeng/ClionProjects/C-compiler/build/CMakeFiles/edit_cache.dir
+/Users/yanhaopeng/ClionProjects/C-compiler/build/CMakeFiles/compiler.dir

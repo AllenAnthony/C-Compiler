@@ -1,5 +1,7 @@
-#!/bin/bash
-echo "---- Usage: ./test.sh <filename in ./testcase/ > -----"
-make clean
+#!/usr/bin/env bash
+cd build
+rm -rf ./*
+cmake ..
 make
-./compiler < ./testcase/$1
+cd ..
+./build/compiler < ./testcase/1.txt

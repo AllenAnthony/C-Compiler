@@ -1,112 +1,58 @@
 %{
-#include "abs.h"
-#include "y.tab.h"
-#include "util.h"
-int line;
-    
+#include <iostream>
+#include "util.hpp"
+#include "y.tab.hpp"
+
+#define DISP_TOK std::cout<<yytext;
 %}
 
 %x CHARACTER
 %x COMMENT_LINE
 %x COMMENT_BLOCK
-%x DEC
 
 %%
 
-"("         { disp_token(yytext); return LP; }
-")"         { disp_token(yytext); return RP; }
-"{"         { disp_token(yytext); return LCB; }
-"}"         { disp_token(yytext); return RCB; }
-"["         { disp_token(yytext); return LSB; }
-"]"         { disp_token(yytext); return RSB; }
-";"         { disp_token(yytext); return SEMI; }
-","         { disp_token(yytext); return COMMA; }
-":"         { disp_token(yytext); return COLON; }
+"("         { DISP_TOK return LP; }
+")"         { DISP_TOK return RP; }
+"{"         { DISP_TOK return LCB; }
+"}"         { DISP_TOK return RCB; }
+"["         { DISP_TOK return LSB; }
+"]"         { DISP_TOK return RSB; }
+";"         { DISP_TOK return SEMI; }
+","         { DISP_TOK return COMMA; }
+":"         { DISP_TOK return COLON; }
 
-"int"       {
-    BEGIN DEC;
-    disp_token(yytext); return INT;
-}
-"float"     {
-    BEGIN DEC;
-    disp_token(yytext); return FLOAT;
-}
-"char"      {
-    BEGIN DEC;
-    disp_token(yytext); return CHAR;
-}
+"int"       { DISP_TOK return INT; }
+"float"     { DISP_TOK return FLOAT;}
+"char"      { DISP_TOK return CHAR; }
 
-<DEC>{
+"if"        { DISP_TOK return IF; }
+"else"      { DISP_TOK return ELSE; }
+"while"     { DISP_TOK return WHILE; }
+"for"       { DISP_TOK return FOR; }
+"break"     { DISP_TOK return BREAK; }
+"continue"  { DISP_TOK return CONTINUE; }
+"switch"    { DISP_TOK return SWITCH; }
+"return"    { DISP_TOK return RETURN; }
 
-    "int"       { disp_token(yytext); return INT; }
-    "float"     { disp_token(yytext); return FLOAT; }
-    "char"      { disp_token(yytext); return CHAR; }
+"="         { DISP_TOK return ASSIGN; }
+"+"         { DISP_TOK return PLUS; }
+"-"         { DISP_TOK return MINUS; }
+"*"         { DISP_TOK return MUL; }
+"/"         { DISP_TOK return DIV; }
+"%"         { DISP_TOK return MOD; }
 
-    ";" {
-        BEGIN INITIAL;
-        disp_token(yytext);
-        return SEMI;
-    }
-    "(" {
-        BEGIN INITIAL;
-        disp_token(yytext);
-        return LP;
-    }
-    ")" {
-        BEGIN INITIAL;
-        disp_token(yytext);
-        return RP;
-    }
-    "," {
-    	disp_token(yytext);
-    	return COMMA;
-    }
+">="        { DISP_TOK return GE; }
+"<="        { DISP_TOK return LE; }
+"!="        { DISP_TOK return NE; }
+"=="        { DISP_TOK return EQ; }
+">"         { DISP_TOK return GT; }
+"<"         { DISP_TOK return LT; }
+"&&"        { DISP_TOK return AND; }
+"||"        { DISP_TOK return OR; }
+"!"         { DISP_TOK return NOT; }
 
-    ([a-zA-Z_][a-zA-Z_0-9]*) {
-        yylval.sval = malloc(strlen(yytext)+1);
-        strcpy(yylval.sval, yytext);
-        disp_token(yytext);
-        return ID_D;
-    }
-
-    [ \t] disp_token(yytext);
-
-	[\n] {
-    	disp_token(yytext);
-    	line++;
-	}
-
-	. {
-    	printf("\nError: Syntax error\n");
-        exit(0);
-	};
-}
-
-"if"        { disp_token(yytext); return IF; }
-"else"      { disp_token(yytext); return ELSE; }
-"while"     { disp_token(yytext); return WHILE; }
-"for"       { disp_token(yytext); return FOR; }
-"break"     { disp_token(yytext); return BREAK; }
-"continue"  { disp_token(yytext); return CONTINUE; }
-"switch"    { disp_token(yytext); return SWITCH; }
-"return"    { disp_token(yytext); return RETURN; }
-
-"="         { disp_token(yytext); return ASSIGN; }
-"+"         { disp_token(yytext); return PLUS; }
-"-"         { disp_token(yytext); return MINUS; }
-"*"         { disp_token(yytext); return MUL; }
-"/"         { disp_token(yytext); return DIV; }
-"%"         { disp_token(yytext); return MOD; }
-
-">="        { disp_token(yytext); return GE; }
-"<="        { disp_token(yytext); return LE; }
-"!="        { disp_token(yytext); return NE; }
-"=="        { disp_token(yytext); return EQ; }
-">"         { disp_token(yytext); return GT; }
-"<"         { disp_token(yytext); return LT; }
-"&&"        { disp_token(yytext); return AND; }
-"||"        { disp_token(yytext); return OR; }
-"!"         { disp_token(yytext); return NOT; }
+"print"     { DISP_TOK return PRINT; }
 
 
 "//"        {   /* 单行注释 */
@@ -117,7 +63,7 @@ int line;
         BEGIN INITIAL;
     }
     .  {
-    
+
     }
 }
 
@@ -144,40 +90,40 @@ int line;
     "'" {
         BEGIN INITIAL;
     }
-    "\n" {
-        yylval.cval=0x0A; disp_token(yytext); return CVAL;
+
+    "\\n" {
+        yylval.cval=0x0A; DISP_TOK return CVAL;
     }
-    
+
     [^\'] {
-        yylval.cval=*yytext; disp_token(yytext); return CVAL;
+        yylval.cval=*yytext; DISP_TOK return CVAL;
     }
 }
 
 [a-zA-Z_][a-zA-Z_0-9]*	{
-    yylval.sval = malloc(strlen(yytext)+1);
+    yylval.sval = (char *)malloc(strlen(yytext)+1);
     strcpy(yylval.sval, yytext);
-    disp_token(yytext);
-    return ID_E;
+    DISP_TOK
+    return ID;
 }
 
 [0-9]+	{
     yylval.fval=atoi(yytext);
-    disp_token(yytext);
+    DISP_TOK
     return IVAL;
 }
 
 [0-9]+\.[0-9]+	{
     yylval.fval=atof(yytext);
-    disp_token(yytext);
+    DISP_TOK
     return FVAL;
 }
 
 
-[ \t]	disp_token(yytext);
+[ \t]	DISP_TOK
 
 [\n]	{
-    disp_token(yytext);
-    line++;
+    DISP_TOK;
 }
 
 .		{

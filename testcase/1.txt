@@ -3,6 +3,8 @@ int main(int argci, int b, float c, char d){
     for(i=0; i<5; i=i+1){
         a=a; b=3; 
     }
+    c = '\n';
+    a = '1';
     if(3==0){
 
     }else{
