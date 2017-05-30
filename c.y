@@ -30,82 +30,82 @@
 %%
 
 expression_list
-    : expression
-    | expression_list COMMA expression
+    : expression {$$ = ABS_express_list(NULL, $1);}
+    | expression_list COMMA expression {$$ = F_ABS_express_list($1, $3);}
 ;
 
 expression
-    : assignment_expression
-    | compound_expression
+    : assignment_expression {$$ = F_ABS_expression(ENUM_assignment_expression, $1);}
+    | compound_expression {$$ = F_ABS_expression(ENUM_compound_expression, $1);}
 ;
 
 assignment_expression
-    : ID ASSIGN compound_expression
-    | ID LSB compound_expression RSB ASSIGN compound_expression
+    : ID ASSIGN compound_expression {$$ = F_ABS_assignment_expression($1, NULL, $3);}
+    | ID LSB compound_expression RSB ASSIGN compound_expression {$$ = F_ABS_assignment_expression($1, $3, $6);}
 ;
 
 primary_expression
-    : ID
-    | constant
-    | LP compound_expression RP
-    | function_invoking
+    : ID {$$ = F_ABS_primary_expression(ENUM_ID, $1, NULL, NULL, NULL);}
+    | constant {$$ = F_ABS_primary_expression(ENUM_constant, NULL, $1, NULL, NULL);}
+    | LP compound_expression RP {$$ = F_ABS_primary_expression(ENUM_compound_expression, NULL, NULL, $2, NULL);}
+    | function_invoking {$$ = F_ABS_primary_expression(ENUM_function_invoking, NULL, NULL, NULL, $1);}
 ;
 
 constant
-    : IVAL
-    | FVAL
-    | CVAL
+    : IVAL {$$ =F_ABS_constant(ENUM_IVAL, $1, NULL, NULL);}
+    | FVAL {$$ =F_ABS_constant(ENUM_FVAL, NULL, $1, NULL);}
+    | CVAL {$$ =F_ABS_constant(ENUM_CVAL, NULL, NULL, $1);}
 ;
 
 function_invoking
-    : ID argue_list RP SEMI
+    : ID argue_list RP SEMI {$$ = F_ABS_function_invoking($1, $2);}
 ;
 
 argue_list
-    : LP ID
-    | argue_list COMMA ID
+    : LP ID {$$ = F_ABS_argue_list(NULL, $2);}
+    | argue_list COMMA ID {$$ = F_ABS_argue_list($1, $3);}
 ;
 
 compound_expression
-    : primary_expression
+    : primary_expression {$$ = F_ABS_compound_expression(ENUM_NONE, $1, NULL);}
 
-    | compound_expression MUL primary_expression
-    | compound_expression DIV primary_expression
-    | compound_expression MOD primary_expression
+    | compound_expression MUL primary_expression {$$ = F_ABS_compound_expression(ENUM_MUL, $3, $1);}
+    | compound_expression DIV primary_expression {$$ = F_ABS_compound_expression(ENUM_DIV, $3, $1);}
+    | compound_expression MOD primary_expression {$$ = F_ABS_compound_expression(ENUM_MOD, $3, $1);}
 
-    | compound_expression PLUS primary_expression
-    | compound_expression MINUS primary_expression
+    | compound_expression PLUS primary_expression {$$ = F_ABS_compound_expression(ENUM_PLUS, $3, $1);}
+    | compound_expression MINUS primary_expression {$$ = F_ABS_compound_expression(ENUM_MINUS, $3, $1);}
 
-    | compound_expression LT primary_expression
-    | compound_expression GT primary_expression
-    | compound_expression LE primary_expression
-    | compound_expression GE primary_expression
+    | compound_expression LT primary_expression {$$ = F_ABS_compound_expression(ENUM_LT, $3, $1);}
+    | compound_expression GT primary_expression {$$ = F_ABS_compound_expression(ENUM_GT, $3, $1);}
+    | compound_expression LE primary_expression {$$ = F_ABS_compound_expression(ENUM_LE, $3, $1);}
+    | compound_expression GE primary_expression {$$ = F_ABS_compound_expression(ENUM_GE, $3, $1);}
 
-    | compound_expression EQ primary_expression
-    | compound_expression NE primary_expression
+    | compound_expression EQ primary_expression {$$ = F_ABS_compound_expression(ENUM_EQ, $3, $1);}
+    | compound_expression NE primary_expression {$$ = F_ABS_compound_expression(ENUM_NE, $3, $1);}
 
-    | compound_expression AND primary_expression
+    | compound_expression AND primary_expression {$$ = F_ABS_compound_expression(ENUM_AND, $3, $1);}
 
-    | compound_expression OR primary_expression
+    | compound_expression OR primary_expression {$$ = F_ABS_compound_expression(ENUM_OR, $3, $1);}
 ;
 
 declaration_list
-    : declaration
-    | declaration_list declaration
+    : declaration {$$ = F_ABS_declaration_list(NULL, $1);}
+    | declaration_list declaration {$$ = F_ABS_declaration_list($1, $2);}
 ;
 
 declaration
-    : type_specifier init_declarator_list
+    : type_specifier init_declarator_list {$$ = F_ABS_declaration($1, $2);}
 ;
 
 type_specifier
-    : INT
-    | FLOAT
-    | CHAR
+    : INT {$$ = F_ABS_specifier(ENUM_INT);}
+    | FLOAT {$$ = F_ABS_specifier(ENUM_FLOAT);}
+    | CHAR {$$ = F_ABS_specifier(ENUM_CHAR);}
 ;
 
 init_declarator_list
-    : init_declarator SEMI
+    : init_declarator SEMI {$$ = F_ABS_init_declarator}
     | init_declarator COMMA init_declarator_list
 ;
 

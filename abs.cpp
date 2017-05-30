@@ -61,7 +61,6 @@ ABS_expression F_ABS_expression(
     return expression;
 }
 
-
 ABS_assignment_expression F_ABS_assignment_expression(
         ABS_ID abs_id,
         ABS_compound_expression compound_expression_index,
