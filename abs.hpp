@@ -402,7 +402,7 @@ ABS_parameter_list F_ABS_parameter_list(
 );
 
 
-ABS_parameter F__ABS_parameter(
+ABS_parameter F_ABS_parameter(
         ABS_specifier type_specifier,
         ABS_ID id
 );
