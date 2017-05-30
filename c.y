@@ -7,12 +7,71 @@
     int ival;
     float fval;
     char* sval;
+    ABS_ID abs_id;
+    ABS_IVAL abs_ival;
+    ABS_FVAL abs_fval;
+    ABS_CVAL abs_cval;
+    ABS_expression_list expression_list;
+    ABS_expression expression;
+    ABS_assignment_expression assignment_expression;
+    ABS_primary_expression primary_expression;
+    ABS_constant constant;
+    ABS_function_invoking function_invoking;
+    ABS_argue_list argue_list;
+    ABS_compound_expression compound_expression;
+    ABS_declaration_list declaration_list;
+    ABS_declaration declaration;
+    ABS_specifier specifier;
+    ABS_init_declarator_list init_declarator_list;
+    ABS_init_declarator init_declarator;
+    ABS_statement_list statement_list;
+    ABS_statement statement;
+    ABS_block_statement block_statement;
+    ABS_expression_statement expression_statement;
+    ABS_selection_statement selection_statement;
+    ABS_iteration_statement iteration_statement;
+    ABS_jump_statement jump_statement;
+    ABS_program program;
+    ABS_function_definition_list function_definition_list;
+    ABS_function_definition function_definition;
+    ABS_parameter_list parameter_list;
+    ABS_parameter parameter;
 }
 
 %token <ival> IVAL
 %token <cval> CVAL
 %token <fval> FVAL
 %token <sval> SVAL
+%token <abs_id>
+%token <abs_ival>
+%token <abs_fval>
+%token <abs_cval>
+%token <expression_list> expression_list
+%token <expression> expression
+%token <assignment_expression> assignment_expression
+%token <primary_expression> primary_expression
+%token <constant> constant
+%token <function_invoking> function_invoking
+%token <argue_list> argue_list
+%token <compound_expression> compound_expression
+%token <declaration_list> declaration_list
+%token <declaration> declaration
+%token <specifier> type_specifier
+%token <init_declarator_list> init_declarator_list
+%token <init_declarator> init_declarator
+%token <statement_list> statement_list
+%token <statement> statement
+%token <block_statement> block_statement
+%token <expression_statement> expression_statement
+%token <selection_statement> selection_statement
+%token <iteration_statement> iteration_statement
+%token <jump_statement> jump_statement
+%token <program> program
+%token <function_definition_list> function_definition_list
+%token <function_definition> function_definition
+%token <parameter_list> parameter_list
+%token <parameter> parameter
+
 %token INT FLOAT CHAR ID
 
 %token LP RP LCB RCB LSB RSB SEMI COMMA COLON PRINT
