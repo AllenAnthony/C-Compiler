@@ -14,7 +14,7 @@ ADD_FLEX_BISON_DEPENDENCY(Scanner Parser)
 #设置关联文件夹，关联当前文件夹和生成目标文件夹的文件
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${})
+
 
 #工具Utils
 set(UTILS util.cpp)

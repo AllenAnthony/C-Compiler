@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include "abs.hpp"
-#include "util.hpp"
 
 ABS_ID F_ABS_ID(string id) {
     ABS_ID abs_id = (ABS_ID) check_malloc(sizeof(*abs_id));
@@ -152,12 +150,12 @@ ABS_argue_list F_ABS_argue_list(ABS_argue_list argue_list, ABS_ID abs_id) {
 ABS_compound_expression F_ABS_compound_expression(
         ENUM_oper_type oper_type,
         ABS_primary_expression primary_expression,
-        ABS_compound_expression compound_expression
+        ABS_compound_expression compound_exp
 ) {
     ABS_compound_expression compound_expression = (ABS_compound_expression) check_malloc(sizeof(*compound_expression));
     compound_expression->oper_type = oper_type;
     compound_expression->primary_expression = primary_expression;
-    compound_expression->compound_expression = compound_expression;
+    compound_expression->compound_expression = compound_exp;
     return compound_expression;
 }
 
@@ -196,7 +194,7 @@ ABS_init_declarator_list F_ABS_init_declarator_list(
                 sizeof(*init_declarator_list));
     }
     init_declarator_list->init_declarator_list.push_back(init_declarator);
-    return init_declarator;
+    return init_declarator_list;
 }
 
 
@@ -327,7 +325,7 @@ ABS_program F_ABS_program(
 ) {
     ABS_program program = (ABS_program) malloc(sizeof(*program));
     program->declaration_list = declaration_list;
-    program->function_definition_list = function_list;
+    program->function_definition_list = function_definition_list;
     return program;
 }
 
@@ -336,7 +334,7 @@ ABS_function_definition_list F_ABS_function_definition_list(
         ABS_function_definition_list function_definition_list,
         ABS_function_definition function_definition
 ) {
-    if (function_definition_list == null) {
+    if (function_definition_list == NULL) {
         function_definition_list = (ABS_function_definition_list) check_malloc(sizeof(*function_definition_list));
     }
     function_definition_list->function_definition_list.push_back(function_definition);

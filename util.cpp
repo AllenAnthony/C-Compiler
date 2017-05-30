@@ -4,7 +4,7 @@ void yyerror(std::string msg) {
     std::cout << msg << std::endl;
 }
 
-void *checck_malloc(size_t size) {
+void *check_malloc(size_t size) {
     void *p = malloc(size);
     if (!p) {
         cout << "Memory is full!" << endl;
