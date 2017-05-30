@@ -1,5 +1,7 @@
 %{
 #include "util.hpp"
+
+ABS_program ABS_root;
 %}
 
 %union{
@@ -85,7 +87,7 @@
 %left PLUS MINUS
 %left MUL DIV MOD
 
-%start program
+%start compiler
 %%
 
 expression_list
@@ -164,55 +166,58 @@ type_specifier
 ;
 
 init_declarator_list
-    : init_declarator SEMI {$$ = F_ABS_init_declarator();}
-    | init_declarator COMMA init_declarator_list {$$ = F_ABS_init_declarator();}
+    : init_declarator SEMI {$$ = F_ABS_init_declarator_list(NULL, $1);}
+    | init_declarator COMMA init_declarator_list {$$ = F_ABS_init_declarator_list($3, $1);}
 ;
 
 init_declarator
-    : ID
-    | ID ASSIGN constant
+    : ID {$$ = F_ABS_init_declaration($1, NULL);}
+    | ID ASSIGN constant {$$ = F_ABS_init_declaration($1, $3);}
 ;
 
 statement_list
-    : statement
-    | statement_list statement
+    : statement {$$ = F_ABS_statement_list(NULL, $1);}
+    | statement_list statement {$$ = F_ABS_statement_list($1, $2);}
 ;
 
 statement
-    : block_statement
-    | expression_statement
-    | selection_statement
-    | iteration_statement
-    | jump_statement
-    | PRINT LP compound_expression RP
+    : block_statement {$$ = F_ABS_statement(ENUM_block_statement, $1, NULL, NULL, NULL, NULL, NULL);}
+    | expression_statement {$$ = F_ABS_statement(ENUM_expression_statement, NULL, $1, NULL, NULL, NULL, NULL);}
+    | selection_statement {$$ = F_ABS_statement(ENUM_selection_statement, NULL, NULL, $1, NULL, NULL, NULL);}
+    | iteration_statement {$$ = F_ABS_statement(ENUM_iteration_statement, NULL, NULL, NULL, $1, NULL, NULL);}
+    | jump_statement {$$ = F_ABS_statement(ENUM_jump_statement, NULL, NULL, NULL, NULL, $1, NULL);}
+    | PRINT LP compound_expression RP {$$ = F_ABS_statement(ENUM_compound_expression, NULL, NULL, NULL, NULL, NULL, $3,);}
 ;
 
-
 block_statement
-    : LCB RCB
-    | LCB declaration_list statement_list RCB
-    | LCB declaration_list RCB
-    | LCB statement_list RCB
+    : LCB RCB {$$ = F_ABS_block_statement(NULL, NULL);}
+    | LCB declaration_list statement_list RCB {$$ = F_ABS_block_statement($2, $3);}
+    | LCB declaration_list RCB {$$ = F_ABS_block_statement($2, NULL);}
+    | LCB statement_list RCB {$$ = F_ABS_block_statement(NULL, $2);}
 ;
 
 expression_statement
-    : SEMI
-    | expression_list SEMI
+    : SEMI {$$ = F_ABS_expression_statement(NULL);}
+    | expression_list SEMI {$$ = F_ABS_expression_statement($1);}
 ;
 
 selection_statement
-    : IF LP expression_list RP statement ELSE statement
+    : IF LP expression_list RP statement ELSE statement {$$ = F_ABS_selection_statement($3, $5, $7);}
 ;
 
 iteration_statement
-    : WHILE LP expression_list RP statement
-    | FOR LP expression_statement expression_statement expression_list RP statement
+    : WHILE LP expression_list RP statement {$$ = F_ABS_iteration_statement($1, NULL, NULL, NULL, $5);}
+    | FOR LP expression_statement expression_statement expression_list RP statement{$$ = F_ABS_iteration_statement(NULL, $3, $4, $5, $7);}
 ;
 
 jump_statement
     : CONTINUE SEMI
     | BREAK SEMI
     | RETURN expression_statement
+;
+
+compiler
+    :program {ABS_root = $1;}
 ;
 
 program
