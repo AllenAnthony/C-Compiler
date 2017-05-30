@@ -224,7 +224,7 @@ function_definition_list
 
 function_definition
     : type_specifier ID LP RP block_statement{$$=F_ABS_function_definition($1, F_ABS_ID($2), NULL, $5);}
-    | type_specifier ID parameter_list RP block_statement{$$=F_ABS_function_definition($1, F_ABS_ID($2), NULL, $5);}
+    | type_specifier ID parameter_list RP block_statement{$$=F_ABS_function_definition($1, F_ABS_ID($2), $3, $5);}
 ;
 
 parameter_list
