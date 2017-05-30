@@ -164,8 +164,8 @@ type_specifier
 ;
 
 init_declarator_list
-    : init_declarator SEMI {$$ = F_ABS_init_declarator}
-    | init_declarator COMMA init_declarator_list
+    : init_declarator SEMI {$$ = F_ABS_init_declarator();}
+    | init_declarator COMMA init_declarator_list {$$ = F_ABS_init_declarator();}
 ;
 
 init_declarator

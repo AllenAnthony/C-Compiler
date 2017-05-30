@@ -312,7 +312,6 @@ ABS_declaration_list F_ABS_declaration_list(
         ABS_declaration declaration
 );
 
-
 ABS_declaration F_ABS_declaration(
         ABS_specifier type_specifier,
         ABS_init_declarator_list init_declarator_list
