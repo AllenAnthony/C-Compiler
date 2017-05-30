@@ -1,7 +1,7 @@
 #include "abs.hpp"
 
 ABS_ID F_ABS_ID(char *id) {
-    ABS_ID abs_id = (ABS_ID) check_malloc(sizeof(_ABS_FVAL));
+    ABS_ID abs_id = (ABS_ID) check_malloc(sizeof(_ABS_ID));
     abs_id->id = string(id);
     return abs_id;
 }
@@ -55,7 +55,7 @@ ABS_expression F_ABS_expression(
             expression->compound_expression = compound_expression;
             break;
         default:
-            yyerror("Undefined type");
+            cout << "Undefined type";
             exit(0);
     }
     return expression;
@@ -95,7 +95,7 @@ ABS_primary_expression F_ABS_primary_expression(
             primary_expression->function_invoking = function_invoking;
             break;
         default:
-            yyerror("Undefined type");
+            cout << "Undefined type";
             exit(0);
     }
     return primary_expression;

@@ -1,7 +1,8 @@
 %{
-#include "abs.hpp"
 #include "util.hpp"
+#include "abs.hpp"
 ABS_program ABS_root;
+
 %}
 
 %union{
@@ -209,7 +210,7 @@ jump_statement
 ;
 
 compiler
-    :program {ABS_root = $1;}
+    :program {ABS_root=$1;}
 ;
 
 program

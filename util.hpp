@@ -17,4 +17,5 @@ int yylex(void);
 
 void *check_malloc(size_t);
 
+
 #endif //COMPILER_UTIL_HPP

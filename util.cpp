@@ -10,5 +10,6 @@ void *check_malloc(size_t size) {
         cout << "Memory is full!" << endl;
         exit(0);
     }
+    memset(p, 0, size);
     return p;
 }

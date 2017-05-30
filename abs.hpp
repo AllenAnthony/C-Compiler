@@ -1,7 +1,8 @@
+#include "util.hpp"
+using namespace std;
+
 #ifndef COMPILER_ABS_HPP
 #define COMPILER_ABS_HPP
-
-#include "util.hpp"
 
 typedef enum {
     ENUM_assignment_expression,
@@ -251,7 +252,7 @@ struct _ABS_parameter {
     ABS_ID id;
 };
 
-ABS_ID F_ABS_ID(char* id);
+ABS_ID F_ABS_ID(char *id);
 
 ABS_IVAL F_ABS_IVAL(int ival);
 

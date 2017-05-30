@@ -1,8 +1,9 @@
 %{
-#include "abs.hpp"
 #include <iostream>
+#include "abs.hpp"
 #include "util.hpp"
 #include "y.tab.hpp"
+using namespace std;
 
 #define DISP_TOK std::cout<<yytext;
 %}
