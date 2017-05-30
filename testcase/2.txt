@@ -1,6 +1,5 @@
 int main(int a){
 	int a;
 	a = 0;
-
-	c = 'i';
+    return 0;
 }

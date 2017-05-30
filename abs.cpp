@@ -1,6 +1,6 @@
 #include "abs.hpp"
 
-ABS_ID F_ABS_ID(char* id) {
+ABS_ID F_ABS_ID(char *id) {
     ABS_ID abs_id = (ABS_ID) check_malloc(sizeof(*abs_id));
     abs_id->id = string(id);
     return abs_id;
@@ -204,6 +204,7 @@ ABS_init_declarator F_ABS_init_declarator(
     ABS_init_declarator init_declarator = (ABS_init_declarator) check_malloc(sizeof(*init_declarator));
     init_declarator->id = id;
     init_declarator->constant = constant;
+    return init_declarator;
 }
 
 
