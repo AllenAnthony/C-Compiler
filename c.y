@@ -9,10 +9,6 @@ ABS_program ABS_root;
     int ival;
     float fval;
     char* sval;
-    ABS_ID abs_id;
-    ABS_IVAL abs_ival;
-    ABS_FVAL abs_fval;
-    ABS_CVAL abs_cval;
     ABS_expression_list expression_list;
     ABS_expression expression;
     ABS_assignment_expression assignment_expression;
@@ -44,35 +40,31 @@ ABS_program ABS_root;
 %token <cval> CVAL
 %token <fval> FVAL
 %token <sval> SVAL
-%token <abs_id>
-%token <abs_ival>
-%token <abs_fval>
-%token <abs_cval>
-%token <expression_list> expression_list
-%token <expression> expression
-%token <assignment_expression> assignment_expression
-%token <primary_expression> primary_expression
-%token <constant> constant
-%token <function_invoking> function_invoking
-%token <argue_list> argue_list
-%token <compound_expression> compound_expression
-%token <declaration_list> declaration_list
-%token <declaration> declaration
-%token <specifier> type_specifier
-%token <init_declarator_list> init_declarator_list
-%token <init_declarator> init_declarator
-%token <statement_list> statement_list
-%token <statement> statement
-%token <block_statement> block_statement
-%token <expression_statement> expression_statement
-%token <selection_statement> selection_statement
-%token <iteration_statement> iteration_statement
-%token <jump_statement> jump_statement
-%token <program> program
-%token <function_definition_list> function_definition_list
-%token <function_definition> function_definition
-%token <parameter_list> parameter_list
-%token <parameter> parameter
+%type <expression_list> expression_list
+%type <expression> expression
+%type <assignment_expression> assignment_expression
+%type <primary_expression> primary_expression
+%type <constant> constant
+%type <function_invoking> function_invoking
+%type <argue_list> argue_list
+%type <compound_expression> compound_expression
+%type <declaration_list> declaration_list
+%type <declaration> declaration
+%type <specifier> type_specifier
+%type <init_declarator_list> init_declarator_list
+%type <init_declarator> init_declarator
+%type <statement_list> statement_list
+%type <statement> statement
+%type <block_statement> block_statement
+%type <expression_statement> expression_statement
+%type <selection_statement> selection_statement
+%type <iteration_statement> iteration_statement
+%type <jump_statement> jump_statement
+%type <program> program
+%type <function_definition_list> function_definition_list
+%type <function_definition> function_definition
+%type <parameter_list> parameter_list
+%type <parameter> parameter
 
 %token INT FLOAT CHAR ID
 
@@ -113,9 +105,9 @@ primary_expression
 ;
 
 constant
-    : IVAL {$$ =F_ABS_constant(ENUM_IVAL, $1, NULL, NULL);}
-    | FVAL {$$ =F_ABS_constant(ENUM_FVAL, NULL, $1, NULL);}
-    | CVAL {$$ =F_ABS_constant(ENUM_CVAL, NULL, NULL, $1);}
+    : IVAL {$$ =F_ABS_constant(ENUM_IVAL, F_ABS_IVAL($1), NULL, NULL);}
+    | FVAL {$$ =F_ABS_constant(ENUM_FVAL, NULL, F_ABS_FVAL($1), NULL);}
+    | CVAL {$$ =F_ABS_constant(ENUM_CVAL, NULL, NULL, F_ABS_CVAL($1));}
 ;
 
 function_invoking
@@ -211,9 +203,9 @@ iteration_statement
 ;
 
 jump_statement
-    : CONTINUE SEMI
-    | BREAK SEMI
-    | RETURN expression_statement
+    : CONTINUE SEMI{$$=F_ABS_jump_statement($1, NULL);}
+    | BREAK SEMI{$$=F_ABS_jump_statement($1, NULL);}
+    | RETURN expression_statement{$$=F_ABS_jump_statement($1, $2);}
 ;
 
 compiler
@@ -221,26 +213,26 @@ compiler
 ;
 
 program
-    : function_definition_list
-    | declaration_list function_definition_list
+    : function_definition_list{$$=F_ABS_program(NULL, $1)}
+    | declaration_list function_definition_list{$$=F_ABS_program($1, $2);}
 ;
 
 function_definition_list
-    : function_definition
-    | function_definition_list function_definition
+    : function_definition{$$=F_ABS_function_definition_list(NULL, $1);}
+    | function_definition_list function_definition{$$=F_ABS_function_definition_list($1, $2);}
 ;
 
 function_definition
-    : type_specifier ID LP RP block_statement
-    | type_specifier ID parameter_list RP block_statement
+    : type_specifier ID LP RP block_statement{$$=F_ABS_function_definition($1, $2, NULL, $5);}
+    | type_specifier ID parameter_list RP block_statement{$$=F_ABS_function_definition($1, $2, NULL, $5);}
 ;
 
 parameter_list
-    : LP parameter
-    | parameter_list COMMA parameter
+    : LP parameter{$$=F_ABS_parameter_list(NULL, $2);}
+    | parameter_list COMMA parameter{$$=F_ABS_parameter_list($1, $3);}
 ;
 parameter
-    : type_specifier ID
+    : type_specifier ID{$$=F_ABS_parameter($1, $2);}
 ;
 
 %%
