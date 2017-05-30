@@ -2,339 +2,380 @@
 #include "abs.hpp"
 #include "util.hpp"
 
-ABS_Exp ABS_Expression(ABS_ExpType exp_type, int type, ABS_Exp exp_left, ABS_Exp exp_right) {
-    ABS_Exp expression = checked_malloc(sizeof(struct _ABS_Exp));
-    expression->exp_type = exp_type;
-    expression->u.expression.type = type;
-    expression->u.expression.exp_left = exp_left;
-    expression->u.expression.exp_right = exp_right;
-#ifdef DEBUG
-    switch (exp_type) {
-        case 0:
-            printf("Expression_%d\n", type);
+ABS_ID F_ABS_ID(string id) {
+    ABS_ID abs_id = (ABS_ID) check_malloc(sizeof(*abs_id));
+    abs_id->id = id;
+    return abs_id;
+}
+
+
+ABS_IVAL F_ABS_IVAL(int ival) {
+    ABS_IVAL abs_ival = (ABS_IVAL) check_malloc(sizeof(*abs_ival));
+    abs_ival->ival = ival;
+    return abs_ival;
+}
+
+
+ABS_FVAL F_ABS_FVAL(float fval) {
+    ABS_FVAL abs_fval = (ABS_FVAL) check_malloc(sizeof(*abs_fval));
+    abs_fval->fval = fval;
+    return abs_fval;
+}
+
+
+ABS_CVAL F_ABS_CVAL(char cval) {
+    ABS_CVAL abs_cval = (ABS_CVAL) check_malloc(sizeof(*abs_cval));
+    abs_cval->cval = cval;
+    return abs_cval;
+}
+
+ABS_expression_list F_ABS_expression_list(
+        ABS_expression_list expression_list,
+        ABS_expression expression
+) {
+    if (expression_list == NULL) {
+        expression_list = (ABS_expression_list) check_malloc(sizeof(*expression_list));
+    }
+    expression_list->expression_list.push_back(expression);
+    return expression_list;
+}
+
+
+ABS_expression F_ABS_expression(
+        ABS_node_type type,
+        ABS_assignment_expression assignment_expression,
+        ABS_compound_expression compound_expression
+) {
+    ABS_expression expression = (ABS_expression) check_malloc(sizeof(*expression));
+    switch (type) {
+        case ENUM_assignment_expression:
+            assert(assignment_expression);
+            expression->assignment_expression = assignment_expression;
             break;
-        case 3:
-            printf("Multiplicative_Expression_%d\n", type);
-            break;
-        case 4:
-            printf("Additive_Expression_%d\n", type);
-            break;
-        case 5:
-            printf("Relational_Expression_%d\n", type);
-            break;
-        case 6:
-            printf("Equality_Expression_%d\n", type);
-            break;
-        case 7:
-            printf("Logical_And_Expression_%d\n", type);
-            break;
-        case 8:
-            printf("Logical_Or_Expression_%d\n", type);
+        case ENUM_compound_expression:
+            assert(assignment_expression);
+            expression->compound_expression = assignment_expression;
             break;
         default:
-            break;
+            yyerror("Undefined type");
+            exit(0);
     }
-#endif
     return expression;
 }
 
-/*
-int type:
-	expression: 1,2;
-	multiplicative: 1,2MUL,3DIV,4MOD
-	additive: 1,2;
-	relational: 1,2LT,3GT,4LE,5GE;
-	equality: 1,2EQ,3NE;
-	logical_and: 1,2;
-	logical_or: 1,2;
-*/
 
-ABS_Exp ABS_Assignment_Expression(ABS_ExpType exp_type, int type, _ABS_ID id_e, ABS_Exp exp_left, ABS_Exp exp_right) {
-    ABS_Exp assignment = checked_malloc(sizeof(struct _ABS_Exp));
-    assignment->exp_type = exp_type;
-    assignment->u.assignment.type = type;
-    assignment->u.assignment.id_e = id_e;
-    assignment->u.assignment.exp_left = exp_left;
-    assignment->u.assignment.exp_right = exp_right;
-#ifdef DEBUG
-    printf("Assignment_Expression_%d\n", type);
-#endif
-    return assignment;
+ABS_assignment_expression F_ABS_assignment_expression(
+        ABS_ID abs_id,
+        ABS_compound_expression compound_expression_index,
+        ABS_compound_expression compound_expression_value
+) {
+    ABS_assignment_expression assignment_expression = (ABS_assignment_expression) check_malloc(
+            sizeof(*assignment_expression));
+    assignment_expression->abs_id = abs_id;
+    assignment_expression->compound_expression_index = compound_expression_index;
+    assignment_expression->compound_expression_value = compound_expression_value;
+    return assignment_expression;
 }
 
-ABS_Exp ABS_Primary_Expression(ABS_ExpType exp_type, int type, void *val) {
-    ABS_Exp primary = checked_malloc(sizeof(struct _ABS_Exp));
-    primary->exp_type = exp_type;
-#ifdef DEBUG
-    printf("Primary_Expression_%d\t", type);
-#endif
+ABS_primary_expression F_ABS_primary_expression(
+        ABS_node_type type,
+        ABS_ID id, ABS_constant constant,
+        ASB_compound_expression compound_expression,
+        ABS_function_invoking function_invoking
+) {
+    ABS_primary_expression primary_expression = (ABS_primary_expression) check_malloc(*primary_expression);
     switch (type) {
-        case 1:
-            primary->u.primary.u.id_e = (_ABS_ID) val;
-#ifdef DEBUG
-            printf("ID_E_%s", (char *) val);
-#endif
+        case ENUM_ID:
+            primary_expression->id = id;
             break;
-        case 2:
-            primary->u.primary.u.ival = *(int *) val;
-#ifdef DEBUG
-            printf("IVAL_%d", *(int *) val);
-#endif
+        case ENUM_constant:
+            primary_expression->constant = constant;
             break;
-        case 3:
-            primary->u.primary.u.fval = *(float *) val;
-#ifdef DEBUG
-            printf("FVAL_%.2f", *(float *) val);
-#endif
+        case ENUM_compound_expression:
+            primary_expression->compound_expression = compound_expression;
             break;
-        case 4:
-            primary->u.primary.u.cval = *(char *) val;
-#ifdef DEBUG
-            printf("CVAL_%c", *(char *) val);
-#endif
-            break;
-        case 5:
-            primary->u.primary.u.exp = (ABS_Exp) val;
-            break;
-        case 6:
-            primary->u.primary.u.ABS_type = (ABS_Type) val;
+        case ENUM_function_invoking:
+            primary_expression->function_invoking = function_invoking;
             break;
         default:
-            break;
+            yyerror("Undefined type");
+            exit(0);
     }
-#ifdef DEBUG
-    printf("\n");
-#endif
-    return primary;
+    return primary_expression;
 }
 
 
-ABS_Dec ABS_Declaration(ABS_Type ABS_type, ABS_Init_Dec_List init_dec_list) {
-    ABS_Dec declaration = checked_malloc(sizeof(struct _ABS_Dec));
-    declaration->ABS_type = ABS_type;
-    declaration->init_dec_list = init_dec_list;
-#ifdef DEBUG
-    printf("ABS_Declaration\n");
-#endif
+ABS_constant F_ABS_constant(
+        ABS_node_type type,
+        ABS_IVAL abs_ival,
+        ABS_FVAL abs_ival,
+        ABS_CVAL abs_cval
+) {
+    ABS_constant constant = (ABS_constant) check_malloc(sizeof(*constant));
+    switch (type) {
+        case ENUM_IVAL:
+            constant->abs_ival = abs_ival;
+            break;
+        case ENUM_FVAL:
+            constant->abs_fval = abs_fval;
+            break;
+        case ENUM_CVAL:
+            constant->abs_cval = abs_cval;
+            break;
+        default:
+            yerror("Undefined type");
+            exit(0);
+    }
+    return constant;
+}
+
+
+ABS_function_invoking F_ABS_function_invoking(
+        ABS_ID abs_id,
+        ABS_argue_list argue_list
+) {
+    ABS_function_invoking function_invoking = (ABS_function_invoking) check_malloc(sizeof(*function_invoking));
+    function_invoking->abs_id = abs_id;
+    function_invoking->argue_list = argue_list;
+    return function_invoking;
+}
+
+ABS_argue_list F_ABS_argue_list(ABS_argue_list argue_list, ABS_ID abs_id) {
+    if (argue_list == NULL) {
+        argue_list = (ABS_argue_list) check_malloc(sizeof(*argue_list));
+    }
+    argue_list->list.push_back(abs_id);
+    return argue_list;
+}
+
+
+ABS_compound_expression F_ABS_compound_expression(
+        ENUM_oper_type oper_type,
+        ABS_primary_expression primary_expression,
+        ABS_compound_expression compound_expression
+) {
+    ABS_compound_expression compound_expression = (ABS_compound_expression) check_malloc(sizeof(*compound_expression));
+    compound_expression->oper_type = oper_type;
+    compound_expression->primary_expression = primary_expression;
+    compound_expression->compound_expression = compound_expression;
+    return compound_expression;
+}
+
+ABS_declaration_list F_ABS_declaration_list(
+        ABS_declaration_list declaration_list,
+        ABS_declaration declaration) {
+    if (declaration_list == NULL) {
+        declaration_list = (ABS_declaration_list) check_malloc(sizeof(*declaration_list));
+    }
+    declaration_list->declaration_list.push_back(declaration);
+    return declaration_list;
+}
+
+
+ABS_declaration F_ABS_declaration(ABS_type_specifier type_specifier,
+                                  ABS_init_declarator_list init_declarator_list) {
+    ABS_declaration declaration = (ABS_declaration) check_malloc(sizeof(*declaration));
+    declaration->type_specifier = type_specifier;
+    declaration->init_declarator_list = init_declarator_list;
     return declaration;
 }
 
-ABS_Type ABS_Type_Specifier(ABS_type_specifier type) {
-    ABS_Type type_specifier = checked_malloc(sizeof(struct _ABS_Type));
+
+ABS_type_specifier F_ABS_type_specifier(ENUM_type_specifier type) {
+    ABS_type_specifier type_specifier = (ABS_type_specifier) check_malloc(sizeof(*type_specifier));
     type_specifier->type = type;
-#ifdef DEBUG
-    switch (type) {
-        case ABS_INT:
-            printf("Type_Specifier_INT\n");
-            break;
-        case ABS_FLOAT:
-            printf("Type_Specifier_FLOAT\n");
-            break;
-        case ABS_CHAR:
-            printf("Type_Specifier_CHAR\n");
-            break;
-    }
-#endif
     return type_specifier;
 }
 
-ABS_Init_Dec_List ABS_Init_Declarator_List(int type, ABS_Init_Dec init_dec, ABS_Init_Dec_List init_dec_list) {
-    ABS_Init_Dec_List init_declarator_list = checked_malloc(sizeof(struct _ABS_Init_Dec_List));
-    init_declarator_list->type = type;
-    init_declarator_list->init_dec = init_dec;
-    init_declarator_list->init_dec_list = init_dec_list;
-#ifdef DEBUG
-    printf("Init_Declarator_List_%d\n", type);
-#endif
-    return init_declarator_list;
-}
-
-ABS_Init_Dec ABS_Init_Declarator(_ABS_ID id_d) {
-    ABS_Init_Dec init_declarator = checked_malloc(sizeof(struct _ABS_Init_Dec));
-    init_declarator->id_d = id_d;
-#ifdef DEBUG
-    printf("Init_Declarator\t %s\n", id_d);
-#endif
+ABS_init_declarator_list F_ABS_init_declarator_list(
+        ABS_init_declarator_list init_declarator_list,
+        ABS_init_declarator init_declarator
+) {
+    if (init_declarator_list == NULL) {
+        init_declarator_list = (ABS_init_declarator_list) check_malloc(
+                sizeof(*init_declarator_list));
+    }
+    init_declarator_list->init_declarator_list.push_back(init_declarator);
     return init_declarator;
 }
 
-ABS_Stmt ABS_Statement(ABS_StmtType stmt_type, ABS_Stmt stmt) {
-    ABS_Stmt statement = checked_malloc(sizeof(struct _ABS_Stmt));
-    statement->stmt_type = stmt_type;
-    statement->u.stmt = stmt;
-#ifdef DEBUG
-    printf("Statement\n");
-#endif
+
+ABS_init_declarator F_ABS_init_declarator(
+        ABS_ID id,
+        ABS_constant constant
+) {
+    ABS_init_declarator init_declarator = (ABS_init_declarator) check_malloc(sizeof(*init_declarator));
+    init_declarator->id = id;
+    init_declarator->constant = constant;
+}
+
+
+ABS_statement_list F_ABS_statement_list(
+        ABS_statement_list statement_list,
+        ABS_statement statement
+) {
+    if (statement_list == NULL) {
+        statement_list = (ABS_statement_list) check_malloc(
+                sizeof(*statement_list));
+    }
+    statement_list->statement_list.push_back(statement);
+    return statement_list;
+}
+
+ABS_statement F_ABS_statement(
+        ENUM_node_type type,
+        ABS_block_statement block_statement,
+        ABS_expression_statement expression_statement,
+        ABS_selection_statement selection_statement,
+        ABS_iteration_statement iteration_statement,
+        ABS_jump_statement jump_statement,
+        ABS_compound_expression compound_expression
+) {
+    ABS_statement statement = (ABS_statement) check_malloc(sizeof(*statement));
+    statement->type = type;
+    switch (type) {
+        case ENUM_block_statement:
+            statement->block_statement = block_statement;
+            break;
+        case ENUM_expression_statement :
+            statement->expression_statement = expression_statement;
+            break;
+        case ENUM_selection_statement:
+            statement->selection_statement = selection_statement;
+            break;
+        case ENUM_iteration_statement:
+            statement->iteration_statement = iteration_statement;
+            break;
+        case ENUM_jump_statement:
+            statement->jump_statement = jump_statement;
+            break;
+        case ENUM_compound_expression:
+            statement->compound_expression = compound_expression;
+            break;
+        default:
+            yyerror("Undefined type");
+            exit(0);
+    }
     return statement;
 }
 
-ABS_Stmt ABS_Compound(ABS_StmtType stmt_type, int type, ABS_Block_Item_List block_item_list) {
-    ABS_Stmt compound = checked_malloc(sizeof(struct _ABS_Stmt));
-    compound->stmt_type = stmt_type;
-    compound->u.compound.type = type;
-    compound->u.compound.block_item_list = block_item_list;
-#ifdef DEBUG
-    printf("Compound_Statement_%d\n", type);
-#endif
-    return compound;
+ABS_block_statement F_ABS_block_statement(
+        ABS_declaration_list declaration_list,
+        ABS_statement_list statement_list
+) {
+    ABS_block_statement block_statement = (ABS_block_statement) check_malloc(sizeof(*block_statement));
+    block_statement->declaration_list = declaration_list;
+    block_statement->statement_list = statement_list;
+    return block_statement;
 }
 
-ABS_Stmt ABS_Expression_Statement(ABS_StmtType stmt_type, int type, ABS_Exp exp) {
-    ABS_Stmt expression = checked_malloc(sizeof(struct _ABS_Stmt));
-    expression->stmt_type = stmt_type;
-    expression->u.expression.type = type;
-    expression->u.expression.exp = exp;
-#ifdef DEBUG
-    printf("Expression_Statement_%d\n", type);
-#endif
-    return expression;
+ABS_expression_statement F_ABS_expression_statement(
+        ABS_expression_list expression_list
+) {
+    ABS_expression_statement expression_statement = (ABS_expression_statement) check_malloc(
+            sizeof(*expression_statement));
+    expression_statement->expression_list = expression_list;
+    return expression_statement;
 }
 
-ABS_Stmt ABS_Selection(ABS_StmtType stmt_type, ABS_Exp exp, ABS_Stmt stmt_if, ABS_Stmt stmt_else) {
-    ABS_Stmt selection = checked_malloc(sizeof(struct _ABS_Stmt));
-    selection->stmt_type = stmt_type;
-    selection->u.selection.exp = exp;
-    selection->u.selection.stmt_if = stmt_if;
-    selection->u.selection.stmt_else = stmt_else;
-#ifdef DEBUG
-    printf("Selection_Statement\n");
-#endif
-    return selection;
+
+ABS_selection_statement F_ABS_selection_statement(
+        ABS_expression_list expression_list,
+        ABS_statement statement_if,
+        ABS_statement statement_else
+) {
+    ABS_selection_statement selection_statement = (ABS_selection_statement) check_malloc(sizeof(*selection_statement));
+    selection_statement->expression_list = expression_list;
+    selection_statement->statement_if = statement_if;
+    selection_statement->statement_else = statement_else;
+    return selection_statement;
 }
 
-ABS_Stmt ABS_Iteration(ABS_StmtType stmt_type, int type, ABS_Exp exp, ABS_Stmt stmt1, ABS_Stmt stmt2, ABS_Stmt stmt3) {
-    ABS_Stmt iteration = checked_malloc(sizeof(struct _ABS_Stmt));
-    iteration->stmt_type = stmt_type;
-    iteration->u.iteration.type = type;
-    switch (type) {
-        case 1:
-            iteration->u.iteration.u.While.exp = exp;
-            iteration->u.iteration.u.While.stmt = stmt1;
-            break;
-        case 2:
-            iteration->u.iteration.u.For.stmt_1 = stmt1;
-            iteration->u.iteration.u.For.stmt_2 = stmt2;
-            iteration->u.iteration.u.For.stmt_4 = stmt3;
-            iteration->u.iteration.u.For.exp_3 = exp;
-            break;
+
+ABS_iteration_statement F_ABS_iteration_statement(
+        ABS_expression_list expression_list_while,
+        ABS_expression_statement expression_statement_for_left,
+        ABS_expression_statement expression_statement_for_middle,
+        ABS_expression_list expression_list_for_right,
+        ABS_statement statement
+
+) {
+    ABS_iteration_statement iteration_statement = (ABS_iteration_statement) check_malloc(sizeof(*iteration_statement));
+    iteration_statement->expression_list_while = expression_list_while;
+    iteration_statement->expression_statement_for_left = expression_statement_for_left;
+    iteration_statement->expression_statement_for_middle = expression_statement_for_middle;
+    iteration_statement->expression_list_for_right = expression_list_for_right;
+    iteration_statement->statement = statement;
+    return iteration_statement;
+}
+
+
+ABS_jump_statement F_ABS_jump_statement(
+        ENUM_action_type action_type,
+        ABS_expression_statement expression_statement
+) {
+    ABS_jump_statement jump_statement = (ABS_jump_statement) check_malloc(sizeof(*jump_statement));
+    jump_statement->action_type = action_type;
+    jump_statement->expression_statement = expression_statement;
+    return jump_statement;
+}
+
+
+ABS_program F_ABS_program(
+        ABS_declaration_list declaration_list,
+        ABS_function_definition_list function_definition_list
+) {
+    ABS_program program = (ABS_program) malloc(sizeof(*program));
+    program->declaration_list = declaration_list;
+    program->function_definition_list = function_list;
+    return program;
+}
+
+
+ABS_function_definition_list F_ABS_function_definition_list(
+        ABS_function_definition_list function_definition_list,
+        ABS_function_definition function_definition
+) {
+    if (function_definition_list == null) {
+        function_definition_list = (ABS_function_definition_list) check_malloc(sizeof(*function_definition_list));
     }
-#ifdef DEBUG
-    printf("Iteration_Statement_%d\n", type);
-#endif
-    return iteration;
+    function_definition_list->function_definition_list.push_back(function_definition);
+    return function_definition_list;
 }
 
-ABS_Stmt ABS_Jump(ABS_StmtType stmt_type, int type, ABS_Exp exp) {
-    ABS_Stmt jump = checked_malloc(sizeof(struct _ABS_Stmt));
-    jump->stmt_type = stmt_type;
-    jump->u.jump.type = type;
-    jump->u.jump.exp = exp;
-#ifdef DEBUG
-    printf("Jump_Statement_%d\n", type);
-#endif
-    return jump;
-}
-
-ABS_Block_Item_List ABS_Block_Item_List_Func(int type, ABS_Block_Item_List block_item_list, ABS_Block_Item block_item) {
-    ABS_Block_Item_List block_item_list_func = checked_malloc(sizeof(struct _ABS_Block_Item_List));
-    block_item_list_func->type = type;
-    block_item_list_func->block_item_list = block_item_list;
-    block_item_list_func->block_item = block_item;
-#ifdef DEBUG
-    printf("Block_Item_List_%d\n", type);
-#endif
-    return block_item_list_func;
-}
-
-ABS_Block_Item ABS_Block_Item_Func(int type, ABS_Dec dec, ABS_Stmt stmt) {
-    ABS_Block_Item block_item_func = checked_malloc(sizeof(struct _ABS_Block_Item));
-    block_item_func->type = type;
-    switch (type) {
-        case 1:
-            block_item_func->u.dec = dec;
-            break;
-        case 2:
-            block_item_func->u.stmt = stmt;
-            break;
-    }
-#ifdef DEBUG
-    printf("Block_Item_%d\n", type);
-#endif
-    return block_item_func;
-}
-
-ABS_Unit ABS_Translation_Unit(int type, ABS_Ex_Dec ex_dec, ABS_Unit unit) {
-    ABS_Unit translation_unit = checked_malloc(sizeof(struct _ABS_Unit));
-    translation_unit->type = type;
-    translation_unit->ex_dec = ex_dec;
-    translation_unit->unit = unit;
-#ifdef DEBUG
-    printf("Translation_Unit_%d\n", type);
-#endif
-    return translation_unit;
-}
-
-ABS_Ex_Dec ABS_External_Declaration(int type, ABS_Func_Def func_def, ABS_Dec dec) {
-    ABS_Ex_Dec external_declaration = checked_malloc(sizeof(struct _ABS_Ex_Dec));
-    external_declaration->type = type;
-    switch (type) {
-        case 1:
-            external_declaration->u.func_def = func_def;
-            break;
-        case 2:
-            external_declaration->u.dec = dec;
-            break;
-    }
-#ifdef DEBUG
-    printf("External_Declaration_%d\n", type);
-#endif
-    return external_declaration;
-}
-
-ABS_Func_Def
-ABS_Function_Definition(int type, ABS_Type ABS_type, _ABS_ID id_d, ABS_Param_List param_list, ABS_Dec_List dec_list,
-                        ABS_Stmt stmt) {
-    ABS_Func_Def function_definition = checked_malloc(sizeof(struct _ABS_Func_Def));
-    function_definition->type = type;
-    function_definition->ABS_type = ABS_type;
-    function_definition->id_d = id_d;
-    function_definition->param_list = param_list;
-    function_definition->stmt = stmt;
-    if (type == 2) {
-        function_definition->dec_list = dec_list;
-    }
-#ifdef DEBUG
-    printf("Function_Declaration_%d\n", type);
-#endif
+ABS_function_definition F_ABS_function_definition(
+        ABS_type_specifier type_specifier,
+        ABS_ID id,
+        ABS_parameter_list parameter_list,
+        ABS_block_statement block_statement
+) {
+    ABS_function_definition function_definition = (ABS_function_definition) check_malloc(sizeof(*function_definition));
+    function_definition->type_specifier = type_specifier;
+    function_definition->id = id;
+    function_definition->parameter_list = parameter_list;
+    function_definition->block_statement = block_statement;
     return function_definition;
 }
 
-ABS_Param_List ABS_Parameter_List(int type, ABS_Param_Dec param_dec, ABS_Param_List param_list) {
-    ABS_Param_List parameter_list = checked_malloc(sizeof(struct _ABS_Param_List));
-    parameter_list->param_dec = param_dec;
-    parameter_list->param_list = param_list;
-#ifdef DEBUG
-    printf("Parameter_List_%d\n", type);
-#endif
+
+ABS_parameter_list F_ABS_parameter_list(
+        ABS_parameter_list parameter_list,
+        ABS_parameter parameter
+) {
+    if (parameter_list == NULL) {
+        parameter_list = (ABS_parameter_list) check_malloc(sizeof(*parameter_list));
+    }
+    parameter_list->parameter_list.push_back(parameter);
     return parameter_list;
 }
 
-ABS_Param_Dec ABS_Parameter_Declaration(ABS_Type ABS_type, _ABS_ID id_d) {
-    ABS_Param_Dec parameter_declaration = checked_malloc(sizeof(struct _ABS_Param_Dec));
-    parameter_declaration->ABS_type = ABS_type;
-    parameter_declaration->id_d = id_d;
-#ifdef DEBUG
-    printf("Parameter_Declaration\n");
-#endif
-    return parameter_declaration;
-}
 
-ABS_Dec_List ABS_Declaration_List(int type, ABS_Dec dec, ABS_Dec_List dec_list) {
-    ABS_Dec_List declaration_list = checked_malloc(sizeof(struct _ABS_Dec_List));
-    declaration_list->dec = dec;
-    declaration_list->dec_list = dec_list;
-#ifdef DEBUG
-    printf("Declaration_List_%d\n", type);
-#endif
-    return declaration_list;
+ABS_parameter F__ABS_parameter(
+        ABS_type_specifier type_specifier,
+        ABS_ID id
+) {
+    ABS_parameter parameter = (ABS_parameter) check_malloc(sizeof(*parameter));
+    parameter->type_specifier = type_specifier;
+    parameter->id = id;
+    return parameter;
 }
