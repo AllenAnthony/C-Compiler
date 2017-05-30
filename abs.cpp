@@ -42,7 +42,7 @@ ABS_expression_list F_ABS_expression_list(
 
 
 ABS_expression F_ABS_expression(
-        ABS_node_type type,
+        ENUM_node_type type,
         ABS_assignment_expression assignment_expression,
         ABS_compound_expression compound_expression
 ) {
@@ -53,8 +53,8 @@ ABS_expression F_ABS_expression(
             expression->assignment_expression = assignment_expression;
             break;
         case ENUM_compound_expression:
-            assert(assignment_expression);
-            expression->compound_expression = assignment_expression;
+            assert(compound_expression);
+            expression->compound_expression = compound_expression;
             break;
         default:
             yyerror("Undefined type");
@@ -78,12 +78,12 @@ ABS_assignment_expression F_ABS_assignment_expression(
 }
 
 ABS_primary_expression F_ABS_primary_expression(
-        ABS_node_type type,
+        ENUM_node_type type,
         ABS_ID id, ABS_constant constant,
-        ASB_compound_expression compound_expression,
+        ABS_compound_expression compound_expression,
         ABS_function_invoking function_invoking
 ) {
-    ABS_primary_expression primary_expression = (ABS_primary_expression) check_malloc(*primary_expression);
+    ABS_primary_expression primary_expression = (ABS_primary_expression) check_malloc(sizeof(*primary_expression));
     switch (type) {
         case ENUM_ID:
             primary_expression->id = id;
@@ -106,9 +106,9 @@ ABS_primary_expression F_ABS_primary_expression(
 
 
 ABS_constant F_ABS_constant(
-        ABS_node_type type,
+        ENUM_node_type type,
         ABS_IVAL abs_ival,
-        ABS_FVAL abs_ival,
+        ABS_FVAL abs_fval,
         ABS_CVAL abs_cval
 ) {
     ABS_constant constant = (ABS_constant) check_malloc(sizeof(*constant));
@@ -123,7 +123,7 @@ ABS_constant F_ABS_constant(
             constant->abs_cval = abs_cval;
             break;
         default:
-            yerror("Undefined type");
+            yyerror("Undefined type");
             exit(0);
     }
     return constant;
@@ -172,7 +172,7 @@ ABS_declaration_list F_ABS_declaration_list(
 }
 
 
-ABS_declaration F_ABS_declaration(ABS_type_specifier type_specifier,
+ABS_declaration F_ABS_declaration(ABS_specifier type_specifier,
                                   ABS_init_declarator_list init_declarator_list) {
     ABS_declaration declaration = (ABS_declaration) check_malloc(sizeof(*declaration));
     declaration->type_specifier = type_specifier;
@@ -181,8 +181,8 @@ ABS_declaration F_ABS_declaration(ABS_type_specifier type_specifier,
 }
 
 
-ABS_type_specifier F_ABS_type_specifier(ENUM_type_specifier type) {
-    ABS_type_specifier type_specifier = (ABS_type_specifier) check_malloc(sizeof(*type_specifier));
+ABS_specifier F_ABS_specifier(ENUM_specifier type) {
+    ABS_specifier type_specifier = (ABS_specifier) check_malloc(sizeof(*type_specifier));
     type_specifier->type = type;
     return type_specifier;
 }
@@ -344,7 +344,7 @@ ABS_function_definition_list F_ABS_function_definition_list(
 }
 
 ABS_function_definition F_ABS_function_definition(
-        ABS_type_specifier type_specifier,
+        ABS_specifier type_specifier,
         ABS_ID id,
         ABS_parameter_list parameter_list,
         ABS_block_statement block_statement
@@ -371,7 +371,7 @@ ABS_parameter_list F_ABS_parameter_list(
 
 
 ABS_parameter F__ABS_parameter(
-        ABS_type_specifier type_specifier,
+        ABS_specifier type_specifier,
         ABS_ID id
 ) {
     ABS_parameter parameter = (ABS_parameter) check_malloc(sizeof(*parameter));

@@ -29,7 +29,7 @@ typedef enum {
     ENUM_IVAL,
     ENUM_FVAL,
     ENUM_CVAL
-} ABS_node_type;
+} ENUM_node_type;
 
 typedef enum {
     ENUM_INT,
@@ -62,35 +62,35 @@ typedef enum {
 
 
 
-typedef _ABS_ID *ABS_ID;
-typedef _ABS_IVAL *ABS_IVAL;
-typedef _ABS_FVAL *ABS_FVAL;
-typedef _ABS_CVAL *ABS_CVAL;
-typedef _ABS_expression_list *ABS_expression_list;
-typedef _ABS_expression *ABS_expression;
-typedef _ABS_assignment_expression *ABS_assignment_expression;
-typedef _ABS_primary_expression *ABS_primary_expression;
-typedef _ABS_constant *ABS_constant;
-typedef _ABS_function_invoking *ABS_function_invoking;
-typedef _ABS_argue_list *ABS_argue_list;
-typedef _ABS_compound_expression *ABS_compound_expression;
-typedef _ABS_declaration_list *ABS_declaration_list;
-typedef _ABS_declaration *ABS_declaration;
-typedef _ABS_type_specifier *ABS_type_specifier;
-typedef _ABS_init_declarator_list *ABS_init_declarator_list;
-typedef _ABS_init_declarator *ABS_init_declarator;
-typedef _ABS_statement_list *ABS_statement_list;
-typedef _ABS_statement *ABS_statement;
-typedef _ABS_block_statement *ABS_block_statement;
-typedef _ABS_expression_statement *ABS_expression_statement;
-typedef _ABS_selection_statement *ABS_selection_statement;
-typedef _ABS_iteration_statement *ABS_iteration_statement;
-typedef _ABS_jump_statement *ABS_jump_statement;
-typedef _ABS_program *ABS_program;
-typedef _ABS_function_definition_list *ABS_function_definition_list;
-typedef _ABS_function_definition *ABS_function_definition;
-typedef _ABS_parameter_list *ABS_parameter_list;
-typedef _ABS_parameter *ABS_parameter;
+typedef struct _ABS_ID *ABS_ID;
+typedef struct _ABS_IVAL *ABS_IVAL;
+typedef struct _ABS_FVAL *ABS_FVAL;
+typedef struct _ABS_CVAL *ABS_CVAL;
+typedef struct _ABS_expression_list *ABS_expression_list;
+typedef struct _ABS_expression *ABS_expression;
+typedef struct _ABS_assignment_expression *ABS_assignment_expression;
+typedef struct _ABS_primary_expression *ABS_primary_expression;
+typedef struct _ABS_constant *ABS_constant;
+typedef struct _ABS_function_invoking *ABS_function_invoking;
+typedef struct _ABS_argue_list *ABS_argue_list;
+typedef struct _ABS_compound_expression *ABS_compound_expression;
+typedef struct _ABS_declaration_list *ABS_declaration_list;
+typedef struct _ABS_declaration *ABS_declaration;
+typedef struct _ABS_specifier *ABS_specifier;
+typedef struct _ABS_init_declarator_list *ABS_init_declarator_list;
+typedef struct _ABS_init_declarator *ABS_init_declarator;
+typedef struct _ABS_statement_list *ABS_statement_list;
+typedef struct _ABS_statement *ABS_statement;
+typedef struct _ABS_block_statement *ABS_block_statement;
+typedef struct _ABS_expression_statement *ABS_expression_statement;
+typedef struct _ABS_selection_statement *ABS_selection_statement;
+typedef struct _ABS_iteration_statement *ABS_iteration_statement;
+typedef struct _ABS_jump_statement *ABS_jump_statement;
+typedef struct _ABS_program *ABS_program;
+typedef struct _ABS_function_definition_list *ABS_function_definition_list;
+typedef struct _ABS_function_definition *ABS_function_definition;
+typedef struct _ABS_parameter_list *ABS_parameter_list;
+typedef struct _ABS_parameter *ABS_parameter;
 
 
 
@@ -117,7 +117,7 @@ struct _ABS_expression_list {
 
 
 struct _ABS_expression {
-    ABS_node_type type;
+    ENUM_node_type type;
     union {
         ABS_assignment_expression assignment_expression;
         ABS_compound_expression compound_expression;
@@ -133,17 +133,17 @@ struct _ABS_assignment_expression {
 
 
 struct _ABS_primary_expression {
-    ABS_node_type type;
+    ENUM_node_type type;
     union {
         ABS_ID id;
         ABS_constant constant;
-        ASB_compound_expression compound_expression;
+        ABS_compound_expression compound_expression;
         ABS_function_invoking function_invoking;
     };
 };
 
 struct _ABS_constant {
-    ABS_node_type type;
+    ENUM_node_type type;
     union {
         ABS_IVAL abs_ival;
         ABS_FVAL abs_fval;
@@ -173,18 +173,18 @@ struct _ABS_compound_expression {
 
 
 struct _ABS_declaration_list {
-    vector<declaration> declaration_list;
+    vector<ABS_declaration> declaration_list;
 };
 
 
 struct _ABS_declaration {
-    ABS_type_specifier type_specifier;
+    ABS_specifier type_specifier;
     ABS_init_declarator_list init_declarator_list;
 };
 
 
-struct _ABS_type_specifier {
-    ENUM_type_specifier type;
+struct _ABS_specifier {
+    ENUM_specifier type;
 };
 
 
@@ -265,7 +265,7 @@ struct _ABS_function_definition_list {
 
 
 struct _ABS_function_definition {
-    ABS_type_specifier type_specifier;
+    ABS_specifier type_specifier;
     ABS_ID id;
     ABS_parameter_list parameter_list;
     ABS_block_statement block_statement;
@@ -278,7 +278,7 @@ struct _ABS_parameter_list {
 
 
 struct _ABS_parameter {
-    ABS_type_specifier type_specifier;
+    ABS_specifier type_specifier;
     ABS_ID id;
 };
 
@@ -302,7 +302,7 @@ ABS_expression_list F_ABS_expression_list(
 
 
 ABS_expression F_ABS_expression(
-        ABS_node_type type,
+        ENUM_node_type type,
         ABS_assignment_expression assignment_expression,
         ABS_compound_expression compound_expression
 );
@@ -315,16 +315,16 @@ ABS_assignment_expression F_ABS_assignment_expression(
 );
 
 ABS_primary_expression F_ABS_primary_expression(
-        ABS_node_type type,
+        ENUM_node_type type,
         ABS_ID id, ABS_constant constant,
-        ASB_compound_expression compound_expression,
+        ABS_compound_expression compound_expression,
         ABS_function_invoking function_invoking
 );
 
 ABS_constant F_ABS_constant(
-        ABS_node_type type,
+        ENUM_node_type type,
         ABS_IVAL abs_ival,
-        ABS_FVAL abs_ival,
+        ABS_FVAL abs_fval,
         ABS_CVAL abs_cval
 );
 
@@ -350,11 +350,11 @@ ABS_declaration_list F_ABS_declaration_list(
 
 
 ABS_declaration F_ABS_declaration(
-        ABS_type_specifier type_specifier,
+        ABS_specifier type_specifier,
         ABS_init_declarator_list init_declarator_list
 );
 
-ABS_type_specifier F_ABS_type_specifier(ENUM_type_specifier type);
+ABS_specifier F_ABS_specifier(ENUM_specifier type);
 
 ABS_init_declarator_list F_ABS_init_declarator_list(
         ABS_init_declarator_list init_declarator_list,
@@ -366,7 +366,6 @@ ABS_init_declarator F_ABS_init_declarator(
         ABS_ID id,
         ABS_constant constant
 );
-
 
 ABS_statement_list F_ABS_statement_list(
         ABS_statement_list statement_list,
@@ -428,7 +427,7 @@ ABS_function_definition_list F_ABS_function_definition_list(
 );
 
 ABS_function_definition F_ABS_function_definition(
-        ABS_type_specifier type_specifier,
+        ABS_specifier type_specifier,
         ABS_ID id,
         ABS_parameter_list parameter_list,
         ABS_block_statement block_statement
@@ -442,7 +441,7 @@ ABS_parameter_list F_ABS_parameter_list(
 
 
 ABS_parameter F__ABS_parameter(
-        ABS_type_specifier type_specifier,
+        ABS_specifier type_specifier,
         ABS_ID id
 );
 
