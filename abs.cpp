@@ -1,8 +1,8 @@
 #include "abs.hpp"
 
-ABS_ID F_ABS_ID(string id) {
+ABS_ID F_ABS_ID(char* id) {
     ABS_ID abs_id = (ABS_ID) check_malloc(sizeof(*abs_id));
-    abs_id->id = id;
+    abs_id->id = string(id);
     return abs_id;
 }
 
@@ -367,7 +367,7 @@ ABS_parameter_list F_ABS_parameter_list(
 }
 
 
-ABS_parameter F__ABS_parameter(
+ABS_parameter F_ABS_parameter(
         ABS_specifier type_specifier,
         ABS_ID id
 ) {

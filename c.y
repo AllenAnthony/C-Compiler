@@ -39,7 +39,7 @@ ABS_program ABS_root;
 %token <ival> IVAL
 %token <cval> CVAL
 %token <fval> FVAL
-%token <sval> SVAL
+%token <sval> ID
 %type <expression_list> expression_list
 %type <expression> expression
 %type <assignment_expression> assignment_expression
@@ -66,7 +66,7 @@ ABS_program ABS_root;
 %type <parameter_list> parameter_list
 %type <parameter> parameter
 
-%token INT FLOAT CHAR ID
+%token INT FLOAT CHAR
 
 %token LP RP LCB RCB LSB RSB SEMI COMMA COLON PRINT
 %token IF ELSE WHILE FOR BREAK RETURN ASSIGN SWITCH CONTINUE CASE DEFAULT SIZEOF
@@ -94,7 +94,7 @@ expression
 
 assignment_expression
     : ID ASSIGN compound_expression {$$ = F_ABS_assignment_expression($1, NULL, $3);}
-    | ID LSB compound_expression RSB ASSIGN compound_expression {$$ = F_ABS_assignment_expression($1, $3, $6);}
+    | ID LSB compound_expression RSB ASSIGN compound_expression {$$ = F_ABS_assignment_expression(string($1), $3, $6);}
 ;
 
 primary_expression
@@ -198,14 +198,14 @@ selection_statement
 ;
 
 iteration_statement
-    : WHILE LP expression_list RP statement {$$ = F_ABS_iteration_statement($1, NULL, NULL, NULL, $5);}
+    : WHILE LP expression_list RP statement {$$ = F_ABS_iteration_statement($3, NULL, NULL, NULL, $5);}
     | FOR LP expression_statement expression_statement expression_list RP statement{$$ = F_ABS_iteration_statement(NULL, $3, $4, $5, $7);}
 ;
 
 jump_statement
-    : CONTINUE SEMI{$$=F_ABS_jump_statement($1, NULL);}
-    | BREAK SEMI{$$=F_ABS_jump_statement($1, NULL);}
-    | RETURN expression_statement{$$=F_ABS_jump_statement($1, $2);}
+    : CONTINUE SEMI{$$=F_ABS_jump_statement(ENUM_CONTINUE, NULL);}
+    | BREAK SEMI{$$=F_ABS_jump_statement(ENUM_BREAK, NULL);}
+    | RETURN expression_statement{$$=F_ABS_jump_statement(ENUM_RETURN, $2);}
 ;
 
 compiler
