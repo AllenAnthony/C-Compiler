@@ -8,8 +8,8 @@
 #include <functional>
 #include "util.hpp"
 
-typedef _Symbol *Symbol;
-typedef _Bucket Bucket;
+typedef struct _Symbol *Symbol;
+typedef struct _Bucket *Bucket;
 
 struct _Symbol {
     std::string id;
@@ -30,15 +30,22 @@ private:
     std::vector<Symbol> record;
 
     size_t hash(std::string id) {
-        std::hash<std::string> hash_fn;
-        return hash_fn(id) % size;
+        unsigned int hashValue = 0;
+        for(int i=0;i<id.length();i++){
+            char temp=id[i];
+            hashValue=(hashValue<<5)+temp;
+        }
+        return hashValue;
+//        std::hash<std::string> hash_fn;
+//        return hash_fn(id) % size;
     }
+
 
 public:
     SymbolTable(int size) {
         this->size = size;
         this->current_depth = 0;
-        this->buckets = (Bucket) check_malloc(sizeof(_Bucket) * size);
+        this->buckets = (Bucket) check_malloc(sizeof(struct _Bucket) * size);
     }
 
     Symbol find(std::string id) {

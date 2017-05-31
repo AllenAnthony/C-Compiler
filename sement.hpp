@@ -2,6 +2,7 @@
 #define COMPILER_SEMENT_HPP
 
 #include "util.hpp"
+#include "symbol.hpp"
 
 void SEM_abs_id(ABS_ID abs_id);
 
@@ -33,7 +34,7 @@ void SEM_declaration(ABS_declaration declaration);
 
 ENUM_specifier SEM_specifer(ABS_specifier specifier);
 
-void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declaration_list);
+void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list);
 
 void SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarator);
 
@@ -43,7 +44,7 @@ void SEM_statement(ABS_statement statement);
 
 void SEM_block_statement(ABS_block_statement block_statement);
 
-void SEM_expression_statement(ABS_expresson_statement expression_statement);
+void SEM_expression_statement(ABS_expression_statement expression_statement);
 
 void SEM_selection_statement(ABS_selection_statement selection_statement);
 
@@ -61,5 +62,7 @@ void SEM_parameter_list(ABS_parameter_list parameter_list);
 
 void SEM_parameter(ABS_parameter parameter);
 
+
+SymbolTable curr_env = SymbolTable(10);
 
 #endif //COMPILER_SEMENT_HPP

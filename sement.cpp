@@ -3,6 +3,8 @@
 #incldue "symbol.hpp"
 #include "util.hpp"
 
+
+
 void SEM_abs_id(ABS_ID abs_id){
     if(!curr_env.find(abs_id->id)){
         printf("id do not exist : %s",abs_id->id);
@@ -125,7 +127,7 @@ ENUM_specifier SEM_specifer(ABS_specifier specifier) {
     return specifier->type;
 }
 
-void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declaration_list){
+void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list){
     vector<ABS_init_declarator>::iterator init_declarator_list_it = init_declarator_list->init_declarator_list.begin();
     for(; init_declarator_list_it != init_declarator_list->init_declarator_list.end(); init_declarator_list_it++){
         SEM_declarator(type, *init_declarator_list_it);
@@ -184,7 +186,7 @@ void SEM_block_statement(ABS_block_statement block_statement){
     cur_env.escapeScope();
 }
 
-void SEM_expression_statement(ABS_expresson_statement expression_statement){
+void SEM_expression_statement(ABS_expression_statement expression_statement){
     vector<ABS_expression>::iterator expression_list_it = expression_statement->expression_list.begin();
     for(; expression_list_it != expression_expression_list.end(); expression_list_it++){
         SEM_expression(*expression_list_it);
@@ -263,3 +265,5 @@ void SEM_parameter(ABS_parameter parameter){
     string id = SEM_ID(parameter->id);
     curr_env.link(id, type);
 }
+
+

@@ -1,8 +1,8 @@
 %{
 #include "util.hpp"
 #include "abs.hpp"
+#include "sement.hpp"
 ABS_program ABS_root;
-
 %}
 
 %union{
@@ -240,5 +240,6 @@ parameter
 
 int main(){
     yyparse();
+    SEM_program(ABS_root);
     return 0;
 }
