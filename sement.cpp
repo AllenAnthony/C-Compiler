@@ -93,11 +93,78 @@ void SEM_compound_expression(ABS_compound_expression compound_expression){
     SEM_primary_expression(compound_expression->primary_expression);
     if(compound_expression->compound_expression!=NULL)
         SEM_compound_expression(compound_expression->compound_expression);
+
+    return compound_expression->oper_type;
 }
 
+//void SEM_statement_list(ABS_statement_list statement_list){
+//    vector<ABS_statement>::iterator statement_list_it=statement_list->statement_list.begin();
+//    for(;statement_list_it!=statement_list->statement_list.end();statement_list_it++){
+//        SEM_statement(*statement_list_it);
+//    }
+//}
+//
+//void SEM_statement(ABS_statement statement){
+//    if(statement->type==ENUM_block_statement){
+//        SEM_block_statement(statement->block_statement);
+//    }else if(statement->type==ENUM_expression_statement){
+//        SEM_expression_statement(statement->expression_statement);
+//    }else if(statement->type==ENUM_selection_statement){
+//        SEM_selection_statement(statement->selection_statement);
+//    }else if(statement->type==ENUM_iteration_statement){
+//        SEM_iteration_statement(statement->iteration_statement);
+//    }else if(statement->type==ENUM_jump_statement){
+//        SEM_jump_statement(statement->jump_statement);
+//    }else if(statement->type==ENUM_compound_expression){
+//        SEM_compound_expression(statement->compound_expression);
+//    }else{
+//        printf("type error\n");
+//    }
+//}
+//
+//void SEM_block_statement(ABS_block_statement block_statement){
+//    SEM_declaration_list(block_statement->declaration_list);
+//    SEM_statement_list(block_statement->statement_list);
+//}
+//
+//void SEM_expression_statement(ABS_expression_statement expression_statement){
+//    SEM_expression_list(expression_statement->expression_list);
+//}
+//
+//void SEM_selection_statement(ABS_selection_statement selection_statement){
+//    SEM_expression_list(selection_statement->expression_list);
+//
+//}
 
+void SEM_abs_id(ABS_ID abs_id){
+    if(!curr_env.find(abs_id->id)){
+        printf("id do not exist : %s",abs_id->id);
+        exit(0);
+    }
+}
 
+int SEM_IVAL(ABS_IVAL ival){
+    return ival->val;
+}
 
+float SEM_FVAL(ABS_FVAL fval){
+    return fval->fval;
+}
+
+char SEM_CVAL(ABS_CVAL cval){
+    return cval->cval;
+}
+
+void SEM_constant(ABS_constant constant){
+    if(constant->type==ENUM_IVAL)
+        SEM_IVAL(constant->abs_ival);
+    else if(constant->type==ENUM_FVAL)
+        SEM_FVAL(constant->abs_fval);
+    else if(constant->type==ENUM_CVAL)
+        SEM_CVAL(constant->abs_cval);
+    else
+        printf("type of the constant do not exist");
+}
 
 
 
