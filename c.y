@@ -210,7 +210,7 @@ jump_statement
 ;
 
 compiler
-    :program {ABS_root=$1;}
+    :program {ABS_root=$1; cout<<2333<<endl}
 ;
 
 program

@@ -32,11 +32,7 @@ typedef enum {
     ENUM_CVAL
 } ENUM_node_type;
 
-typedef enum {
-    ENUM_INT,
-    ENUM_FLOAT,
-    ENUM_CHAR
-} ENUM_specifier;
+
 
 typedef enum {
     ENUM_BREAK,

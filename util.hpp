@@ -11,6 +11,12 @@
 
 using namespace std;
 
+typedef enum {
+    ENUM_INT,
+    ENUM_FLOAT,
+    ENUM_CHAR
+} ENUM_specifier;
+
 void yyerror(string);
 
 int yylex(void);
