@@ -94,7 +94,7 @@ void SEM_statement_list(ABS_statement_list statement_list){
     }
 }
 
-void SEM_statement_list(ABS_statement statement){
+void SEM_statement(ABS_statement statement){
     switch(statement->type){
         case ENUM_block_statement:
             SEM_block_statement(statement->block_statement);
@@ -117,6 +117,40 @@ void SEM_statement_list(ABS_statement statement){
     }
 }
 
-void SEM_expression_statement(ABS_expresson statement){
-    SEM_
+void SEM_expression_statement(ABS_expresson_statement expression_statement){
+    vector<ABS_expression>::iterator expression_list_it = expression_statement->expression_list.begin();
+    for(; expression_list_it != expression_expression_list.end(); expression_list_it++){
+        SEM_expression(*expression_list_it);
+    }
 }
+
+void SEM_selection_statement(ABS_selection_statement selection_statement){
+    SEM_expression_list(selection_statement->expression_list);
+    SEM_statement(selection_statement->statement_if);
+    SEM_statement(selection_statement->statement_else);
+}
+
+void SEM_iteration_statement(ABS_iteration_statement iteration_statement){
+    if(iteration_statement->expression_list_while != NULL){
+        SEM_expression_list(iteration_statement->expression_list_while);
+    }
+    else{
+        SEM_expression_statement(iteration_statement->expression_list_for_right);
+        SEM_expression_statement(iteration_statement->expression_statement_for_middle);
+        SEM_expression_list(iteration_statement->expression_statement_for_left);
+    }
+    SEM_statement(iteration_statement->statement);
+}
+
+void SEM_jump_statement(ABS_jump_statement jump_statement){
+    switch(jump_statement->action_type){
+        case ENUM_CONTINUE:
+            break;
+        case ENUM_BREAK:
+            break;
+        case ENUM_RETURN:
+            SEM_expression_statement(jump_statement->expression_statement);
+            break;
+    }
+}
+
