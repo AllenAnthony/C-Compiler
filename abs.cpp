@@ -45,6 +45,7 @@ ABS_expression F_ABS_expression(
         ABS_compound_expression compound_expression
 ) {
     ABS_expression expression = (ABS_expression) check_malloc(sizeof(_ABS_expression));
+    expression->type = type;
     switch (type) {
         case ENUM_assignment_expression:
             assert(assignment_expression);
@@ -76,11 +77,13 @@ ABS_assignment_expression F_ABS_assignment_expression(
 
 ABS_primary_expression F_ABS_primary_expression(
         ENUM_node_type type,
-        ABS_ID id, ABS_constant constant,
+        ABS_ID id,
+        ABS_constant constant,
         ABS_compound_expression compound_expression,
         ABS_function_invoking function_invoking
 ) {
     ABS_primary_expression primary_expression = (ABS_primary_expression) check_malloc(sizeof(_ABS_primary_expression));
+    primary_expression->type=type;
     switch (type) {
         case ENUM_ID:
             primary_expression->id = id;
