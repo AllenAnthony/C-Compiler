@@ -2,8 +2,6 @@
 #include "symbol.hpp"
 #include "abs.hpp"
 
-
-
 void SEM_program(ABS_program program){
 	if(program->declaration_list != NULL){
         SEM_declaretion_list(program->declaratin_list);
@@ -154,3 +152,6 @@ void SEM_jump_statement(ABS_jump_statement jump_statement){
     }
 }
 
+ENUM_specifier SEM_specifer(ABS_specifier specifier){
+    return specifier->type;
+}
