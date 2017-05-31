@@ -5,7 +5,7 @@
 #ifndef COMPILER_SEMENT_HPP
 #define COMPILER_SEMENT_HPP
 
-
+#include "util.hpp"
 class sement {
 
 };
