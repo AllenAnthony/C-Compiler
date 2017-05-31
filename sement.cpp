@@ -66,12 +66,33 @@ void SEM_primary_expression(ABS_primary_expression primary_expression){
             printf("the type of const do not agree with the type of id");
             exit(0);
         }
+        SEM_constant(primary_expression->constant->type);
     }else if(primary_expression->type==ENUM_compound_expression){
         SEM_compound_expression(primary_expression->compound_expression);
     }else if(primary_expression->type==ENUM_function_invoking){
         SEM_function_invoking(primary_expression->function_invoking);
     }
 }
+
+void SEM_function_invoking(ABS_function_invoking function_invoking){
+    if(!curr_env.find(function_invoking->abs_id->id)){
+        printf("id do not exist : %s",primary_expression->id);
+        exit(0);
+    }
+    SEM_argue_list(function_invoking->argue_list);
+}
+
+void SEM_argue_list(ABS_argue_list argue_list){
+    vector<abs_id>::iterator argue_list_it=argue_list->list.begin();
+    for(;argue_list_it!=argue_list->list.end();argue_list_it++){
+        if(!curr_env.find((*argue_list_it)->id)){
+            printf("id do not exist");
+            exit(0);
+        }
+    }
+}
+
+
 
 
 
