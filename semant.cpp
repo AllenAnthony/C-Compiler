@@ -45,7 +45,7 @@ void SEM_expression(ABS_expression expression) {
 void SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
     cout << "SEM_assignment_expression(" << endl;
     string id = SEM_ID(assignment_expression->abs_id);
-    if (!assignment_expression->compound_expression_index) {
+    if (assignment_expression->compound_expression_index) {
         SEM_compound_expression(assignment_expression->compound_expression_index);
     }
 
@@ -54,7 +54,7 @@ void SEM_assignment_expression(ABS_assignment_expression assignment_expression) 
 }
 
 void SEM_primary_expression(ABS_primary_expression primary_expression) {
-    cout << "SEM_primary_expression" << endl;
+    cout << "SEM_primary_expression(" << endl;
     if (primary_expression->type == ENUM_ID) {
         string id = SEM_ID(primary_expression->id);
         if (!curr_env->find(SEM_ID(primary_expression->id))) {
@@ -62,13 +62,12 @@ void SEM_primary_expression(ABS_primary_expression primary_expression) {
             exit(0);
         }
     } else if (primary_expression->type == ENUM_constant) {
-        string id = SEM_ID(primary_expression->id);
-        Symbol symbol = curr_env->find(id);
-
-        if (!symbol && primary_expression->constant->type != symbol->type) {
-            cout << "the type of const do not agree with the type of id" << endl;
-            exit(0);
-        }
+//        string id = SEM_ID(primary_expression->id);
+//        Symbol symbol = curr_env->find(id);
+//        if (!symbol && primary_expression->constant->type != symbol->type) {
+//            cout << "the type of const do not agree with the type of id" << endl;
+//            exit(0);
+//        }
         SEM_constant(primary_expression->constant);
     } else if (primary_expression->type == ENUM_compound_expression) {
         SEM_compound_expression(primary_expression->compound_expression);
@@ -118,10 +117,11 @@ void SEM_argue_list(ABS_argue_list argue_list) {
 void SEM_compound_expression(ABS_compound_expression compound_expression) {
     cout << "SEM_compound_expression(" << endl;
 
-    SEM_primary_expression(compound_expression->primary_expression);
-
     if (compound_expression->compound_expression != NULL)
         SEM_compound_expression(compound_expression->compound_expression);
+
+    SEM_primary_expression(compound_expression->primary_expression);
+
     cout << ")" << endl;
 }
 
