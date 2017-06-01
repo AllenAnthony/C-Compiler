@@ -1,5 +1,5 @@
-#ifndef COMPILER_SEMENT_HPP
-#define COMPILER_SEMENT_HPP
+#ifndef COMPILER_SEMANT_HPP
+#define COMPILER_SEMANT_HPP
 
 #include "util.hpp"
 #include "symbol.hpp"
@@ -66,4 +66,4 @@ void SEM_parameter(ABS_parameter parameter);
 
 SymbolTable curr_env = SymbolTable(10);
 
-#endif //COMPILER_SEMENT_HPP
+#endif //COMPILER_SEMANT_HPP

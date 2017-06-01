@@ -21,8 +21,8 @@ set(UTILS util.cpp)
 
 set(ASB_TREE abs.cpp)
 
-set(SEMENT sement.cpp)
+set(SEMANT semant.cpp)
 
 #编译生成compiler
-set(SOURCE_FILES ${BISON_Parser_OUTPUTS} ${FLEX_Scanner_OUTPUTS} ${UTILS} ${ASB_TREE} ${SEMENT})
+set(SOURCE_FILES ${BISON_Parser_OUTPUTS} ${FLEX_Scanner_OUTPUTS} ${UTILS} ${ASB_TREE} ${SEMANT})
 add_executable(compiler ${SOURCE_FILES})
