@@ -63,6 +63,8 @@ void SEM_parameter_list(ABS_parameter_list parameter_list);
 
 void SEM_parameter(ABS_parameter parameter);
 
-extern SymbolTable* curr_env;
+extern SymbolTable *curr_env;
+
+extern int func_depth;
 
 #endif //COMPILER_SEMANT_HPP
