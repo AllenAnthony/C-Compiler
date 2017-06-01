@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make clean
+rm -rf lex.yy.cpp *.tab.cpp *.tab.hpp *.tab.c *.tab.h *.output build
 git add .
 if $1
 then

@@ -1,5 +1,3 @@
-
-
 #ifndef COMPILER_SYMBOL_HPP
 #define COMPILER_SYMBOL_HPP
 
@@ -29,19 +27,11 @@ private:
     Bucket buckets;
     std::vector<Symbol> record;
 
-    size_t hash(std::string id) {
-        unsigned int hashValue = 0;
-        for(int i=0;i<id.length();i++){
-            char temp=id[i];
-            hashValue=(hashValue<<5)+temp;
-        }
-        return hashValue;
-//        std::hash<std::string> hash_fn;
-//        return hash_fn(id) % size;
-    }
+    size_t hash(std::string id);
 
 
 public:
+<<<<<<< HEAD
     SymbolTable(int size) {
         this->size = size;
         this->current_depth = 0;
@@ -96,6 +86,17 @@ public:
         }
         current_depth--;
     }
+=======
+    SymbolTable(int size);
+
+    Symbol find(std::string id);
+
+    Symbol link(std::string id, ENUM_specifier type);
+
+    void enterScope();
+
+    void escapeScope();
+>>>>>>> 93cf02995d1203139043ddba6c1d7c694759b722
 
 };
 
