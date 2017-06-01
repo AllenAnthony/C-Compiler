@@ -83,7 +83,7 @@ ABS_primary_expression F_ABS_primary_expression(
         ABS_function_invoking function_invoking
 ) {
     ABS_primary_expression primary_expression = (ABS_primary_expression) check_malloc(sizeof(_ABS_primary_expression));
-    primary_expression->type=type;
+    primary_expression->type = type;
     switch (type) {
         case ENUM_ID:
             primary_expression->id = id;
@@ -112,6 +112,7 @@ ABS_constant F_ABS_constant(
         ABS_CVAL abs_cval
 ) {
     ABS_constant constant = (ABS_constant) check_malloc(sizeof(_ABS_constant));
+    constant->type = type;
     switch (type) {
         case ENUM_IVAL:
             constant->abs_ival = abs_ival;

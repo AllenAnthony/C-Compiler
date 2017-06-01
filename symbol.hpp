@@ -41,6 +41,8 @@ public:
     void enterScope();
 
     void escapeScope();
+
+    void levelAdapt();
 };
 
 

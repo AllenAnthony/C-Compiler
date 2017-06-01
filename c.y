@@ -1,12 +1,16 @@
 %{
+#include <cstdlib>
+#include <cstdio>
 #include "util.hpp"
 #include "abs.hpp"
 #include "semant.hpp"
+
 ABS_program ABS_root;
 
 
 SymbolTable* curr_env;
 extern FILE* yyin;
+
 %}
 
 %union{
@@ -125,7 +129,7 @@ argue_list
 ;
 
 compound_expression
-    : primary_expression {$$ = F_ABS_compound_expression(ENUM_NONE, $1, NULL);}
+    : primary_expression {$$ = F_ABS_compound_expression(ENUM_NONE, $1, NULL); if($1 == NULL) cout << "tag2"<<endl;}
 
     | compound_expression MUL primary_expression {$$ = F_ABS_compound_expression(ENUM_MUL, $3, $1);}
     | compound_expression DIV primary_expression {$$ = F_ABS_compound_expression(ENUM_DIV, $3, $1);}
@@ -250,8 +254,15 @@ int main(int argc, char** argv){
         cout << "File: " << argv[1] << endl;
         yyin = fp;
     }
+
+    cout << endl << "------------Parse begin-------------" << endl;
     yyparse();
+    cout << endl << "------------Parse finish-------------" << endl;
+
+    cout << endl << "------------Semant check begin-------------" << endl;
     curr_env = new SymbolTable(10);
     SEM_program(ABS_root);
+    cout << endl << "------------Semant check finish-------------" << endl;
+
     return 0;
 }

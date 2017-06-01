@@ -110,7 +110,7 @@ using namespace std;
 }
 
 [0-9]+	{
-    yylval.fval=atoi(yytext);
+    yylval.ival=atoi(yytext);
     DISP_TOK
     return IVAL;
 }

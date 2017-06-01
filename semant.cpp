@@ -24,7 +24,6 @@ char SEM_CVAL(ABS_CVAL cval) {
     return cval->cval;
 }
 
-
 void SEM_expression_list(ABS_expression_list expression_list) {
     cout << "SEM_expression_list(" << endl;
     vector<ABS_expression>::iterator expression_list_it = expression_list->expression_list.begin();
@@ -46,13 +45,16 @@ void SEM_expression(ABS_expression expression) {
 void SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
     cout << "SEM_assignment_expression(" << endl;
     string id = SEM_ID(assignment_expression->abs_id);
-    SEM_compound_expression(assignment_expression->compound_expression_index);
+    if (!assignment_expression->compound_expression_index) {
+        SEM_compound_expression(assignment_expression->compound_expression_index);
+    }
+
     SEM_compound_expression(assignment_expression->compound_expression_value);
     cout << ")" << endl;
 }
 
 void SEM_primary_expression(ABS_primary_expression primary_expression) {
-    cout << "SEM_primary_expression";
+    cout << "SEM_primary_expression" << endl;
     if (primary_expression->type == ENUM_ID) {
         string id = SEM_ID(primary_expression->id);
         if (!curr_env->find(SEM_ID(primary_expression->id))) {
@@ -116,8 +118,8 @@ void SEM_argue_list(ABS_argue_list argue_list) {
 void SEM_compound_expression(ABS_compound_expression compound_expression) {
     cout << "SEM_compound_expression(" << endl;
 
-    //todo oper_type
     SEM_primary_expression(compound_expression->primary_expression);
+
     if (compound_expression->compound_expression != NULL)
         SEM_compound_expression(compound_expression->compound_expression);
     cout << ")" << endl;
@@ -142,9 +144,8 @@ void SEM_declaration(ABS_declaration declaration) {
 }
 
 ENUM_specifier SEM_specifier(ABS_specifier specifier) {
-    cout << "SEM_specifier(" << endl;
-
     cout << "SEM_specifier(";
+
     switch (specifier->type) {
         case ENUM_INT:
             cout << "int";
@@ -309,7 +310,7 @@ void SEM_function_definition(ABS_function_definition function_definition) {
     if (function_definition->parameter_list != NULL) {
         curr_env->enterScope();
         SEM_parameter_list(function_definition->parameter_list);
-        curr_env->escapeScope();
+        curr_env->levelAdapt();
     }
     ENUM_specifier type = SEM_specifier(function_definition->type_specifier);
     string id = SEM_ID(function_definition->id);
@@ -326,7 +327,6 @@ void SEM_parameter_list(ABS_parameter_list parameter_list) {
         SEM_parameter(*parameter_list_it);
     }
     cout << ")" << endl;
-
 }
 
 void SEM_parameter(ABS_parameter parameter) {

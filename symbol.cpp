@@ -65,4 +65,8 @@ void SymbolTable::escapeScope() {
     current_depth--;
 }
 
+void SymbolTable::levelAdapt() {
+    current_depth--;
+}
+
 
