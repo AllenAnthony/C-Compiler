@@ -3,6 +3,7 @@
 
 #include "util.hpp"
 #include "symbol.hpp"
+#include "abs.hpp"
 
 void SEM_abs_id(ABS_ID abs_id);
 

@@ -56,6 +56,8 @@ cmake-build-debug/
 lex.yy.cpp
 *.tab.cpp
 *.tab.hpp
+*.tab.c
+*.tab.h
 *.output
 build/
 
