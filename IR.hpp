@@ -31,7 +31,4 @@ using namespace std;
 
 
 
-
-
-
 #endif //COMPILER_IR_HPP

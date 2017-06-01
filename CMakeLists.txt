@@ -21,7 +21,7 @@ set(UTILS util.cpp)
 
 set(ASB_TREE abs.cpp)
 
-set(SEMANT semant.cpp symbol.cpp)
+set(SEMANT semant.cpp symbol.cpp function.cpp)
 
 #编译生成compiler
 set(SOURCE_FILES ${BISON_Parser_OUTPUTS} ${FLEX_Scanner_OUTPUTS} ${UTILS} ${ASB_TREE} ${SEMANT})
