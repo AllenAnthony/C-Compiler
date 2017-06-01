@@ -39,50 +39,49 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INT = 258,
-     CHAR = 259,
-     FLOAT = 260,
-     ID_D = 261,
-     ID_E = 262,
-     IVAL = 263,
-     CVAL = 264,
-     FVAL = 265,
-     SVAL = 266,
-     LP = 267,
-     RP = 268,
-     LCB = 269,
-     RCB = 270,
-     LSB = 271,
-     RSB = 272,
-     SEMI = 273,
-     COMMA = 274,
-     COLON = 275,
-     IF = 276,
-     ELSE = 277,
-     WHILE = 278,
-     FOR = 279,
-     BREAK = 280,
-     RETURN = 281,
-     ASSIGN = 282,
-     SWITCH = 283,
-     CONTINUE = 284,
-     CASE = 285,
-     DEFAULT = 286,
-     SIZEOF = 287,
-     PLUS = 288,
-     MINUS = 289,
-     MUL = 290,
-     DIV = 291,
-     MOD = 292,
-     AND = 293,
-     OR = 294,
-     NOT = 295,
-     GE = 296,
-     LE = 297,
-     NE = 298,
-     EQ = 299,
-     GT = 300,
-     LT = 301
+     IVAL = 258,
+     CVAL = 259,
+     FVAL = 260,
+     ID = 261,
+     INT = 262,
+     FLOAT = 263,
+     CHAR = 264,
+     LP = 265,
+     RP = 266,
+     LCB = 267,
+     RCB = 268,
+     LSB = 269,
+     RSB = 270,
+     SEMI = 271,
+     COMMA = 272,
+     COLON = 273,
+     PRINT = 274,
+     IF = 275,
+     ELSE = 276,
+     WHILE = 277,
+     FOR = 278,
+     BREAK = 279,
+     RETURN = 280,
+     ASSIGN = 281,
+     SWITCH = 282,
+     CONTINUE = 283,
+     CASE = 284,
+     DEFAULT = 285,
+     SIZEOF = 286,
+     PLUS = 287,
+     MINUS = 288,
+     MUL = 289,
+     DIV = 290,
+     MOD = 291,
+     AND = 292,
+     OR = 293,
+     NOT = 294,
+     NE = 295,
+     EQ = 296,
+     GE = 297,
+     LE = 298,
+     GT = 299,
+     LT = 300
    };
 #endif
 
@@ -93,17 +92,42 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 6 "c.y"
+#line 9 "c.y"
 
     char cval;
     int ival;
     float fval;
-    char *sval;
+    char* sval;
+    ABS_expression_list expression_list;
+    ABS_expression expression;
+    ABS_assignment_expression assignment_expression;
+    ABS_primary_expression primary_expression;
+    ABS_constant constant;
+    ABS_function_invoking function_invoking;
+    ABS_argue_list argue_list;
+    ABS_compound_expression compound_expression;
+    ABS_declaration_list declaration_list;
+    ABS_declaration declaration;
+    ABS_specifier specifier;
+    ABS_init_declarator_list init_declarator_list;
+    ABS_init_declarator init_declarator;
+    ABS_statement_list statement_list;
+    ABS_statement statement;
+    ABS_block_statement block_statement;
+    ABS_expression_statement expression_statement;
+    ABS_selection_statement selection_statement;
+    ABS_iteration_statement iteration_statement;
+    ABS_jump_statement jump_statement;
+    ABS_program program;
+    ABS_function_definition_list function_definition_list;
+    ABS_function_definition function_definition;
+    ABS_parameter_list parameter_list;
+    ABS_parameter parameter;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 107 "y.tab.h"
+#line 131 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

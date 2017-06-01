@@ -87,7 +87,8 @@ public:
     void escapeScope() {
         size_t current_size = record.size();
         while (current_size != 0 && record[current_size]->depth == current_depth) {
-            Symbol symbol = record.pop_back();
+            Symbol symbol = record.back();
+            record.pop_back();
             size_t index = hash(symbol->id);
             std::vector<Symbol> symbols = symbol_table[index].symbols;
             symbols.pop_back();
