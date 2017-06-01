@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf lex.yy.cpp *.tab.cpp *.tab.hpp *.tab.c *.tab.h *.output build
+rm -rf lex.yy.* *.tab.cpp *.tab.hpp *.tab.c *.tab.h *.output *.o
 git add .
 if $1
 then
