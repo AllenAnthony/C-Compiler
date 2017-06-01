@@ -88,7 +88,7 @@ void SEM_constant(ABS_constant constant) {
     else if (constant->type == ENUM_CVAL)
         SEM_CVAL(constant->abs_cval);
     else
-        printf("type of the constant do not exist");
+        cout<<"type of the constant do not exist";
     cout << ")" << endl;
 }
 
