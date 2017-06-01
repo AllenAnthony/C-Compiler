@@ -4,64 +4,73 @@
 #include "util.hpp"
 #include "symbol.hpp"
 #include "abs.hpp"
+#include "IR.hpp"
 
-string SEM_ID(ABS_ID id);
+IR_NODE SEM_ID(ABS_ID id);
 
-int SEM_IVAL(ABS_IVAL ival);
+IR_NODE SEM_IVAL(ABS_IVAL ival);
 
-float SEM_FVAL(ABS_FVAL fval);
+IR_NODE SEM_FVAL(ABS_FVAL fval);
 
-char SEM_CVAL(ABS_CVAL cval);
+IR_NODE SEM_CVAL(ABS_CVAL cval);
 
-void SEM_expression_list(ABS_expression_list expression_list);
 
-void SEM_expression(ABS_expression expression);
+//QIAN XU FENG
+IR_NODE SEM_expression_list(ABS_expression_list expression_list);
 
-void SEM_assignment_expression(ABS_assignment_expression assignment_expression);
+IR_NODE SEM_expression(ABS_expression expression);
 
-void SEM_primary_expression(ABS_primary_expression primary_expression);
+IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression);
 
-void SEM_constant(ABS_constant constant);
+IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression);
 
-void SEM_function_invoking(ABS_function_invoking function_invoking);
+IR_NODE SEM_constant(ABS_constant constant);
 
-void SEM_argue_list(ABS_argue_list argue_list);
+IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking);
 
-void SEM_compound_expression(ABS_compound_expression compound_expression);
+IR_NODE SEM_argue_list(ABS_argue_list argue_list);
 
-void SEM_declaration_list(ABS_declaration_list declaration_list);
+IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression);
 
-void SEM_declaration(ABS_declaration declaration);
+//BIAN BIAN
+
+IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list);
+
+IR_NODE SEM_declaration(ABS_declaration declaration);
 
 ENUM_specifier SEM_specifier(ABS_specifier specifier);
 
-void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list);
+IR_NODE SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list);
 
-void SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarator);
+IR_NODE SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarator);
 
-void SEM_statement_list(ABS_statement_list statement_list);
+IR_NODE SEM_statement_list(ABS_statement_list statement_list);
 
-void SEM_statement(ABS_statement statement);
+IR_NODE SEM_statement(ABS_statement statement);
 
-void SEM_block_statement(ABS_block_statement block_statement);
+IR_NODE SEM_block_statement(ABS_block_statement block_statement);
 
-void SEM_expression_statement(ABS_expression_statement expression_statement);
+IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement);
 
-void SEM_selection_statement(ABS_selection_statement selection_statement);
 
-void SEM_iteration_statement(ABS_iteration_statement iteration_statement);
 
-void SEM_jump_statement(ABS_jump_statement jump_statement);
+//HOPEN
 
-void SEM_program(ABS_program program);
+IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement);
 
-void SEM_function_definition_list(ABS_function_definition_list function_definition_list);
+IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement);
 
-void SEM_function_definition(ABS_function_definition function_definition);
+IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement);
 
-void SEM_parameter_list(ABS_parameter_list parameter_list);
+IR_NODE SEM_program(ABS_program program);
 
-void SEM_parameter(ABS_parameter parameter);
+IR_NODE SEM_function_definition_list(ABS_function_definition_list function_definition_list);
+
+IR_NODE SEM_function_definition(ABS_function_definition function_definition);
+
+IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list);
+
+IR_NODE SEM_parameter(ABS_parameter parameter);
 
 extern SymbolTable *curr_env;
 

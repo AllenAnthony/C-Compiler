@@ -2,39 +2,57 @@
 #include "abs.hpp"
 
 #include "symbol.hpp"
+#include "function.hpp"
+#include "IR.hpp"
 #include "util.hpp"
 #include <cstdio>
+#include <vector>
+#include <map>
 
-string SEM_ID(ABS_ID abs_id) {
+using namespace std;
+
+IR_NODE SEM_ID(ABS_ID abs_id) {
     cout << "SEM_ID(" << abs_id->id << ")" << endl;
-    return abs_id->id;
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    node->ir_node_type = IR_NODE_LEAF;
+    node->leaf.id = abs_id->id;
+    return node;
 }
 
-int SEM_IVAL(ABS_IVAL ival) {
+IR_NODE SEM_IVAL(ABS_IVAL ival) {
     cout << "SEM_IVAL(" << ival->ival << ")" << endl;
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    node->ir_node_type = IR;
+    node->leaf.id = abs_id->id;
     return ival->ival;
 }
 
-float SEM_FVAL(ABS_FVAL fval) {
+IR_NODE SEM_FVAL(ABS_FVAL fval) {
     cout << "SEM_FVAL(" << fval->fval << ")" << endl;
-    return fval->fval;
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    node->ir_node_type = IR_NODE_IVAL;
+    node->leaf.fval = fval->fval;
+    return node;
 }
 
-char SEM_CVAL(ABS_CVAL cval) {
+IR_NODE SEM_CVAL(ABS_CVAL cval) {
     cout << "SEM_CVAL(" << cval->cval << ")" << endl;
     return cval->cval;
 }
 
-void SEM_expression_list(ABS_expression_list expression_list) {
+IR_NODE SEM_expression_list(ABS_expression_list expression_list) {
     cout << "SEM_expression_list(" << func_depth++ << endl;
+    IR_NODE node_list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node_list->ir_node_type = IR_NODE_LIST;
     vector<ABS_expression>::iterator expression_list_it = expression_list->expression_list.begin();
     for (; expression_list_it != expression_list->expression_list.end(); expression_list_it++) {
-        SEM_expression(*expression_list_it);
+        node_list->list->node_list.push_back(SEM_expression(*expression_list_it));
     }
     cout << ")" << func_depth-- << endl;
+    return node_list;
 }
 
-void SEM_expression(ABS_expression expression) {
+IR_NODE SEM_expression(ABS_expression expression) {
     cout << "SEM_expression(" << func_depth++ << endl;
     if (expression->type == ENUM_assignment_expression) {
         SEM_assignment_expression(expression->assignment_expression);
@@ -46,7 +64,7 @@ void SEM_expression(ABS_expression expression) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
+IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
     cout << "SEM_assignment_expression(" << func_depth++ << endl;
     string id = SEM_ID(assignment_expression->abs_id);
     if (assignment_expression->compound_expression_index) {
@@ -56,7 +74,7 @@ void SEM_assignment_expression(ABS_assignment_expression assignment_expression) 
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_primary_expression(ABS_primary_expression primary_expression) {
+IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression) {
     cout << "SEM_primary_expression(" << func_depth++ << endl;
     if (primary_expression->type == ENUM_ID) {
         string id = SEM_ID(primary_expression->id);
@@ -83,7 +101,7 @@ void SEM_primary_expression(ABS_primary_expression primary_expression) {
 }
 
 
-void SEM_constant(ABS_constant constant) {
+IR_NODE SEM_constant(ABS_constant constant) {
     cout << "SEM_constant(" << func_depth++ << endl;
 
     if (constant->type == ENUM_IVAL) {
@@ -98,7 +116,7 @@ void SEM_constant(ABS_constant constant) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_function_invoking(ABS_function_invoking function_invoking) {
+IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking) {
     cout << "SEM_function_invoking(" << func_depth++ << endl;
 
 //    if(!curr_env->find(function_invoking->abs_id->id)){
@@ -109,7 +127,7 @@ void SEM_function_invoking(ABS_function_invoking function_invoking) {
     SEM_argue_list(function_invoking->argue_list);
 }
 
-void SEM_argue_list(ABS_argue_list argue_list) {
+IR_NODE SEM_argue_list(ABS_argue_list argue_list) {
     cout << "SEM_argue_list(" << func_depth++ << endl;
 
     vector<ABS_ID>::iterator argue_list_it = argue_list->list.begin();
@@ -120,7 +138,7 @@ void SEM_argue_list(ABS_argue_list argue_list) {
 }
 
 
-void SEM_compound_expression(ABS_compound_expression compound_expression) {
+IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
     cout << "SEM_compound_expression(" << func_depth++ << endl;
 
     if (compound_expression->compound_expression != NULL)
@@ -132,7 +150,7 @@ void SEM_compound_expression(ABS_compound_expression compound_expression) {
 }
 
 
-void SEM_declaration_list(ABS_declaration_list declaration_list) {
+IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list) {
     cout << "SEM_declaration_list(" << func_depth++ << endl;
 
     vector<ABS_declaration>::iterator declaration_list_it = declaration_list->declaration_list.begin();
@@ -142,7 +160,7 @@ void SEM_declaration_list(ABS_declaration_list declaration_list) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_declaration(ABS_declaration declaration) {
+IR_NODE SEM_declaration(ABS_declaration declaration) {
     cout << "SEM_declaration(" << func_depth++ << endl;
     ENUM_specifier type = SEM_specifier(declaration->type_specifier);
     SEM_init_declarator_list(type, declaration->init_declarator_list);
@@ -170,7 +188,7 @@ ENUM_specifier SEM_specifier(ABS_specifier specifier) {
     return specifier->type;
 }
 
-void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list) {
+IR_NODE SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list) {
     cout << "SEM_init_declarator_list(" << func_depth++ << endl;
 
     vector<ABS_init_declarator>::iterator init_declarator_list_it = init_declarator_list->init_declarator_list.begin();
@@ -180,7 +198,7 @@ void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarator) {
+IR_NODE SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarator) {
     cout << "SEM_init_declarator(" << func_depth++ << endl;
 
     if (init_declarator->constant != NULL) {
@@ -191,7 +209,7 @@ void SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarato
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_statement_list(ABS_statement_list statement_list) {
+IR_NODE SEM_statement_list(ABS_statement_list statement_list) {
     cout << "SEM_statement_list(" << func_depth++ << endl;
 
     vector<ABS_statement>::iterator statement_list_it = statement_list->statement_list.begin();
@@ -201,7 +219,7 @@ void SEM_statement_list(ABS_statement_list statement_list) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_statement(ABS_statement statement) {
+IR_NODE SEM_statement(ABS_statement statement) {
     cout << "SEM_statement(" << func_depth++ << endl;
 
     switch (statement->type) {
@@ -231,7 +249,7 @@ void SEM_statement(ABS_statement statement) {
 }
 
 
-void SEM_block_statement(ABS_block_statement block_statement) {
+IR_NODE SEM_block_statement(ABS_block_statement block_statement) {
     cout << "SEM_block_statement(" << func_depth++ << endl;
 
     curr_env->enterScope();
@@ -245,13 +263,13 @@ void SEM_block_statement(ABS_block_statement block_statement) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_expression_statement(ABS_expression_statement expression_statement) {
+IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement) {
     cout << "SEM_expression_statement(" << func_depth++ << endl;
     SEM_expression_list(expression_statement->expression_list);
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_selection_statement(ABS_selection_statement selection_statement) {
+IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement) {
     cout << "SEM_selection_statement(" << func_depth++ << endl;
 
     SEM_expression_list(selection_statement->expression_list);
@@ -260,7 +278,7 @@ void SEM_selection_statement(ABS_selection_statement selection_statement) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
+IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
     cout << "SEM_iteration_statement(" << func_depth++ << endl;
 
     if (iteration_statement->expression_list_while != NULL) {
@@ -274,7 +292,7 @@ void SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_jump_statement(ABS_jump_statement jump_statement) {
+IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
     cout << "SEM_jump_statement(" << func_depth++ << endl;
     switch (jump_statement->action_type) {
         case ENUM_CONTINUE:
@@ -291,7 +309,7 @@ void SEM_jump_statement(ABS_jump_statement jump_statement) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_program(ABS_program program) {
+IR_NODE SEM_program(ABS_program program) {
     cout << "SEM_program(" << func_depth++ << endl;
 
     if (program->declaration_list != NULL) {
@@ -301,7 +319,7 @@ void SEM_program(ABS_program program) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_function_definition_list(ABS_function_definition_list function_definition_list) {
+IR_NODE SEM_function_definition_list(ABS_function_definition_list function_definition_list) {
     cout << "SEM_function_definition_list(" << func_depth++ << endl;
     vector<ABS_function_definition>::iterator function_definition_list_it = function_definition_list->function_definition_list.begin();
     for (; function_definition_list_it !=
@@ -314,7 +332,7 @@ void SEM_function_definition_list(ABS_function_definition_list function_definiti
 
 }
 
-void SEM_function_definition(ABS_function_definition function_definition) {
+IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
     cout << "SEM_function_definition(" << func_depth++ << endl;
     ENUM_specifier type = SEM_specifier(function_definition->type_specifier);
     string id = SEM_ID(function_definition->id);
@@ -329,7 +347,7 @@ void SEM_function_definition(ABS_function_definition function_definition) {
 }
 
 
-void SEM_parameter_list(ABS_parameter_list parameter_list) {
+IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list) {
     cout << "SEM_parameter_list(" << func_depth++ << endl;
     vector<ABS_parameter>::iterator parameter_list_it = parameter_list->parameter_list.begin();
     for (; parameter_list_it != parameter_list->parameter_list.end(); parameter_list_it++) {
@@ -338,7 +356,7 @@ void SEM_parameter_list(ABS_parameter_list parameter_list) {
     cout << ")" << func_depth-- << endl;
 }
 
-void SEM_parameter(ABS_parameter parameter) {
+IR_NODE SEM_parameter(ABS_parameter parameter) {
     cout << "SEM_parameter(" << func_depth++ << endl;
     ENUM_specifier type = SEM_specifier(parameter->type_specifier);
     string id = SEM_ID(parameter->id);

@@ -26,5 +26,4 @@ public:
     Func link(string id, _Func func);
 };
 
-
 #endif //COMPILER_FUNCTION_HPP
