@@ -4,6 +4,8 @@
 #include "symbol.hpp"
 #include "util.hpp"
 
+#include <cstdio>
+
 string SEM_ID(ABS_ID abs_id) {
     cout << "SEM_ID(" << abs_id->id << ")" << endl;
     return abs_id->id;
@@ -30,7 +32,7 @@ void SEM_expression_list(ABS_expression_list expression_list) {
     for (; expression_list_it != expression_list->expression_list.end(); expression_list_it++) {
         SEM_expression(*expression_list_it);
     }
-    cout << ")";
+    cout << ")exp_list" <<endl;
 }
 
 void SEM_expression(ABS_expression expression) {
@@ -45,7 +47,7 @@ void SEM_expression(ABS_expression expression) {
 void SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
     cout << "SEM_assignment_expression(" << endl;
     string id = SEM_ID(assignment_expression->abs_id);
-    if (!assignment_expression->compound_expression_index) {
+    if (assignment_expression->compound_expression_index != NULL) {
         SEM_compound_expression(assignment_expression->compound_expression_index);
     }
 
@@ -54,21 +56,21 @@ void SEM_assignment_expression(ABS_assignment_expression assignment_expression) 
 }
 
 void SEM_primary_expression(ABS_primary_expression primary_expression) {
-    cout << "SEM_primary_expression" << endl;
+    cout << "SEM_primary_expression(" << endl;
     if (primary_expression->type == ENUM_ID) {
         string id = SEM_ID(primary_expression->id);
-        if (!curr_env->find(SEM_ID(primary_expression->id))) {
-            cout << primary_expression->id->id;
-            exit(0);
-        }
+//        if (!curr_env->find(SEM_ID(primary_expression->id))) {
+//            cout << primary_expression->id->id;
+//            exit(0);
+//        }
     } else if (primary_expression->type == ENUM_constant) {
-        string id = SEM_ID(primary_expression->id);
-        Symbol symbol = curr_env->find(id);
-
-        if (!symbol && primary_expression->constant->type != symbol->type) {
-            cout << "the type of const do not agree with the type of id" << endl;
-            exit(0);
-        }
+//        string id = SEM_ID(primary_expression->id);
+//        Symbol symbol = curr_env->find(id);
+//
+//        if (!symbol && primary_expression->constant->type != symbol->type) {
+//            cout << "the type of const do not agree with the type of id" << endl;
+//            exit(0);
+//        }
         SEM_constant(primary_expression->constant);
     } else if (primary_expression->type == ENUM_compound_expression) {
         SEM_compound_expression(primary_expression->compound_expression);
@@ -118,10 +120,10 @@ void SEM_argue_list(ABS_argue_list argue_list) {
 void SEM_compound_expression(ABS_compound_expression compound_expression) {
     cout << "SEM_compound_expression(" << endl;
 
-    SEM_primary_expression(compound_expression->primary_expression);
-
     if (compound_expression->compound_expression != NULL)
         SEM_compound_expression(compound_expression->compound_expression);
+
+    SEM_primary_expression(compound_expression->primary_expression);
     cout << ")" << endl;
 }
 
@@ -181,7 +183,7 @@ void SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarato
         SEM_constant(init_declarator->constant);
     }
     string id = SEM_ID(init_declarator->id);
-    curr_env->link(id, type);
+    //curr_env->link(id, type);
     cout << ")" << endl;
 }
 
@@ -192,7 +194,7 @@ void SEM_statement_list(ABS_statement_list statement_list) {
     for (; statement_list_it != statement_list->statement_list.end(); statement_list_it++) {
         SEM_statement(*statement_list_it);
     }
-    cout << ")" << endl;
+    cout << ")stmt_list" << endl;
 }
 
 void SEM_statement(ABS_statement statement) {
@@ -228,14 +230,14 @@ void SEM_statement(ABS_statement statement) {
 void SEM_block_statement(ABS_block_statement block_statement) {
     cout << "SEM_block_statement(" << endl;
 
-    curr_env->enterScope();
+    //curr_env->enterScope();
     if (block_statement->declaration_list != NULL) {
         SEM_declaration_list(block_statement->declaration_list);
     }
     if (block_statement->statement_list != NULL) {
         SEM_statement_list(block_statement->statement_list);
     }
-    curr_env->escapeScope();
+    //curr_env->escapeScope();
     cout << ")" << endl;
 }
 
@@ -264,8 +266,9 @@ void SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
         SEM_expression_statement(iteration_statement->expression_statement_for_middle);
         SEM_expression_list(iteration_statement->expression_list_for_right);
     }
+    cout<< "aaaaaaaaaaaaaaa" <<endl;
     SEM_statement(iteration_statement->statement);
-    cout << ")" << endl;
+    cout << ")iter" << endl;
 }
 
 void SEM_jump_statement(ABS_jump_statement jump_statement) {
@@ -297,9 +300,9 @@ void SEM_function_definition_list(ABS_function_definition_list function_definiti
     vector<ABS_function_definition>::iterator function_definition_list_it = function_definition_list->function_definition_list.begin();
     for (; function_definition_list_it !=
            function_definition_list->function_definition_list.end(); function_definition_list_it++) {
-        curr_env->enterScope();
+        //curr_env->enterScope();
         SEM_function_definition(*function_definition_list_it);
-        curr_env->escapeScope();
+        //curr_env->escapeScope();
     }
     cout << ")" << endl;
 
@@ -308,9 +311,9 @@ void SEM_function_definition_list(ABS_function_definition_list function_definiti
 void SEM_function_definition(ABS_function_definition function_definition) {
     cout << "SEM_function_definition(" << endl;
     if (function_definition->parameter_list != NULL) {
-        curr_env->enterScope();
+        //curr_env->enterScope();
         SEM_parameter_list(function_definition->parameter_list);
-        curr_env->levelAdapt();
+        //curr_env->levelAdapt();
     }
     ENUM_specifier type = SEM_specifier(function_definition->type_specifier);
     string id = SEM_ID(function_definition->id);
@@ -333,7 +336,7 @@ void SEM_parameter(ABS_parameter parameter) {
     cout << "SEM_parameter(" << endl;
     ENUM_specifier type = SEM_specifier(parameter->type_specifier);
     string id = SEM_ID(parameter->id);
-    curr_env->link(id, type);
+    //curr_env->link(id, type);
     cout << ")" << endl;
 }
 
