@@ -9,6 +9,7 @@ ABS_program ABS_root;
 
 
 SymbolTable* curr_env;
+int func_depth;
 extern FILE* yyin;
 
 %}
