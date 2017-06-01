@@ -63,7 +63,6 @@ void SEM_parameter_list(ABS_parameter_list parameter_list);
 
 void SEM_parameter(ABS_parameter parameter);
 
-
-SymbolTable curr_env = SymbolTable(10);
+extern SymbolTable* curr_env;
 
 #endif //COMPILER_SEMANT_HPP

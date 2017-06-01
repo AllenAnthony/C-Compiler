@@ -1,7 +1,11 @@
 %{
 #include "util.hpp"
 #include "abs.hpp"
+#include "semant.hpp"
 ABS_program ABS_root;
+
+
+SymbolTable* curr_env;
 
 %}
 
@@ -240,6 +244,7 @@ parameter
 
 int main(){
     yyparse();
+    curr_env = new SymbolTable(10);
     SEM_program(ABS_root);
     return 0;
 }

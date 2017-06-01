@@ -4,9 +4,8 @@
 #include "symbol.hpp"
 #include "util.hpp"
 
-
 string SEM_ID(ABS_ID abs_id) {
-    if (!curr_env.find(abs_id->id)) {
+    if (!curr_env->find(abs_id->id)) {
         cout << abs_id->id;
         exit(0);
     }
@@ -41,7 +40,7 @@ void SEM_expression(ABS_expression expression) {
 }
 
 void SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
-//    if (!curr_env.find(assignment_expression->abs_id->id)) {
+//    if (!curr_env->find(assignment_expression->abs_id->id)) {
 //        printf("id do not exist : %s", assignment_expression->abs_id->id);
 //        exit(0);
 //    }
@@ -54,12 +53,12 @@ void SEM_assignment_expression(ABS_assignment_expression assignment_expression) 
 void SEM_primary_expression(ABS_primary_expression primary_expression) {
     if (primary_expression->type == ENUM_ID) {
         //string id = SEM_ID(primary_expression->id);
-        if (!curr_env.find(SEM_ID(primary_expression->id))) {
+        if (!curr_env->find(SEM_ID(primary_expression->id))) {
             cout << primary_expression->id->id;
             exit(0);
         }
     } else if (primary_expression->type == ENUM_constant) {
-        Symbol symbol = curr_env.find(SEM_ID(primary_expression->id));
+        Symbol symbol = curr_env->find(SEM_ID(primary_expression->id));
 
         if (!symbol && primary_expression->constant->type != symbol->type) {
             cout << "the type of const do not agree with the type of id" << endl;
@@ -86,7 +85,7 @@ void SEM_constant(ABS_constant constant) {
 }
 
 void SEM_function_invoking(ABS_function_invoking function_invoking) {
-//    if(!curr_env.find(function_invoking->abs_id->id)){
+//    if(!curr_env->find(function_invoking->abs_id->id)){
 //        printf("id do not exist : %s",primary_expression->id);
 //        exit(0);
 //    }
@@ -142,7 +141,7 @@ void SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarato
         SEM_constant(init_declarator->constant);
     }
     string id = SEM_ID(init_declarator->id);
-    curr_env.link(id, type);
+    curr_env->link(id, type);
     return;
 }
 
@@ -181,14 +180,14 @@ void SEM_statement(ABS_statement statement) {
 
 
 void SEM_block_statement(ABS_block_statement block_statement) {
-    curr_env.enterScope();
+    curr_env->enterScope();
     if (block_statement->declaration_list != NULL) {
         SEM_declaration_list(block_statement->declaration_list);
     }
     if (block_statement->statement_list != NULL) {
         SEM_statement_list(block_statement->statement_list);
     }
-    curr_env.escapeScope();
+    curr_env->escapeScope();
 }
 
 void SEM_expression_statement(ABS_expression_statement expression_statement) {
@@ -235,17 +234,17 @@ void SEM_function_definition_list(ABS_function_definition_list function_definiti
     vector<ABS_function_definition>::iterator function_definition_list_it = function_definition_list->function_definition_list.begin();
     for (; function_definition_list_it !=
            function_definition_list->function_definition_list.end(); function_definition_list_it++) {
-        curr_env.enterScope();
+        curr_env->enterScope();
         SEM_function_definition(*function_definition_list_it);
-        curr_env.escapeScope();
+        curr_env->escapeScope();
     }
 }
 
 void SEM_function_definition(ABS_function_definition function_definition) {
     if (function_definition->parameter_list != NULL) {
-        curr_env.enterScope();
+        curr_env->enterScope();
         SEM_parameter_list(function_definition->parameter_list);
-        curr_env.escapeScope();
+        curr_env->escapeScope();
     }
     ENUM_specifier type = SEM_specifier(function_definition->type_specifier);
     string id = SEM_ID(function_definition->id);
@@ -263,7 +262,7 @@ void SEM_parameter_list(ABS_parameter_list parameter_list) {
 void SEM_parameter(ABS_parameter parameter) {
     ENUM_specifier type = SEM_specifier(parameter->type_specifier);
     string id = SEM_ID(parameter->id);
-    curr_env.link(id, type);
+    curr_env->link(id, type);
 }
 
 
