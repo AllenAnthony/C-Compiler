@@ -5,7 +5,7 @@
 #include "symbol.hpp"
 #include "abs.hpp"
 
-void SEM_abs_id(ABS_ID abs_id);
+string SEM_ID(ABS_ID id);
 
 int SEM_IVAL(ABS_IVAL ival);
 
@@ -33,7 +33,7 @@ void SEM_declaration_list(ABS_declaration_list declaration_list);
 
 void SEM_declaration(ABS_declaration declaration);
 
-ENUM_specifier SEM_specifer(ABS_specifier specifier);
+ENUM_specifier SEM_specifier(ABS_specifier specifier);
 
 void SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list);
 

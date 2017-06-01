@@ -5,6 +5,7 @@
 #include <string>
 #include <functional>
 #include "util.hpp"
+#include "abs.hpp"
 
 typedef struct _Symbol *Symbol;
 typedef struct _Bucket *Bucket;
