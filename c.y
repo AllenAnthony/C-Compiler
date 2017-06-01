@@ -6,7 +6,7 @@ ABS_program ABS_root;
 
 
 SymbolTable* curr_env;
-
+extern FILE* yyin;
 %}
 
 %union{
@@ -242,7 +242,14 @@ parameter
 
 %%
 
-int main(){
+int main(int argc, char** argv){
+    FILE *fp = fopen(argv[1], "r");
+    if(!fp){
+        cout << "File " << argv[1] << " open error!" << endl;
+    } else {
+        cout << "File: " << argv[1] << endl;
+        yyin = fp;
+    }
     yyparse();
     curr_env = new SymbolTable(10);
     SEM_program(ABS_root);

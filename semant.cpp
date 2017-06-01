@@ -45,13 +45,7 @@ void SEM_expression(ABS_expression expression) {
 
 void SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
     cout << "SEM_assignment_expression(" << endl;
-//    if (!curr_env->find(assignment_expression->abs_id->id)) {
-//        printf("id do not exist : %s", assignment_expression->abs_id->id);
-//        exit(0);
-//    }
-    cout << "SEM_assignment_expression";
-    SEM_ID(assignment_expression->abs_id);
-    //string id = SEM_ID(assignment_expression->abs_id->id);
+    string id = SEM_ID(assignment_expression->abs_id);
     SEM_compound_expression(assignment_expression->compound_expression_index);
     SEM_compound_expression(assignment_expression->compound_expression_value);
     cout << ")" << endl;
@@ -60,13 +54,14 @@ void SEM_assignment_expression(ABS_assignment_expression assignment_expression) 
 void SEM_primary_expression(ABS_primary_expression primary_expression) {
     cout << "SEM_primary_expression";
     if (primary_expression->type == ENUM_ID) {
-        //string id = SEM_ID(primary_expression->id);
+        string id = SEM_ID(primary_expression->id);
         if (!curr_env->find(SEM_ID(primary_expression->id))) {
             cout << primary_expression->id->id;
             exit(0);
         }
     } else if (primary_expression->type == ENUM_constant) {
-        Symbol symbol = curr_env->find(SEM_ID(primary_expression->id));
+        string id = SEM_ID(primary_expression->id);
+        Symbol symbol = curr_env->find(id);
 
         if (!symbol && primary_expression->constant->type != symbol->type) {
             cout << "the type of const do not agree with the type of id" << endl;
