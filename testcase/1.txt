@@ -1,24 +1,6 @@
 int main(int argci, int b, float c, char d){
-    int a, b, c, i;
-    a = '1';
+    int i;
     for(i=0; i<5; i=i+1){
         a=a; b=3; 
     }
-    c = '\n';
-
-    if(3==0){
-
-    }else{
-        
-    }
-    if(a == 2){
-        a = 1;    
-    }else{
-        
-    }
-    while(1){
-        a = 5;    
-    }
-    
-    return 0;
 }
