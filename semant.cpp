@@ -151,8 +151,10 @@ ENUM_specifier SEM_specifier(ABS_specifier specifier) {
             break;
         case ENUM_FLOAT:
             cout << "float";
+            break;
         case ENUM_CHAR:
             cout << "char";
+            break;
         default:
             cout << "undefined_type ";
             exit(1);
