@@ -85,4 +85,5 @@ extern FuncTable *curr_func;
 
 extern int func_depth;
 
+
 #endif //COMPILER_SEMANT_HPP
