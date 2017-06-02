@@ -80,12 +80,12 @@ int curr_iter_label_head = 0;
 int curr_iter_label_tail = 0;
 int curr_iter_label_count = 0;
 
-void transProgram(IR_NODE node) {
-    switch (node->ir_node_type) {
-        case IR_NODE_LEAF:
-//TODO
-            break;
-    }
-}
+//void transProgram(IR_NODE node) {
+//    switch (node->ir_node_type) {
+//        case IR_NODE_LEAF:
+////TODO
+//            break;
+//    }
+//}
 
 #endif //COMPILER_IR_HPP
