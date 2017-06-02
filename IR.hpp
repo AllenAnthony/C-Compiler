@@ -82,12 +82,16 @@ extern int curr_iter_label_head;
 extern int curr_iter_label_tail;
 extern int curr_iter_label_count;
 
-//void transProgram(IR_NODE node) {
-//    switch (node->ir_node_type) {
-//        case IR_NODE_LEAF:
-////TODO
-//            break;
-//    }
-//}
+void transProgram(IR_NODE node) {
+    switch (node->ir_node_type) {
+        case IR_NODE_LEAF:
+            break;
+    }
+}
+
+void IR_print(IR_NODE IR_root);
+
+void IR_translate_program(IR_NODE IR_root);
+
 
 #endif //COMPILER_IR_HPP
