@@ -53,8 +53,8 @@ void SymbolTable::enterScope() {
 }
 
 void SymbolTable::escapeScope() {
-    size_t current_size = record.size() - 1;
-    while (current_size >= 0 && record[current_size]->depth >= current_depth) {
+    size_t current_size = record.size();
+    while (current_size > 0 && record[current_size - 1]->depth >= current_depth) {
         Symbol symbol = record.back();
         size_t index = hash(symbol->id);
         std::vector<Symbol> symbols = buckets[index].symbols;

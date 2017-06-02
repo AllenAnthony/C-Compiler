@@ -9,8 +9,8 @@
 
 using namespace std;
 
-typedef _IR_NODE *IR_NODE;
-typedef _IR_LEAF *IR_LEAF;
+typedef struct _IR_NODE *IR_NODE;
+typedef struct _IR_LEAF *IR_LEAF;
 
 typedef enum {
     IR_NODE_LEAF,
@@ -46,8 +46,8 @@ typedef enum {
 
 struct _IR_LEAF {
     LEAF_type leaf_type;
+    string id;
     union {
-        string id;
         int ival;
         float fval;
         char cval;
@@ -57,14 +57,20 @@ struct _IR_LEAF {
 
 struct _IR_NODE {
     IR_NODE_type ir_node_type;
-    union {
-        IR_NODE left;
-        _IR_LEAF leaf;
-        vector<IR_NODE> list;
-        string label;
-    };
-    IR_NODE right;
+
+    //Label
+    int label;
+
+    //非叶节点属性
     LEAF_type return_type;
+    IR_NODE left;
+    IR_NODE right;
+
+    //叶节点属性
+    _IR_LEAF leaf;
+
+    //list
+    vector<IR_NODE> list;
 };
 
 vector<int> iter_label_head;
@@ -77,9 +83,8 @@ int curr_iter_label_count = 0;
 void transProgram(IR_NODE node) {
     switch (node->ir_node_type) {
         case IR_NODE_LEAF:
-
+//TODO
             break;
-        case :
     }
 }
 
