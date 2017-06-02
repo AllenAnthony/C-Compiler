@@ -168,22 +168,34 @@ IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
 IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list) {
     cout << "SEM_declaration_list(" << func_depth++ << endl;
 
+    IR_NODE list = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    list->ir_node_type = IR_NODE_LIST;
+    list->right = NULL;
+    list->return_type = IR_LEAF_VOID;
     vector<ABS_declaration>::iterator declaration_list_it = declaration_list->declaration_list.begin();
     for (; declaration_list_it != declaration_list->declaration_list.end(); declaration_list_it++) {
-        SEM_declaration(*declaration_list_it);
+        list->list.push_back(SEM_declaration(*declaration_list_it));
     }
     cout << ")" << func_depth-- << endl;
+    return list;
 }
 
 IR_NODE SEM_declaration(ABS_declaration declaration) {
     cout << "SEM_declaration(" << func_depth++ << endl;
+
+    IR_NODE node = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    node->ir_node_type = IR_NODE_NONE;
+    node->right = NULL;
+    node->return_type = IR_LEAF_VOID;
     ENUM_specifier type = SEM_specifier(declaration->type_specifier);
-    SEM_init_declarator_list(type, declaration->init_declarator_list);
+    node->left = SEM_init_declarator_list(type, declaration->init_declarator_list);
+
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 ENUM_specifier SEM_specifier(ABS_specifier specifier) {
-    cout << "SEM_specifier(";
+    cout << "SEM_specifier("<<endl;
 
     switch (specifier->type) {
         case ENUM_INT:
@@ -206,82 +218,114 @@ ENUM_specifier SEM_specifier(ABS_specifier specifier) {
 IR_NODE SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list) {
     cout << "SEM_init_declarator_list(" << func_depth++ << endl;
 
+    IR_NODE list = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    list->ir_node_type = IR_NODE_LIST;
+    list->right = NULL;
+    list->return_type = IR_LEAF_VOID;
     vector<ABS_init_declarator>::iterator init_declarator_list_it = init_declarator_list->init_declarator_list.begin();
     for (; init_declarator_list_it != init_declarator_list->init_declarator_list.end(); init_declarator_list_it++) {
-        SEM_init_declarator(type, *init_declarator_list_it);
+        list->list.push_back(SEM_init_declarator(type, *init_declarator_list_it));
     }
     cout << ")" << func_depth-- << endl;
+
+    return list;
 }
 
 IR_NODE SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarator) {
     cout << "SEM_init_declarator(" << func_depth++ << endl;
 
+    IR_NODE node = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    node->ir_node_type = IR_NODE_LEAF;
+    node->left = node->right = NULL;
+    node->return_type = IR_LEAF_VOID;
     if (init_declarator->constant != NULL) {
-        SEM_constant(init_declarator->constant);
+        node->left = SEM_constant(init_declarator->constant);
     }
-    string id = SEM_ID(init_declarator->id);
+    string id = SEM_ID(init_declarator->id)->leaf.id;
     curr_env->link(id, type);
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 IR_NODE SEM_statement_list(ABS_statement_list statement_list) {
     cout << "SEM_statement_list(" << func_depth++ << endl;
 
+    IR_NODE list = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    list->ir_node_type = IR_NODE_LIST;
+    list->right = NULL;
+    list->return_type = IR_LEAF_VOID;
     vector<ABS_statement>::iterator statement_list_it = statement_list->statement_list.begin();
     for (; statement_list_it != statement_list->statement_list.end(); statement_list_it++) {
-        SEM_statement(*statement_list_it);
+        list->list.push_back(SEM_statement(*statement_list_it));
     }
     cout << ")" << func_depth-- << endl;
+    return list;
 }
 
 IR_NODE SEM_statement(ABS_statement statement) {
     cout << "SEM_statement(" << func_depth++ << endl;
 
+    IR_NODE node = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    node->ir_node_type = IR_NODE_NONE;
+    node->right = NULL;
+    node->return_type = IR_LEAF_VOID;
     switch (statement->type) {
         case ENUM_block_statement:
-            SEM_block_statement(statement->block_statement);
+            node->left = SEM_block_statement(statement->block_statement);
             break;
         case ENUM_expression_statement:
-            SEM_expression_statement(statement->expression_statement);
+            node->left = SEM_expression_statement(statement->expression_statement);
             break;
         case ENUM_selection_statement:
-            SEM_selection_statement(statement->selection_statement);
+            node->left = SEM_selection_statement(statement->selection_statement);
             break;
         case ENUM_iteration_statement:
-            SEM_iteration_statement(statement->iteration_statement);
+            node->left = SEM_iteration_statement(statement->iteration_statement);
             break;
         case ENUM_jump_statement:
-            SEM_jump_statement(statement->jump_statement);
+            node->left = SEM_jump_statement(statement->jump_statement);
             break;
         case ENUM_compound_expression:
-            SEM_compound_expression(statement->compound_expression);
+            node->left = SEM_compound_expression(statement->compound_expression);
             break;
         default:
             cout << "Unknown expression!" << endl;
             exit(1);
     }
     cout << ")" << func_depth-- << endl;
+
+    return node;
 }
 
 
 IR_NODE SEM_block_statement(ABS_block_statement block_statement) {
     cout << "SEM_block_statement(" << func_depth++ << endl;
 
+    IR_NODE node = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    node->ir_node_type = IR_NODE_NONE;
+    node->left = node->right = NULL;
+    node->return_type = IR_LEAF_VOID;
     curr_env->enterScope();
     if (block_statement->declaration_list != NULL) {
-        SEM_declaration_list(block_statement->declaration_list);
+        node->left = SEM_declaration_list(block_statement->declaration_list);
     }
     if (block_statement->statement_list != NULL) {
-        SEM_statement_list(block_statement->statement_list);
+        node->right = SEM_statement_list(block_statement->statement_list);
     }
     curr_env->escapeScope();
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement) {
+    IR_NODE node = (IR_NODE)check_malloc(sizeof(struct _IR_NODE));
+    node->ir_node_type = IR_NODE_NONE;
+    node->right = NULL;
+    node->return_type = IR_LEAF_VOID;
     cout << "SEM_expression_statement(" << func_depth++ << endl;
-    SEM_expression_list(expression_statement->expression_list);
+    node->left = SEM_expression_list(expression_statement->expression_list);
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement) {
