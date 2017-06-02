@@ -34,9 +34,9 @@ digraph G{
 	node15->node16;
 	node17[shape=plaintext, label="EXP", height=.3];
 	node11->node17;
-	node18[shape=plaintext, label="i", height=.3];
+	node18[shape=plaintext, label="5", height=.3];
 	node17->node18;
-	node19[shape=plaintext, label="5", height=.3];
+	node19[shape=plaintext, label="i", height=.3];
 	node17->node19;
 	node20[shape=plaintext, label="BRANCH", height=.3];
 	node11->node20;
@@ -68,9 +68,9 @@ digraph G{
 	node32->node33;
 	node34[shape=plaintext, label="EXP", height=.3];
 	node32->node34;
-	node35[shape=plaintext, label="i", height=.3];
+	node35[shape=plaintext, label="1", height=.3];
 	node34->node35;
-	node36[shape=plaintext, label="1", height=.3];
+	node36[shape=plaintext, label="i", height=.3];
 	node34->node36;
 	node37[shape=plaintext, label="JUMP", height=.3];
 	node38[shape=plaintext, label="LABEL_2", height=.3];
@@ -84,10 +84,10 @@ digraph G{
 	node39->node41;
 	node42[shape=plaintext, label="EXP", height=.3];
 	node41->node42;
-	node43[shape=plaintext, label="1", height=.3];
+	node43[shape=plaintext, label="3", height=.3];
 	node42->node43;
 	node44[shape=plaintext, label="2", height=.3];
 	node42->node44;
-	node45[shape=plaintext, label="3", height=.3];
+	node45[shape=plaintext, label="1", height=.3];
 	node41->node45;
 }

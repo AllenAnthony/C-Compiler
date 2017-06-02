@@ -19,8 +19,6 @@ IR_NODE SEM_FVAL(ABS_FVAL fval);
 
 IR_NODE SEM_CVAL(ABS_CVAL cval);
 
-
-//QIAN XU FENG;
 IR_NODE SEM_expression_list(ABS_expression_list expression_list);
 
 IR_NODE SEM_expression(ABS_expression expression);
@@ -39,8 +37,6 @@ IR_NODE SEM_argue_list(ABS_argue_list argue_list);
 
 IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression);
 
-//BIAN BIAN
-
 IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list);
 
 IR_NODE SEM_declaration(ABS_declaration declaration);
@@ -58,10 +54,6 @@ IR_NODE SEM_statement(ABS_statement statement);
 IR_NODE SEM_block_statement(ABS_block_statement block_statement);
 
 IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement);
-
-
-
-//HOPEN
 
 IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement);
 
