@@ -64,7 +64,7 @@ IR_NODE SEM_expression_list(ABS_expression_list expression_list) {
     }
 
     list->return_type = list->list[0]->return_type;
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return list;
 }
 
@@ -82,7 +82,7 @@ IR_NODE SEM_expression(ABS_expression expression) {
     } else {
         cout << "Unknown expression" << endl;
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
 
     return node;
 }
@@ -101,7 +101,7 @@ IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expressio
     }
     node->right = SEM_compound_expression(assignment_expression->compound_expression_value);
     node->return_type = node->right->return_type;
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
 
     return node;
 }
@@ -134,7 +134,7 @@ IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression) {
     }
     node->right = NULL;
     node->return_type = node->left->return_type;
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
 
     return node;
 }
@@ -154,7 +154,7 @@ IR_NODE SEM_constant(ABS_constant constant) {
         cout << "<<++func_depthtype of the constant do not exist";
         exit(1);
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
 
     return node;
 }
@@ -198,7 +198,7 @@ IR_NODE SEM_argue_list(ABS_argue_list argue_list) {
     }
     node->right = NULL;
     node->return_type = IR_LEAF_VOID;
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
 
     return node;
 }
@@ -217,7 +217,7 @@ IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
         node->return_type = node->left->return_type;
         node->right = NULL;
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
 
     return node;
 }
@@ -234,7 +234,7 @@ IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list) {
     for (; declaration_list_it != declaration_list->declaration_list.end(); declaration_list_it++) {
         list->list.push_back(SEM_declaration(*declaration_list_it));
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return list;
 }
 
@@ -248,7 +248,7 @@ IR_NODE SEM_declaration(ABS_declaration declaration) {
     ENUM_specifier type = SEM_specifier(declaration->type_specifier);
     node->left = SEM_init_declarator_list(type, declaration->init_declarator_list);
 
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
@@ -284,7 +284,7 @@ IR_NODE SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list i
     for (; init_declarator_list_it != init_declarator_list->init_declarator_list.end(); init_declarator_list_it++) {
         list->list.push_back(SEM_init_declarator(type, *init_declarator_list_it));
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
 
     return list;
 }
@@ -301,7 +301,7 @@ IR_NODE SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declar
     }
     string id = SEM_ID(init_declarator->id, ENUM_VOID)->leaf.id;
     curr_env->link(id, type);
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
@@ -315,7 +315,7 @@ IR_NODE SEM_statement_list(ABS_statement_list statement_list) {
     for (; statement_list_it != statement_list->statement_list.end(); statement_list_it++) {
         list->list.push_back(SEM_statement(*statement_list_it));
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return list;
 }
 
@@ -345,7 +345,7 @@ IR_NODE SEM_statement(ABS_statement statement) {
             cout << "Unknown expression!" << endl;
             exit(1);
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
@@ -365,7 +365,7 @@ IR_NODE SEM_block_statement(ABS_block_statement block_statement) {
         node->right = SEM_statement_list(block_statement->statement_list);
     }
     curr_env->escapeScope();
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
@@ -376,7 +376,7 @@ IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement) 
     node->return_type = IR_LEAF_VOID;
     cout << "SEM_expression_statement(" << ++func_depth << endl;
     node->left = SEM_expression_list(expression_statement->expression_list);
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
@@ -426,7 +426,7 @@ IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement) {
     node->list.push_back(label2);
     node->list.push_back(SEM_statement(selection_statement->statement_else));
     node->list.push_back(label3);
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
@@ -483,7 +483,7 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
         node_list->list.push_back(SEM_expression_list(iteration_statement->expression_list_for_right));
         node_list->list.push_back(jump2);
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node_list;
 }
 
@@ -501,7 +501,7 @@ IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
             cout << "Unknow jump_statement" << endl;
             exit(1);
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return NULL;
 }
 
@@ -516,7 +516,7 @@ IR_NODE SEM_program(ABS_program program) {
     } else {
         node = SEM_function_definition_list(program->function_definition_list);
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
@@ -533,7 +533,7 @@ IR_NODE SEM_function_definition_list(ABS_function_definition_list function_defin
         node_list->list.push_back(SEM_function_definition(*function_definition_list_it));
         curr_env->escapeScope();
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node_list;
 }
 
@@ -549,7 +549,7 @@ IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
         curr_env->levelAdapt();
     }
     SEM_block_statement(function_definition->block_statement);
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return NULL;
 }
 
@@ -563,7 +563,7 @@ IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list) {
     for (; parameter_list_it != parameter_list->parameter_list.end(); parameter_list_it++) {
         node_list->list.push_back(SEM_parameter(*parameter_list_it));
     }
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node_list;
 }
 
@@ -571,7 +571,7 @@ IR_NODE SEM_parameter(ABS_parameter parameter) {
     cout << "SEM_parameter(" << ++func_depth << endl;
     ENUM_specifier specifier = SEM_specifier(parameter->type_specifier);
     IR_NODE node = SEM_ID(parameter->id, specifier);
-    cout << ")" << --func_depth << endl;
+    cout << ")" << func_depth-- << endl;
     return node;
 }
 
