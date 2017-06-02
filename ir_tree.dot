@@ -1,0 +1,3 @@
+digraph G{
+	node0[shape=plaintext; labal="program"; height=.3];
+}
