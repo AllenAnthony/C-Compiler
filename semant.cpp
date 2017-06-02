@@ -4,6 +4,7 @@
 #include "symbol.hpp"
 #include "function.hpp"
 #include "IR.hpp"
+#include "abs.hpp"
 #include "util.hpp"
 #include <cstdio>
 #include <vector>
@@ -154,19 +155,17 @@ IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression) {
 
 IR_NODE SEM_constant(ABS_constant constant) {
     cout << "SEM_constant(" << func_depth++ << endl;
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-    node->ir_node_type = IR_NODE_CONST;
+
+    IR_NODE node;
     if (constant->type == ENUM_IVAL) {
-        node->left = SEM_IVAL(constant->abs_ival);
+        node = SEM_IVAL(constant->abs_ival);
     } else if (constant->type == ENUM_FVAL) {
-        node->left = SEM_FVAL(constant->abs_fval);
+        node = SEM_FVAL(constant->abs_fval);
     } else if (constant->type == ENUM_CVAL) {
-        node->left = SEM_CVAL(constant->abs_cval);
+        node = SEM_CVAL(constant->abs_cval);
     } else {
         printf("<<func_depth++type of the constant do not exist");
     }
-    node->right = NULL;
-    node->return_type = node->left->return_type;
     cout << ")" << func_depth-- << endl;
 
     return node;
@@ -177,19 +176,23 @@ IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking) {
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_FUNC;
     if (!curr_func->find(function_invoking->abs_id->id)) {
-        printf("function id do not exist : %s", function_invoking->abs_id->id);
+        cout << "function id do not exist :" << function_invoking->abs_id->id;
         exit(1);
     }
     node->left = SEM_ID(function_invoking->abs_id, ENUM_VOID);
     node->right = SEM_argue_list(function_invoking->argue_list);
 
     ENUM_node_type node_type = curr_func->find(function_invoking->abs_id->id)->ret_type;
-    switch(node_type){
-        case ENUM_IVAL:
-            node->return_type = ENUM_LEAF_INT;
 
+    if (node_type == ENUM_IVAL) {
+        node->return_type = IR_LEAF_INT;
+    } else if (node_type == ENUM_FVAL) {
+        node->return_type = IR_LEAF_FLOAT;
+    } else if (node_type == ENUM_CVAL) {
+        node->return_type = IR_LEAF_CHAR;
+    } else {
+        cout << "type of the constant do not exist" << endl;
     }
-     =
 //    if(!curr_env->find(function_invoking->abs_id->id)){
 //        printf("<<func_depth++id do not exist : %s",primary_expression->id);
 //        exit(0);
