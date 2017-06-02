@@ -15,7 +15,7 @@ IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type) {
     } else {
         curr_env->find(abs_id->id);
     }
-    node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
     node->leaf.leaf_type = IR_LEAF_ID;
     node->leaf.id = abs_id->id;
@@ -24,7 +24,7 @@ IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type) {
 
 IR_NODE SEM_IVAL(ABS_IVAL ival) {
     cout << "SEM_IVAL(" << ival->ival << ")" << endl;
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
     node->leaf.leaf_type = IR_LEAF_INT;
     node->leaf.ival = ival->ival;
@@ -33,7 +33,7 @@ IR_NODE SEM_IVAL(ABS_IVAL ival) {
 
 IR_NODE SEM_FVAL(ABS_FVAL fval) {
     cout << "SEM_FVAL(" << fval->fval << ")" << endl;
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
     node->leaf.leaf_type = IR_LEAF_FLOAT;
     node->leaf.fval = fval->fval;
@@ -42,7 +42,7 @@ IR_NODE SEM_FVAL(ABS_FVAL fval) {
 
 IR_NODE SEM_CVAL(ABS_CVAL cval) {
     cout << "SEM_CVAL(" << cval->cval << ")" << endl;
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
     node->leaf.leaf_type = IR_LEAF_CHAR;
     node->leaf.fval = cval->cval;
@@ -151,7 +151,8 @@ IR_NODE SEM_constant(ABS_constant constant) {
     } else if (constant->type == ENUM_CVAL) {
         node = SEM_CVAL(constant->abs_cval);
     } else {
-        printf("<<func_depth++type of the constant do not exist");
+        cout << "<<func_depth++type of the constant do not exist";
+        exit(1);
     }
     cout << ")" << func_depth-- << endl;
 
@@ -252,7 +253,7 @@ IR_NODE SEM_declaration(ABS_declaration declaration) {
 }
 
 ENUM_specifier SEM_specifier(ABS_specifier specifier) {
-    cout << "SEM_specifier(" << endl;
+    cout << "SEM_specifier(";
 
     switch (specifier->type) {
         case ENUM_INT:
