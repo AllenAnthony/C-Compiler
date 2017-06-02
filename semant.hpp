@@ -5,8 +5,9 @@
 #include "symbol.hpp"
 #include "abs.hpp"
 #include "IR.hpp"
+#include "function.hpp"
 
-IR_NODE SEM_ID(ABS_ID id);
+IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type);
 
 IR_NODE SEM_IVAL(ABS_IVAL ival);
 
@@ -15,12 +16,14 @@ IR_NODE SEM_FVAL(ABS_FVAL fval);
 IR_NODE SEM_CVAL(ABS_CVAL cval);
 
 
-//QIAN XU FENG
+//QIAN XU FENG;
 IR_NODE SEM_expression_list(ABS_expression_list expression_list);
 
 IR_NODE SEM_expression(ABS_expression expression);
 
 IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression);
+
+IR_NODE SEM_array_expression(ABS_ID id, ABS_compound_expression abs_index);
 
 IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression);
 
@@ -73,6 +76,8 @@ IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list);
 IR_NODE SEM_parameter(ABS_parameter parameter);
 
 extern SymbolTable *curr_env;
+
+extern FuncTable* curr_func;
 
 extern int func_depth;
 

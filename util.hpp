@@ -13,7 +13,8 @@ using namespace std;
 typedef enum {
     ENUM_INT,
     ENUM_FLOAT,
-    ENUM_CHAR
+    ENUM_CHAR,
+    ENUM_VOID
 } ENUM_specifier;
 
 void yyerror(string);

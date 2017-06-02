@@ -13,6 +13,8 @@ typedef struct _IR_NODE *IR_NODE;
 typedef struct _IR_LEAF *IR_LEAF;
 
 typedef enum {
+    IR_NODE_ASSIGN,
+    IR_NODE_CONST,
     IR_NODE_LEAF,
     IR_NODE_FUNC,
     IR_NODE_LABEL,

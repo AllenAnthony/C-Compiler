@@ -4,11 +4,13 @@
 #include "util.hpp"
 #include "abs.hpp"
 #include "semant.hpp"
+#include "function.hpp"
 
 ABS_program ABS_root;
 
 
 SymbolTable* curr_env;
+FuncTable* curr_func;
 int func_depth;
 extern FILE* yyin;
 
@@ -262,6 +264,7 @@ int main(int argc, char** argv){
 
     cout << endl << "------------Semant check begin-------------" << endl;
     curr_env = new SymbolTable(10);
+    curr_func= new FuncTable();
     SEM_program(ABS_root);
     cout << endl << "------------Semant check finish-------------" << endl;
 
