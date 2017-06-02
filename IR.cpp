@@ -45,15 +45,9 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
             return;
         case IR_NODE_CONST:
         case IR_NODE_NONE:
-            if(IR_root->left != NULL){
-                //fprintf(fp, "haha\n");
-                IR_print(IR_root->left, fp, root);
-            }
-            if(IR_root->right != NULL){
-                //fprintf(fp, "hihi\n");
-                IR_print(IR_root->right, fp, root);
-            }
-            return;
+            fprintf(fp, "\tnode%d[shape=plaintext, label=\"EXP\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root, count_node + 1);
+            count_node++;
+            break;
         case IR_NODE_ASSIGN:
             fprintf(fp, "\tnode%d[shape=plaintext, label=\"MOVE\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root, count_node + 1);
             count_node++;
