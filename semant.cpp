@@ -1,17 +1,4 @@
 #include "semant.hpp"
-#include "abs.hpp"
-#include "symbol.hpp"
-#include "function.hpp"
-#include "IR.hpp"
-#include "abs.hpp"
-#include "util.hpp"
-#include <cstdio>
-#include <vector>
-#include <map>
-
-
-using namespace std;
-
 
 //当前状态
 enum SEM_STATE {
