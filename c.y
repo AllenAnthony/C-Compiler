@@ -7,7 +7,7 @@
 #include "function.hpp"
 
 ABS_program ABS_root;
-
+FILE *fp;
 
 SymbolTable* curr_env;
 FuncTable* curr_func;
@@ -272,9 +272,13 @@ int main(int argc, char** argv){
     cout << endl << "------------Semant check begin-------------" << endl;
     curr_env = new SymbolTable(10);
     curr_func= new FuncTable();
-    IR_NODE IR_root = SEM_program(ABS_root);
 
-    IR_print(IR_root);
+    IR_NODE IR_root = SEM_program(ABS_root);
+    fp = fopen("ir_tree.dot", "w");
+    fprintf(fp, "digraph G{\n");
+    IR_print(IR_root, fp, -1);
+    fprintf(fp, "}\n");
+    fclose(fp);
 
     cout << endl << "------------Semant check finish-------------" << endl;
 
