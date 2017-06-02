@@ -42,46 +42,68 @@ IR_NODE SEM_CVAL(ABS_CVAL cval) {
 
 IR_NODE SEM_expression_list(ABS_expression_list expression_list) {
     cout << "SEM_expression_list(" << func_depth++ << endl;
-    IR_NODE node_list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-    node_list->ir_node_type = IR_NODE_LIST;
+    IR_NODE list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    list->ir_node_type = IR_NODE_LIST;
+    list->right=NULL;
     vector<ABS_expression>::iterator expression_list_it = expression_list->expression_list.begin();
     for (; expression_list_it != expression_list->expression_list.end(); expression_list_it++) {
-        node_list->list->node_list.push_back(SEM_expression(*expression_list_it));
+        list->list.push_back(SEM_expression(*expression_list_it));
     }
+    if(list->list.empty()){
+        cout<<"expression list empty"<<endl;
+        exit(1);
+    }
+
+    list->return_type=list->list[0]->return_type;
     cout << ")" << func_depth-- << endl;
-    return node_list;
+    return list;
 }
 
 IR_NODE SEM_expression(ABS_expression expression) {
     cout << "SEM_expression(" << func_depth++ << endl;
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type=IR_NODE_NONE;
+    node->right=NULL;
     if (expression->type == ENUM_assignment_expression) {
-        SEM_assignment_expression(expression->assignment_expression);
+        node->left=SEM_assignment_expression(expression->assignment_expression);
+        node->return_type=node->left->return_type;
     } else if (expression->type == ENUM_compound_expression) {
-        SEM_compound_expression(expression->compound_expression);
+        node->left=SEM_compound_expression(expression->compound_expression);
+        node->return_type=node->left->return_type;
     } else {
         cout << "Unknown expression" << endl;
     }
     cout << ")" << func_depth-- << endl;
+    return  node;
 }
 
 IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
     cout << "SEM_assignment_expression(" << func_depth++ << endl;
-    string id = SEM_ID(assignment_expression->abs_id);
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type=IR_NODE_ASSIGN;
+
     if (assignment_expression->compound_expression_index) {
-        SEM_compound_expression(assignment_expression->compound_expression_index);
+        node->left=SEM_array_expression(assignment_expression->abs_id,assignment_expression->compound_expression_index);
+    }else{
+        node->left=SEM_ID(assignment_expression->abs_id);
     }
-    SEM_compound_expression(assignment_expression->compound_expression_value);
+    node->right=SEM_compound_expression(assignment_expression->compound_expression_value);
+    node->return_type=node->right->return_type;
     cout << ")" << func_depth-- << endl;
+    return node;
+}
+
+IR_NODE SEM_array_expression(ABS_ID id,ABS_compound_expression abs_index){
+
 }
 
 IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression) {
     cout << "SEM_primary_expression(" << func_depth++ << endl;
+    IR_NODE node = (IR_NODE)check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type=IR_NODE_NONE;
+
     if (primary_expression->type == ENUM_ID) {
-        string id = SEM_ID(primary_expression->id);
-//        if (!curr_env->find(SEM_ID(primary_expression->id))) {
-//            cout << "Unknown id:" << primary_expression->id->id;
-//            exit(0);
-//        }
+        node->left = SEM_ID(primary_expression->id);
     } else if (primary_expression->type == ENUM_constant) {
 //        string id = SEM_ID(primary_expression->id);
 //        Symbol symbol = curr_env->find(id);
@@ -89,64 +111,88 @@ IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression) {
 //            cout << "the type of const do not agree with the type of id" << endl;
 //            exit(0);
 //        }
-        SEM_constant(primary_expression->constant);
+        node->left=SEM_constant(primary_expression->constant);
     } else if (primary_expression->type == ENUM_compound_expression) {
-        SEM_compound_expression(primary_expression->compound_expression);
+        node->left = SEM_compound_expression(primary_expression->compound_expression);
     } else if (primary_expression->type == ENUM_function_invoking) {
-        SEM_function_invoking(primary_expression->function_invoking);
+        node->left = SEM_function_invoking(primary_expression->function_invoking);
     } else {
         cout << "Unknown primary_expression" << endl;
     }
+    node->right=NULL;
+    node->return_type=node->left->return_type;
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 
 IR_NODE SEM_constant(ABS_constant constant) {
     cout << "SEM_constant(" << func_depth++ << endl;
-
+    IR_NODE node = (IR_NODE)check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type=IR_NODE_CONST;
     if (constant->type == ENUM_IVAL) {
-        SEM_IVAL(constant->abs_ival);
+        node->left = SEM_IVAL(constant->abs_ival);
     } else if (constant->type == ENUM_FVAL) {
-        SEM_FVAL(constant->abs_fval);
+        node->left = SEM_FVAL(constant->abs_fval);
     } else if (constant->type == ENUM_CVAL) {
-        SEM_CVAL(constant->abs_cval);
+        node->left = SEM_CVAL(constant->abs_cval);
     } else {
         printf("<<func_depth++type of the constant do not exist");
     }
+    node->right=NULL;
+    node->return_type=node->left->return_type;
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking) {
     cout << "SEM_function_invoking(" << func_depth++ << endl;
-
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type=IR_NODE_FUNC;
+    if(!curr_func->find(function_invoking->abs_id->id)){
+        printf("function id do not exist : %s",function_invoking->abs_id->id)
+        exit(1);
+    }
+    node->left=SEM_ID(function_invoking->abs_id);
+    node->right=SEM_argue_list(function_invoking->argue_list);
+    node->return_type=curr_func->find(function_invoking->abs_id->id).ret_type;
 //    if(!curr_env->find(function_invoking->abs_id->id)){
 //        printf("<<func_depth++id do not exist : %s",primary_expression->id);
 //        exit(0);
 //    }
-    SEM_ID(function_invoking->abs_id);
-    SEM_argue_list(function_invoking->argue_list);
+    return node;
 }
 
 IR_NODE SEM_argue_list(ABS_argue_list argue_list) {
     cout << "SEM_argue_list(" << func_depth++ << endl;
-
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type=IR_NODE_LIST;
     vector<ABS_ID>::iterator argue_list_it = argue_list->list.begin();
     for (; argue_list_it != argue_list->list.end(); argue_list_it++) {
-        SEM_ID((*argue_list_it));
+        node->list.push_back(SEM_ID((*argue_list_it)));
     }
+    node->right=NULL;
+    node->return_type=IR_LEAF_VOID;
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 
 IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
     cout << "SEM_compound_expression(" << func_depth++ << endl;
-
-    if (compound_expression->compound_expression != NULL)
-        SEM_compound_expression(compound_expression->compound_expression);
-
-    SEM_primary_expression(compound_expression->primary_expression);
-
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type=IR_NODE_NONE;
+    if (compound_expression->compound_expression != NULL){
+        node->left=SEM_compound_expression(compound_expression->compound_expression);
+        node->right=SEM_primary_expression(compound_expression->primary_expression);
+        node->return_type=node->left->return_type;
+    }else{
+        node->left=SEM_primary_expression(compound_expression->primary_expression);
+        node->return_type=node->left->return_type;
+        node->right=NULL;
+    }
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 

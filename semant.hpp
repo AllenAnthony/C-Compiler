@@ -22,6 +22,8 @@ IR_NODE SEM_expression(ABS_expression expression);
 
 IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression);
 
+IR_NODE SEM_array_expression(ABS_ID id,int index);
+
 IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression);
 
 IR_NODE SEM_constant(ABS_constant constant);
