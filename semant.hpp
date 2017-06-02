@@ -6,6 +6,10 @@
 #include "abs.hpp"
 #include "IR.hpp"
 #include "function.hpp"
+#include <cstdio>
+#include <vector>
+#include <map>
+
 
 IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type);
 

@@ -75,12 +75,12 @@ struct _IR_NODE {
     vector<IR_NODE> list;
 };
 
-vector<int> iter_label_head;
-vector<int> iter_label_tail;
+extern vector<int> iter_label_head;
+extern vector<int> iter_label_tail;
 
-int curr_iter_label_head = 0;
-int curr_iter_label_tail = 0;
-int curr_iter_label_count = 0;
+extern int curr_iter_label_head;
+extern int curr_iter_label_tail;
+extern int curr_iter_label_count;
 
 //void transProgram(IR_NODE node) {
 //    switch (node->ir_node_type) {
