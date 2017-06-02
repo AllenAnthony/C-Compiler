@@ -50,7 +50,7 @@ IR_NODE SEM_CVAL(ABS_CVAL cval) {
 }
 
 IR_NODE SEM_expression_list(ABS_expression_list expression_list) {
-    cout << "SEM_expression_list(" << func_depth++ << endl;
+    cout << "SEM_expression_list(" << ++func_depth << endl;
     IR_NODE list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     list->ir_node_type = IR_NODE_LIST;
     list->right = NULL;
@@ -69,7 +69,7 @@ IR_NODE SEM_expression_list(ABS_expression_list expression_list) {
 }
 
 IR_NODE SEM_expression(ABS_expression expression) {
-    cout << "SEM_expression(" << func_depth++ << endl;
+    cout << "SEM_expression(" << ++func_depth << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_NONE;
     node->right = NULL;
@@ -88,7 +88,7 @@ IR_NODE SEM_expression(ABS_expression expression) {
 }
 
 IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression) {
-    cout << "SEM_assignment_expression(" << func_depth++ << endl;
+    cout << "SEM_assignment_expression(" << ++func_depth << endl;
 
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_ASSIGN;
@@ -111,7 +111,7 @@ IR_NODE SEM_array_expression(ABS_ID id, ABS_compound_expression abs_index) {
 }
 
 IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression) {
-    cout << "SEM_primary_expression(" << func_depth++ << endl;
+    cout << "SEM_primary_expression(" << ++func_depth << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_NONE;
 
@@ -141,7 +141,7 @@ IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression) {
 
 
 IR_NODE SEM_constant(ABS_constant constant) {
-    cout << "SEM_constant(" << func_depth++ << endl;
+    cout << "SEM_constant(" << ++func_depth << endl;
 
     IR_NODE node;
     if (constant->type == ENUM_IVAL) {
@@ -151,7 +151,7 @@ IR_NODE SEM_constant(ABS_constant constant) {
     } else if (constant->type == ENUM_CVAL) {
         node = SEM_CVAL(constant->abs_cval);
     } else {
-        cout << "<<func_depth++type of the constant do not exist";
+        cout << "<<++func_depthtype of the constant do not exist";
         exit(1);
     }
     cout << ")" << func_depth-- << endl;
@@ -160,7 +160,7 @@ IR_NODE SEM_constant(ABS_constant constant) {
 }
 
 IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking) {
-    cout << "SEM_function_invoking(" << func_depth++ << endl;
+    cout << "SEM_function_invoking(" << ++func_depth << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_FUNC;
     if (!curr_func->find(function_invoking->abs_id->id)) {
@@ -182,14 +182,14 @@ IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking) {
         cout << "type of the constant do not exist" << endl;
     }
 //    if(!curr_env->find(function_invoking->abs_id->id)){
-//        printf("<<func_depth++id do not exist : %s",primary_expression->id);
+//        printf("<<++func_depthid do not exist : %s",primary_expression->id);
 //        exit(0);
 //    }
     return node;
 }
 
 IR_NODE SEM_argue_list(ABS_argue_list argue_list) {
-    cout << "SEM_argue_list(" << func_depth++ << endl;
+    cout << "SEM_argue_list(" << ++func_depth << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LIST;
     vector<ABS_ID>::iterator argue_list_it = argue_list->list.begin();
@@ -205,7 +205,7 @@ IR_NODE SEM_argue_list(ABS_argue_list argue_list) {
 
 
 IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
-    cout << "SEM_compound_expression(" << func_depth++ << endl;
+    cout << "SEM_compound_expression(" << ++func_depth << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_NONE;
     if (compound_expression->compound_expression != NULL) {
@@ -224,9 +224,9 @@ IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
 
 
 IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list) {
-    cout << "SEM_declaration_list(" << func_depth++ << endl;
+    cout << "SEM_declaration_list(" << ++func_depth << endl;
 
-    IR_NODE list = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     list->ir_node_type = IR_NODE_LIST;
     list->right = NULL;
     list->return_type = IR_LEAF_VOID;
@@ -239,9 +239,9 @@ IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list) {
 }
 
 IR_NODE SEM_declaration(ABS_declaration declaration) {
-    cout << "SEM_declaration(" << func_depth++ << endl;
+    cout << "SEM_declaration(" << ++func_depth << endl;
 
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_NONE;
     node->right = NULL;
     node->return_type = IR_LEAF_VOID;
@@ -274,9 +274,9 @@ ENUM_specifier SEM_specifier(ABS_specifier specifier) {
 }
 
 IR_NODE SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list init_declarator_list) {
-    cout << "SEM_init_declarator_list(" << func_depth++ << endl;
+    cout << "SEM_init_declarator_list(" << ++func_depth << endl;
 
-    IR_NODE list = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     list->ir_node_type = IR_NODE_LIST;
     list->right = NULL;
     list->return_type = IR_LEAF_VOID;
@@ -290,9 +290,9 @@ IR_NODE SEM_init_declarator_list(ENUM_specifier type, ABS_init_declarator_list i
 }
 
 IR_NODE SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declarator) {
-    cout << "SEM_init_declarator(" << func_depth++ << endl;
+    cout << "SEM_init_declarator(" << ++func_depth << endl;
 
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
     node->left = node->right = NULL;
     node->return_type = IR_LEAF_VOID;
@@ -306,8 +306,8 @@ IR_NODE SEM_init_declarator(ENUM_specifier type, ABS_init_declarator init_declar
 }
 
 IR_NODE SEM_statement_list(ABS_statement_list statement_list) {
-    cout << "SEM_statement_list(" << func_depth++ << endl;
-    IR_NODE list = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    cout << "SEM_statement_list(" << ++func_depth << endl;
+    IR_NODE list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     list->ir_node_type = IR_NODE_LIST;
     list->right = NULL;
     list->return_type = IR_LEAF_VOID;
@@ -320,7 +320,7 @@ IR_NODE SEM_statement_list(ABS_statement_list statement_list) {
 }
 
 IR_NODE SEM_statement(ABS_statement statement) {
-    cout << "SEM_statement(" << func_depth++ << endl;
+    cout << "SEM_statement(" << ++func_depth << endl;
     IR_NODE node;
     switch (statement->type) {
         case ENUM_block_statement:
@@ -351,9 +351,9 @@ IR_NODE SEM_statement(ABS_statement statement) {
 
 
 IR_NODE SEM_block_statement(ABS_block_statement block_statement) {
-    cout << "SEM_block_statement(" << func_depth++ << endl;
+    cout << "SEM_block_statement(" << ++func_depth << endl;
 
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_NONE;
     node->left = node->right = NULL;
     node->return_type = IR_LEAF_VOID;
@@ -370,11 +370,11 @@ IR_NODE SEM_block_statement(ABS_block_statement block_statement) {
 }
 
 IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement) {
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_NONE;
     node->right = NULL;
     node->return_type = IR_LEAF_VOID;
-    cout << "SEM_expression_statement(" << func_depth++ << endl;
+    cout << "SEM_expression_statement(" << ++func_depth << endl;
     node->left = SEM_expression_list(expression_statement->expression_list);
     cout << ")" << func_depth-- << endl;
     return node;
@@ -382,36 +382,36 @@ IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement) 
 
 
 IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement) {
-    cout << "SEM_selection_statement(" << func_depth++ << endl;
+    cout << "SEM_selection_statement(" << ++func_depth << endl;
     //创建父节点为list
-    IR_NODE node = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LIST;
 
     //select需要3个label
-    IR_NODE label1 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE label1 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     label1->ir_node_type = IR_NODE_LABEL;
     label1->label = curr_iter_label_count++;
 
-    IR_NODE label2 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE label2 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     label1->ir_node_type = IR_NODE_LABEL;
     label1->label = curr_iter_label_count++;
 
-    IR_NODE label3 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE label3 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     label1->ir_node_type = IR_NODE_LABEL;
     label1->label = curr_iter_label_count++;
 
 
     //一个branch
-    IR_NODE branch = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE branch = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     branch->ir_node_type = IR_NODE_BRANCH;
     branch->left = label1;
 
     //两个JUMP
-    IR_NODE jump1 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE jump1 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     jump1->ir_node_type = IR_NODE_JUMP;
     jump1->left = label2;
 
-    IR_NODE jump2 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE jump2 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     jump2->ir_node_type = IR_NODE_JUMP;
     jump2->left = label3;
 
@@ -431,36 +431,36 @@ IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement) {
 }
 
 IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
-    cout << "SEM_iteration_statement(" << func_depth++ << endl;
+    cout << "SEM_iteration_statement(" << ++func_depth << endl;
 
-    IR_NODE node_list = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE node_list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node_list->ir_node_type = IR_NODE_LIST;
 
     //select需要3个label
-    IR_NODE label1 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE label1 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     label1->ir_node_type = IR_NODE_LABEL;
     label1->label = curr_iter_label_count++;
 
-    IR_NODE label2 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE label2 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     label1->ir_node_type = IR_NODE_LABEL;
     label1->label = curr_iter_label_count++;
 
-    IR_NODE label3 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE label3 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     label1->ir_node_type = IR_NODE_LABEL;
     label1->label = curr_iter_label_count++;
 
 
     //一个branch
-    IR_NODE branch = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE branch = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     branch->ir_node_type = IR_NODE_BRANCH;
     branch->left = label2;
 
     //两个JUMP
-    IR_NODE jump1 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE jump1 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     jump1->ir_node_type = IR_NODE_JUMP;
     jump1->left = label3;
 
-    IR_NODE jump2 = (IR_NODE) check_malloc(sizeof(struct _IR_NODE));
+    IR_NODE jump2 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     jump2->ir_node_type = IR_NODE_JUMP;
     jump2->left = label1;
 
@@ -488,7 +488,7 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
 }
 
 IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
-    cout << "SEM_jump_statement(" << func_depth++ << endl;
+    cout << "SEM_jump_statement(" << ++func_depth << endl;
     switch (jump_statement->action_type) {
         case ENUM_CONTINUE:
             break;
@@ -506,7 +506,7 @@ IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
 }
 
 IR_NODE SEM_program(ABS_program program) {
-    cout << "SEM_program(" << func_depth++ << endl;
+    cout << "SEM_program(" << ++func_depth << endl;
     IR_NODE node;
     if (program->declaration_list != NULL) {
         node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
@@ -521,10 +521,14 @@ IR_NODE SEM_program(ABS_program program) {
 }
 
 IR_NODE SEM_function_definition_list(ABS_function_definition_list function_definition_list) {
-    cout << "SEM_function_definition_list(" << func_depth++ << endl;
+    if (function_definition_list->function_definition_list.size() == 1) {
+        return SEM_function_definition(function_definition_list->function_definition_list[0]);
+    }
+    cout << "SEM_function_definition_list(" << ++func_depth << endl;
 
     IR_NODE node_list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node_list->ir_node_type = IR_NODE_LIST;
+
 
     vector<ABS_function_definition>::iterator function_definition_list_it = function_definition_list->function_definition_list.begin();
     for (; function_definition_list_it !=
@@ -538,26 +542,52 @@ IR_NODE SEM_function_definition_list(ABS_function_definition_list function_defin
 }
 
 IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
-    cout << "SEM_function_definition(" << func_depth++ << endl;
+    cout << "SEM_function_definition(" << ++func_depth << endl;
     ENUM_specifier type = SEM_specifier(function_definition->type_specifier);
+    _Func func;
+    func.id = function_definition->id->id;
+    size_t list_size = function_definition->parameter_list->parameter_list.size();
+    for (size_t i = 0; i < list_size; i++) {
+        func.param_list.push_back(function_definition->parameter_list->parameter_list[i]->type_specifier->type);
+    }
+    switch (func.param_list[list_size - 1]) {
+        case ENUM_INT:
+            func.ret_type = ENUM_IVAL;
+            break;
+        case ENUM_FLOAT:
+            func.ret_type = ENUM_FVAL;
+            break;
+        case ENUM_CHAR:
+            func.ret_type = ENUM_CVAL;
+            break;
+        default:
+            cout << "Invalid type defined!" << endl;
+            exit(0);
+    }
+
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_FUNC;
-    SEM_ID(function_definition->id, ENUM_VOID);
+    node->list.push_back(SEM_ID(function_definition->id, ENUM_VOID));
     if (function_definition->parameter_list != NULL) {
         curr_env->enterScope();
-        SEM_parameter_list(function_definition->parameter_list);
+        node->list.push_back(SEM_parameter_list(function_definition->parameter_list));
         curr_env->levelAdapt();
     }
-    SEM_block_statement(function_definition->block_statement);
+    node->list.push_back(SEM_block_statement(function_definition->block_statement));
     cout << ")" << func_depth-- << endl;
-    return NULL;
+    return node;
 }
 
 
 IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list) {
-    cout << "SEM_parameter_list(" << func_depth++ << endl;
+    if (parameter_list->parameter_list.size() == 1) {
+        return SEM_parameter(parameter_list->parameter_list[0]);
+    }
+
+    cout << "SEM_parameter_list(" << ++func_depth << endl;
     IR_NODE node_list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node_list->ir_node_type = IR_NODE_LIST;
+
 
     vector<ABS_parameter>::iterator parameter_list_it = parameter_list->parameter_list.begin();
     for (; parameter_list_it != parameter_list->parameter_list.end(); parameter_list_it++) {
@@ -568,7 +598,7 @@ IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list) {
 }
 
 IR_NODE SEM_parameter(ABS_parameter parameter) {
-    cout << "SEM_parameter(" << func_depth++ << endl;
+    cout << "SEM_parameter(" << ++func_depth << endl;
     ENUM_specifier specifier = SEM_specifier(parameter->type_specifier);
     IR_NODE node = SEM_ID(parameter->id, specifier);
     cout << ")" << func_depth-- << endl;
