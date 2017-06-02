@@ -44,9 +44,9 @@ typedef enum {
 } LEAF_type;
 
 struct _IR_LEAF {
-    string id;
     LEAF_type leaf_type;
     union {
+        string id;
         int ival;
         float fval;
         char cval;

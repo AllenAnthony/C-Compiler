@@ -11,8 +11,17 @@
 
 using namespace std;
 
-IR_NODE SEM_ID(ABS_ID abs_id) {
+
+//当前状态
+enum SEM_STATE {
+    SEM_STATE_STATEMENT,
+    SEM_STATE_PARAMETER,
+    SEM_STATE_DECLARATION
+} curr_state;
+
+IR_NODE SEM_ID(ABS_ID abs_id, ABS_specifier type) {
     cout << "SEM_ID(" << abs_id->id << ")" << endl;
+    curr_env->link(abs_id->id, type->type);
     IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
     node->leaf.id = abs_id->id;
@@ -22,22 +31,28 @@ IR_NODE SEM_ID(ABS_ID abs_id) {
 IR_NODE SEM_IVAL(ABS_IVAL ival) {
     cout << "SEM_IVAL(" << ival->ival << ")" << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
-    node->ir_node_type = IR;
-    node->leaf.id = abs_id->id;
-    return ival->ival;
+    node->ir_node_type = IR_NODE_LEAF;
+    node->leaf.leaf_type = IR_LEAF_INT;
+    node->leaf.ival = ival->ival;
+    return node;
 }
 
 IR_NODE SEM_FVAL(ABS_FVAL fval) {
     cout << "SEM_FVAL(" << fval->fval << ")" << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
-    node->ir_node_type = IR_NODE_IVAL;
+    node->ir_node_type = IR_NODE_LEAF;
+    node->leaf.leaf_type = IR_LEAF_FLOAT;
     node->leaf.fval = fval->fval;
     return node;
 }
 
 IR_NODE SEM_CVAL(ABS_CVAL cval) {
     cout << "SEM_CVAL(" << cval->cval << ")" << endl;
-    return cval->cval;
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(IR_NODE));
+    node->ir_node_type = IR_NODE_LEAF;
+    node->leaf.leaf_type = IR_LEAF_CHAR;
+    node->leaf.fval = cval->cval;
+    return node;
 }
 
 IR_NODE SEM_expression_list(ABS_expression_list expression_list) {
@@ -335,7 +350,10 @@ IR_NODE SEM_function_definition_list(ABS_function_definition_list function_defin
 IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
     cout << "SEM_function_definition(" << func_depth++ << endl;
     ENUM_specifier type = SEM_specifier(function_definition->type_specifier);
-    string id = SEM_ID(function_definition->id);
+    IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node->ir_node_type = IR_NODE_FUNC;
+    node.
+            SEM_ID(function_definition->id);
     if (function_definition->parameter_list != NULL) {
         curr_env->enterScope();
         SEM_parameter_list(function_definition->parameter_list);
@@ -349,19 +367,22 @@ IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
 
 IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list) {
     cout << "SEM_parameter_list(" << func_depth++ << endl;
+    IR_NODE node_list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+    node_list->ir_node_type = IR_NODE_LIST;
+
     vector<ABS_parameter>::iterator parameter_list_it = parameter_list->parameter_list.begin();
     for (; parameter_list_it != parameter_list->parameter_list.end(); parameter_list_it++) {
-        SEM_parameter(*parameter_list_it);
+        node_list->list.push_back(SEM_parameter(*parameter_list_it));
     }
     cout << ")" << func_depth-- << endl;
+    return node_list;
 }
 
 IR_NODE SEM_parameter(ABS_parameter parameter) {
     cout << "SEM_parameter(" << func_depth++ << endl;
-    ENUM_specifier type = SEM_specifier(parameter->type_specifier);
-    string id = SEM_ID(parameter->id);
-    curr_env->link(id, type);
+    IR_NODE node = SEM_ID(parameter->id, parameter->type_specifier);
     cout << ")" << func_depth-- << endl;
+    return node;
 }
 
 
