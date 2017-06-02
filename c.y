@@ -274,7 +274,7 @@ int main(int argc, char** argv){
     curr_func= new FuncTable();
     IR_NODE IR_root = SEM_program(ABS_root);
 
-    IR_print(IR_root);
+    
 
     cout << endl << "------------Semant check finish-------------" << endl;
 

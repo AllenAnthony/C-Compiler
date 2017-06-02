@@ -82,7 +82,7 @@ extern int curr_iter_label_head;
 extern int curr_iter_label_tail;
 extern int curr_iter_label_count;
 
-void IR_print(IR_NODE IR_root);
+void IR_print(IR_NODE IR_root, FILE *fp, int root);
 
 void IR_translate_program(IR_NODE IR_root);
 
