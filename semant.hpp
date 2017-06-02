@@ -27,7 +27,7 @@ IR_NODE SEM_expression(ABS_expression expression);
 
 IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression);
 
-IR_NODE SEM_array_expression(ABS_ID id, ABS_compound_expression abs_index);
+IR_NODE SEM_array_expression(ABS_ID abs_id, ABS_compound_expression index);
 
 IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression);
 
@@ -81,7 +81,7 @@ IR_NODE SEM_parameter(ABS_parameter parameter);
 
 extern SymbolTable *curr_env;
 
-extern FuncTable* curr_func;
+extern FuncTable *curr_func;
 
 extern int func_depth;
 
