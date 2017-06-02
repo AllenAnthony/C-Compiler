@@ -33,7 +33,7 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
         case IR_NODE_LABEL:
             fprintf(fp, "\tnode%d[shape=plaintext, label=\"LABEL\", height=.3];\n\tnode%d[shape=plaintext, label=\"%d\", height=.3];\n\tnode%d->node%d;\n\tnode%d->node%d;\n", count_node + 1, count_node + 2 , IR_root->label, root, count_node + 1, count_node + 1, count_node + 2);
             count_node += 2;
-            break;
+            return;
         case IR_NODE_FUNC:
         case IR_NODE_LIST:
             fprintf(fp, "\tnode%d[shape=plaintext, label=\"SEQ\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root, count_node + 1);
@@ -45,15 +45,23 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
             return;
         case IR_NODE_CONST:
         case IR_NODE_NONE:
-            break;
+            if(IR_root->left != NULL){
+                //fprintf(fp, "haha\n");
+                IR_print(IR_root->left, fp, root);
+            }
+            if(IR_root->right != NULL){
+                //fprintf(fp, "hihi\n");
+                IR_print(IR_root->right, fp, root);
+            }
+            return;
         case IR_NODE_ASSIGN:
             fprintf(fp, "\tnode%d[shape=plaintext, label=\"MOVE\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root, count_node + 1);
             count_node++;
             break;
         case IR_NODE_JUMP:
-            fprintf(fp, "\tnode%d[shape=plaintext, label=\"JUMP\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root , count_node + 1);
-            count_node++;
-            break;
+            fprintf(fp, "\tnode%d[shape=plaintext, label=\"JUMP\", height=.3];\n\tnode%d[shape=plaintext, label=\"LABEL_%d\", height=.3];\n\tnode%d->node%d;\n\tnode%d->node%d;\n", count_node + 1, count_node + 2, IR_root->left->label, root, count_node + 1 , count_node + 1,  count_node + 2);
+            count_node += 2;
+            return;
         case IR_NODE_BRANCH:
             fprintf(fp, "\tnode%d[shape=plaintext, label=\"BRANCH\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root, count_node + 1);
             count_node++;
@@ -119,9 +127,11 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
     }
     root = count_node;
     if(IR_root->left != NULL){
+        //fprintf(fp, "haha\n");
         IR_print(IR_root->left, fp, root);
     }
     if(IR_root->right != NULL){
+        //fprintf(fp, "hihi\n");
         IR_print(IR_root->right, fp, root);
     }
 
