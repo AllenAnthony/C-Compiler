@@ -11,7 +11,7 @@ using namespace std;
 struct _Func {
     string id;
     ENUM_node_type ret_type;  //ENUM_IVAL、ENUM_FVAL、ENUM_CVAL
-    vector<ENUM_node_type> param_list;  //参数类型列表
+    vector<ENUM_specifier> param_list;  //参数类型列表
 };
 
 typedef _Func *Func;
