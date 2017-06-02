@@ -19,7 +19,7 @@ vector<int> iter_label_tail;
 
 int curr_iter_label_head = 0;
 int curr_iter_label_tail = 0;
-int curr_iter_label_count = 0;
+int curr_iter_label_count = 1;
 
 %}
 

@@ -37,6 +37,8 @@ IR_NODE SEM_argue_list(ABS_argue_list argue_list);
 
 IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression);
 
+IR_NODE_type toNodeType(ENUM_oper_type op_type);
+
 IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list);
 
 IR_NODE SEM_declaration(ABS_declaration declaration);

@@ -203,7 +203,7 @@ IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
     IR_NODE node;
     if (compound_expression->compound_expression != NULL) {
         node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-        node->ir_node_type = IR_NODE_NONE;
+        node->ir_node_type = toNodeType(compound_expression->oper_type);
         node->left = SEM_compound_expression(compound_expression->compound_expression);
         node->right = SEM_primary_expression(compound_expression->primary_expression);
         node->return_type = node->left->return_type;
@@ -215,6 +215,38 @@ IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
     return node;
 }
 
+IR_NODE_type toNodeType(ENUM_oper_type op_type) {
+    switch (op_type) {
+        case ENUM_MUL:
+            return IR_NODE_MUL;
+        case ENUM_DIV:
+            return IR_NODE_DIV;
+        case ENUM_MOD:
+            return IR_NODE_MOD;
+        case ENUM_PLUS:
+            return IR_NODE_PLUS;
+        case ENUM_MINUS:
+            return IR_NODE_MINUS;
+        case ENUM_LT:
+            return IR_NODE_LT;
+        case ENUM_GT:
+            return IR_NODE_GT;
+        case ENUM_LE:
+            return IR_NODE_LE;
+        case ENUM_GE:
+            return IR_NODE_GE;
+        case ENUM_EQ:
+            return IR_NODE_EQ;
+        case ENUM_NE:
+            return IR_NODE_NE;
+        case ENUM_AND:
+            return IR_NODE_AND;
+        case ENUM_OR:
+            return IR_NODE_OR;
+        default:
+            return IR_NODE_NONE;
+    }
+}
 
 IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list) {
     size_t list_size = declaration_list->declaration_list.size();
@@ -393,12 +425,12 @@ IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement) {
     label1->label = curr_iter_label_count++;
 
     IR_NODE label2 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-    label1->ir_node_type = IR_NODE_LABEL;
-    label1->label = curr_iter_label_count++;
+    label2->ir_node_type = IR_NODE_LABEL;
+    label2->label = curr_iter_label_count++;
 
     IR_NODE label3 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-    label1->ir_node_type = IR_NODE_LABEL;
-    label1->label = curr_iter_label_count++;
+    label3->ir_node_type = IR_NODE_LABEL;
+    label3->label = curr_iter_label_count++;
 
 
     //一个branch
@@ -442,12 +474,12 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
     label1->label = curr_iter_label_count++;
 
     IR_NODE label2 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-    label1->ir_node_type = IR_NODE_LABEL;
-    label1->label = curr_iter_label_count++;
+    label2->ir_node_type = IR_NODE_LABEL;
+    label2->label = curr_iter_label_count++;
 
     IR_NODE label3 = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-    label1->ir_node_type = IR_NODE_LABEL;
-    label1->label = curr_iter_label_count++;
+    label3->ir_node_type = IR_NODE_LABEL;
+    label3->label = curr_iter_label_count++;
 
 
     //一个branch
@@ -472,6 +504,7 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
         node_list->list.push_back(label2);
         node_list->list.push_back(SEM_statement(iteration_statement->statement));
         node_list->list.push_back(jump2);
+        node_list->list.push_back(label3);
     } else {
         node_list->list.push_back(SEM_expression_statement(iteration_statement->expression_statement_for_left));
         node_list->list.push_back(label1);
@@ -482,6 +515,7 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
         node_list->list.push_back(SEM_statement(iteration_statement->statement));
         node_list->list.push_back(SEM_expression_list(iteration_statement->expression_list_for_right));
         node_list->list.push_back(jump2);
+        node_list->list.push_back(label3);
     }
     cout << ")" << func_depth-- << endl;
     return node_list;
