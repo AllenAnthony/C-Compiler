@@ -1,6 +1,5 @@
 #include "semant.hpp"
 #include "abs.hpp"
-
 #include "symbol.hpp"
 #include "function.hpp"
 #include "IR.hpp"
