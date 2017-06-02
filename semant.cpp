@@ -17,6 +17,7 @@ IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type) {
     }
     node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
+    node->leaf.leaf_type = IR_LEAF_ID;
     node->leaf.id = abs_id->id;
     return node;
 }
