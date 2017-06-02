@@ -275,8 +275,8 @@ int main(int argc, char** argv){
 
     IR_NODE IR_root = SEM_program(ABS_root);
     fp = fopen("ir_tree.dot", "w");
-    fprintf(fp, "digraph G{\n");
-    IR_print(IR_root, fp, -1);
+    fprintf(fp, "digraph G{\n\tnode0[shape=plaintext, label=\"program\", height=.3];\n");
+    IR_print(IR_root, fp, 0);
     fprintf(fp, "}\n");
     fclose(fp);
 
