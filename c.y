@@ -272,7 +272,8 @@ int main(int argc, char** argv){
     cout << endl << "------------Semant check begin-------------" << endl;
     curr_env = new SymbolTable(10);
     curr_func= new FuncTable();
-    SEM_program(ABS_root);
+    IR_NODE IR_root = SEM_program(ABS_root);
+
     cout << endl << "------------Semant check finish-------------" << endl;
 
     return 0;
