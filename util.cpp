@@ -2,6 +2,7 @@
 
 void yyerror(std::string msg) {
     std::cout << endl << "Line" << line << ": " << msg << std::endl;
+    exit(1);
 }
 
 void *check_malloc(size_t size) {
