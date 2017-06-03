@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 
+extern int line;
 
 IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type);
 
@@ -19,15 +20,13 @@ IR_NODE SEM_FVAL(ABS_FVAL fval);
 
 IR_NODE SEM_CVAL(ABS_CVAL cval);
 
-
-//QIAN XU FENG;
 IR_NODE SEM_expression_list(ABS_expression_list expression_list);
 
 IR_NODE SEM_expression(ABS_expression expression);
 
 IR_NODE SEM_assignment_expression(ABS_assignment_expression assignment_expression);
 
-IR_NODE SEM_array_expression(ABS_ID id, ABS_compound_expression abs_index);
+IR_NODE SEM_array_expression(ABS_ID abs_id, ABS_compound_expression index);
 
 IR_NODE SEM_primary_expression(ABS_primary_expression primary_expression);
 
@@ -39,7 +38,7 @@ IR_NODE SEM_argue_list(ABS_argue_list argue_list);
 
 IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression);
 
-//BIAN BIAN
+IR_NODE_type toNodeType(ENUM_oper_type op_type);
 
 IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list);
 
@@ -59,10 +58,6 @@ IR_NODE SEM_block_statement(ABS_block_statement block_statement);
 
 IR_NODE SEM_expression_statement(ABS_expression_statement expression_statement);
 
-
-
-//HOPEN
-
 IR_NODE SEM_selection_statement(ABS_selection_statement selection_statement);
 
 IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement);
@@ -81,8 +76,9 @@ IR_NODE SEM_parameter(ABS_parameter parameter);
 
 extern SymbolTable *curr_env;
 
-extern FuncTable* curr_func;
+extern FuncTable *curr_func;
 
 extern int func_depth;
+
 
 #endif //COMPILER_SEMANT_HPP

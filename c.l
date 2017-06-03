@@ -4,13 +4,14 @@
 #include "util.hpp"
 #include "y.tab.hpp"
 using namespace std;
-
+extern int line;
 #define DISP_TOK std::cout<<yytext;
 %}
 
 %x CHARACTER
 %x COMMENT_LINE
 %x COMMENT_BLOCK
+%x HEAD
 
 %%
 
@@ -58,47 +59,63 @@ using namespace std;
 
 
 "//"        {   /* 单行注释 */
-    BEGIN COMMENT_LINE;
+    DISP_TOK BEGIN COMMENT_LINE;
 }
 <COMMENT_LINE>{
     "\n" {
-        BEGIN INITIAL;
+        DISP_TOK line++; cout << line << "\t"; BEGIN INITIAL;
     }
     .  {
-
+        DISP_TOK
     }
 }
 
 
 "/*"        {   /* 多行注释 */
-    BEGIN COMMENT_BLOCK;
+    DISP_TOK BEGIN COMMENT_BLOCK;
 }
 
 <COMMENT_BLOCK>{
     "*/" {
-        BEGIN INITIAL;
+        DISP_TOK BEGIN INITIAL;
+    }
+    "\n" {
+        DISP_TOK line++; cout << line << "\t";
     }
     .  {
-        
+        DISP_TOK
     }
 }
 
 
 "'"     {   /* 匹配字符， 形如'a'、'\n' */
-    BEGIN CHARACTER;
+    DISP_TOK BEGIN CHARACTER;
 }
 
 <CHARACTER>{
     "'" {
-        BEGIN INITIAL;
+        DISP_TOK BEGIN INITIAL;
     }
 
     "\\n" {
-        yylval.cval=0x0A; DISP_TOK return CVAL;
+        yylval.cval=0x0A; DISP_TOK line++; return CVAL;
     }
 
     [^\'] {
         yylval.cval=*yytext; DISP_TOK return CVAL;
+    }
+}
+
+"#"     {    /*include, define*/
+        DISP_TOK BEGIN HEAD;
+}
+
+<HEAD>{
+    "\n" {
+        DISP_TOK line++; cout << line << "\t"; BEGIN INITIAL;
+    }
+    .  {
+        DISP_TOK
     }
 }
 
@@ -125,7 +142,7 @@ using namespace std;
 [ \t]	DISP_TOK
 
 [\n]	{
-    DISP_TOK;
+    DISP_TOK line++; cout << line << "\t";
 }
 
 .		{
