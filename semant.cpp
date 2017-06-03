@@ -80,7 +80,7 @@ IR_NODE SEM_expression(ABS_expression expression) {
     } else if (expression->type == ENUM_compound_expression) {
         node = SEM_compound_expression(expression->compound_expression);
     } else {
-        cout << "Unknown expression" << endl;
+        cout << "Line" << line << ": " <<"Unknown expression" << endl;
         exit(1);
     }
     cout << ")" << func_depth-- << endl;
@@ -158,7 +158,7 @@ IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking) {
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_FUNC;
     if (!curr_func->find(function_invoking->abs_id->id)) {
-        cout << "function id do not exist :" << function_invoking->abs_id->id;
+        cout << "Line" << line << ": " << "function id do not exist :" << function_invoking->abs_id->id;
         exit(1);
     }
     node->left = SEM_ID(function_invoking->abs_id, ENUM_INT);

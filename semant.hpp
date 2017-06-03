@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 
+extern int line;
 
 IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type);
 

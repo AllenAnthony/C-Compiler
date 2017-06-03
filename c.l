@@ -4,13 +4,14 @@
 #include "util.hpp"
 #include "y.tab.hpp"
 using namespace std;
-
+extern int line;
 #define DISP_TOK std::cout<<yytext;
 %}
 
 %x CHARACTER
 %x COMMENT_LINE
 %x COMMENT_BLOCK
+%x HEAD
 
 %%
 
@@ -62,7 +63,7 @@ using namespace std;
 }
 <COMMENT_LINE>{
     "\n" {
-        BEGIN INITIAL;
+        line++; BEGIN INITIAL;
     }
     .  {
 
@@ -94,11 +95,24 @@ using namespace std;
     }
 
     "\\n" {
-        yylval.cval=0x0A; DISP_TOK return CVAL;
+        yylval.cval=0x0A; DISP_TOK line++; return CVAL;
     }
 
     [^\'] {
         yylval.cval=*yytext; DISP_TOK return CVAL;
+    }
+}
+
+"#"     {    /*include, define*/
+        BEGIN HEAD;
+}
+
+<HEAD>{
+    "\n" {
+        line++; BEGIN INITIAL;
+    }
+    .  {
+
     }
 }
 
@@ -125,7 +139,7 @@ using namespace std;
 [ \t]	DISP_TOK
 
 [\n]	{
-    DISP_TOK;
+    DISP_TOK line++;
 }
 
 .		{

@@ -8,6 +8,7 @@
 
 ABS_program ABS_root;
 FILE *fp;
+int line = 1;
 
 SymbolTable* curr_env;
 FuncTable* curr_func;
