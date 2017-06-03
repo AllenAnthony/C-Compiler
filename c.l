@@ -59,39 +59,42 @@ extern int line;
 
 
 "//"        {   /* 单行注释 */
-    BEGIN COMMENT_LINE;
+    DISP_TOK BEGIN COMMENT_LINE;
 }
 <COMMENT_LINE>{
     "\n" {
-        line++; BEGIN INITIAL;
+        DISP_TOK line++; cout << line << "\t"; BEGIN INITIAL;
     }
     .  {
-
+        DISP_TOK
     }
 }
 
 
 "/*"        {   /* 多行注释 */
-    BEGIN COMMENT_BLOCK;
+    DISP_TOK BEGIN COMMENT_BLOCK;
 }
 
 <COMMENT_BLOCK>{
     "*/" {
-        BEGIN INITIAL;
+        DISP_TOK BEGIN INITIAL;
+    }
+    "\n" {
+        DISP_TOK line++; cout << line << "\t";
     }
     .  {
-        
+        DISP_TOK
     }
 }
 
 
 "'"     {   /* 匹配字符， 形如'a'、'\n' */
-    BEGIN CHARACTER;
+    DISP_TOK BEGIN CHARACTER;
 }
 
 <CHARACTER>{
     "'" {
-        BEGIN INITIAL;
+        DISP_TOK BEGIN INITIAL;
     }
 
     "\\n" {
@@ -104,15 +107,15 @@ extern int line;
 }
 
 "#"     {    /*include, define*/
-        BEGIN HEAD;
+        DISP_TOK BEGIN HEAD;
 }
 
 <HEAD>{
     "\n" {
-        line++; BEGIN INITIAL;
+        DISP_TOK line++; cout << line << "\t"; BEGIN INITIAL;
     }
     .  {
-
+        DISP_TOK
     }
 }
 
@@ -139,7 +142,7 @@ extern int line;
 [ \t]	DISP_TOK
 
 [\n]	{
-    DISP_TOK line++;
+    DISP_TOK line++; cout << line << "\t";
 }
 
 .		{

@@ -267,6 +267,7 @@ int main(int argc, char** argv){
     }
 
     cout << endl << "------------Parse begin-------------" << endl;
+    cout << line << "\t";
     yyparse();
     cout << endl << "------------Parse finish-------------" << endl;
 

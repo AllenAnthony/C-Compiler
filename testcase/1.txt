@@ -1,4 +1,11 @@
-#define
+#include <stdio.h>
+#include <stdlib.h>
+#define LINE 1
+
+//my compiler.
+/*
+    test test test
+*/
 
 int main(int argci, int b, float c, char d){
     int i;
