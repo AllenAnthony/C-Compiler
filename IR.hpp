@@ -37,7 +37,8 @@ typedef enum {
     IR_NODE_OR,
     IR_NODE_NOT,
     IR_NODE_LIST,
-    IR_NODE_NONE
+    IR_NODE_NONE,
+    IR_NODE_RETURN
 } IR_NODE_type;
 
 typedef enum {

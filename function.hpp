@@ -17,8 +17,10 @@ struct _Func {
 typedef _Func *Func;
 
 class FuncTable {
+
 private:
     map<string, _Func> funcs;
+
 public:
 
     Func find(string id);
