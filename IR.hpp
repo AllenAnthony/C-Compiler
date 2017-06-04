@@ -18,6 +18,7 @@ typedef enum {
     IR_NODE_CONST,
     IR_NODE_LEAF,
     IR_NODE_FUNC,
+    IR_NODE_CALL,
     IR_NODE_LABEL,
     IR_NODE_JUMP,
     IR_NODE_BRANCH,

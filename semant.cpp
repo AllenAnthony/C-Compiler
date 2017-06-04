@@ -88,7 +88,7 @@ IR_NODE SEM_expression(ABS_expression expression) {
     } else if (expression->type == ENUM_compound_expression) {
         node = SEM_compound_expression(expression->compound_expression);
     } else {
-        cout << "Line" << line << ": " <<"Unknown expression" << endl;
+        cout << "Line" << line << ": " << "Unknown expression" << endl;
         exit(1);
     }
     cout << ")" << func_depth-- << endl;
@@ -164,12 +164,12 @@ IR_NODE SEM_constant(ABS_constant constant) {
 IR_NODE SEM_function_invoking(ABS_function_invoking function_invoking) {
     cout << "SEM_function_invoking(" << ++func_depth << endl;
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
-    node->ir_node_type = IR_NODE_FUNC;
+    node->ir_node_type = IR_NODE_CALL;
     if (!curr_func->find(function_invoking->abs_id->id)) {
         cout << "Line" << line << ": " << "function id do not exist :" << function_invoking->abs_id->id;
         exit(1);
     }
-    node->left = SEM_ID(function_invoking->abs_id, ENUM_INT);
+    node->left = SEM_ID(function_invoking->abs_id, ENUM_VOID);
     node->right = SEM_argue_list(function_invoking->argue_list);
 
     ENUM_node_type node_type = curr_func->find(function_invoking->abs_id->id)->ret_type;
@@ -605,7 +605,7 @@ IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
             cout << "Invalid type defined!" << endl;
             exit(1);
     }
-
+    curr_func->link(func.id, func);
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_FUNC;
     node->list.push_back(SEM_ID(function_definition->id, type));

@@ -102,4 +102,20 @@ digraph G{
 	node48->node50;
 	node51[shape=plaintext, label="1", height=.3];
 	node47->node51;
+	node52[shape=plaintext, label="MOVE", height=.3];
+	node12->node52;
+	node53[shape=plaintext, label="a", height=.3];
+	node52->node53;
+	node54[shape=plaintext, label="main", height=.3];
+	node53->node54;
+	node55[shape=plaintext, label="SEQ", height=.3];
+	node53->node55;
+	node56[shape=plaintext, label="argci", height=.3];
+	node55->node56;
+	node57[shape=plaintext, label="b", height=.3];
+	node55->node57;
+	node58[shape=plaintext, label="c", height=.3];
+	node55->node58;
+	node59[shape=plaintext, label="d", height=.3];
+	node55->node59;
 }
