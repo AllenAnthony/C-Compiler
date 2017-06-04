@@ -10,6 +10,7 @@
 
 using namespace std;
 
+extern int line;
 typedef enum {
     ENUM_INT,
     ENUM_FLOAT,

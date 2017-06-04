@@ -1,7 +1,8 @@
 #include "util.hpp"
 
 void yyerror(std::string msg) {
-    std::cout << msg << std::endl;
+    std::cout << endl << "Line" << line << ": " << msg << std::endl;
+    exit(1);
 }
 
 void *check_malloc(size_t size) {

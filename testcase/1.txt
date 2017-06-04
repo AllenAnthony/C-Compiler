@@ -1,3 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define LINE 1
+
+//my compiler.
+/*
+    test test test
+*/
+
 int main(int argci, int b, float c, char d){
     int i;
     for(i=0; i<5; i=i+1){
@@ -5,4 +14,5 @@ int main(int argci, int b, float c, char d){
 
     }
     a = 1+2*3;
+    a = main(argci,b,c,d);
 }

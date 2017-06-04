@@ -8,6 +8,7 @@
 
 ABS_program ABS_root;
 FILE *fp;
+int line = 1;
 
 SymbolTable* curr_env;
 FuncTable* curr_func;
@@ -266,6 +267,7 @@ int main(int argc, char** argv){
     }
 
     cout << endl << "------------Parse begin-------------" << endl;
+    cout << line << "\t";
     yyparse();
     cout << endl << "------------Parse finish-------------" << endl;
 
