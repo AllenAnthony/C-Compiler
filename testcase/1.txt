@@ -12,7 +12,12 @@ int f(int a){
 }
 
 int main(int argci, int b, float c, char d){
-    int a;
-    a = f(c);
-    return a;
+    int i, sum;
+
+    sum = 0;
+    i = 0;
+    while(i < 5){
+        sum = sum + i;
+        i = i + 1;
+    }
 }
