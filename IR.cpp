@@ -35,6 +35,11 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
                     break;
             }
             break;
+        case IR_NODE_RETURN:
+            fprintf(fp, "\tnode%d[shape=plaintext, label=\"RETURN\", height=.3];\n\tnode%d->node%d;\n",
+                    count_node + 1, root, count_node + 1);
+            count_node++;
+            break;
         case IR_NODE_LABEL:
             fprintf(fp,
                     "\tnode%d[shape=plaintext, label=\"LABEL\", height=.3];\n\tnode%d[shape=plaintext, label=\"%d\", height=.3];\n\tnode%d->node%d;\n\tnode%d->node%d;\n",
