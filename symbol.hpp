@@ -16,16 +16,19 @@ struct _Symbol {
     int depth;
 };
 
+
 struct _Bucket {
     std::vector<Symbol> symbols;
 };
 
+
+//符号表
 class SymbolTable {
 
 private:
-    int size;
-    int current_depth;
-    Bucket buckets;
+    int size; //符号表中hash表大小
+    int current_depth;   //当前环境的深度
+    Bucket buckets;   //哈希表中的桶
     std::vector<Symbol> record;
 
     size_t hash(std::string id);

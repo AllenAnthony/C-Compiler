@@ -30,14 +30,20 @@ digraph G{
 	node7->node14;
 	node15[shape=plaintext, label="a", height=.3];
 	node14->node15;
-	node16[shape=plaintext, label="MOVE", height=.3];
+	node16[shape=plaintext, label="SEQ", height=.3];
 	node14->node16;
-	node17[shape=plaintext, label="a", height=.3];
+	node17[shape=plaintext, label="MOVE", height=.3];
 	node16->node17;
-	node18[shape=plaintext, label="CALL", height=.3];
-	node16->node18;
-	node19[shape=plaintext, label="f", height=.3];
-	node18->node19;
-	node20[shape=plaintext, label="c", height=.3];
-	node18->node20;
+	node18[shape=plaintext, label="a", height=.3];
+	node17->node18;
+	node19[shape=plaintext, label="CALL", height=.3];
+	node17->node19;
+	node20[shape=plaintext, label="f", height=.3];
+	node19->node20;
+	node21[shape=plaintext, label="c", height=.3];
+	node19->node21;
+	node22[shape=plaintext, label="RETURN", height=.3];
+	node16->node22;
+	node23[shape=plaintext, label="a", height=.3];
+	node22->node23;
 }
