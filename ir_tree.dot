@@ -24,7 +24,7 @@ digraph G{
 	node8->node11;
 	node12[shape=plaintext, label="d", height=.3];
 	node8->node12;
-	node13[shape=plaintext, label="EXP", height=.3];
+	node13[shape=plaintext, label="SEQ", height=.3];
 	node6->node13;
 	node14[shape=plaintext, label="a", height=.3];
 	node13->node14;
@@ -32,8 +32,10 @@ digraph G{
 	node13->node15;
 	node16[shape=plaintext, label="a", height=.3];
 	node15->node16;
-	node17[shape=plaintext, label="f", height=.3];
-	node16->node17;
-	node18[shape=plaintext, label="c", height=.3];
-	node16->node18;
+	node17[shape=plaintext, label="CALL", height=.3];
+	node15->node17;
+	node18[shape=plaintext, label="f", height=.3];
+	node17->node18;
+	node19[shape=plaintext, label="c", height=.3];
+	node17->node19;
 }

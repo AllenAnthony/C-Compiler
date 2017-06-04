@@ -42,6 +42,10 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
                     count_node + 2);
             count_node += 2;
             return;
+        case IR_NODE_CALL:
+            fprintf(fp, "\tnode%d[shape=plaintext, label=\"CALL\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root, count_node + 1);
+            count_node++;
+            break;
         case IR_NODE_FUNC:
         case IR_NODE_LIST:
             fprintf(fp, "\tnode%d[shape=plaintext, label=\"SEQ\", height=.3];\n\tnode%d->node%d;\n", count_node + 1,
@@ -54,7 +58,7 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
             return;
         case IR_NODE_CONST:
         case IR_NODE_NONE:
-            fprintf(fp, "\tnode%d[shape=plaintext, label=\"EXP\", height=.3];\n\tnode%d->node%d;\n", count_node + 1,
+            fprintf(fp, "\tnode%d[shape=plaintext, label=\"SEQ\", height=.3];\n\tnode%d->node%d;\n", count_node + 1,
                     root, count_node + 1);
             count_node++;
             break;
