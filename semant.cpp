@@ -11,9 +11,17 @@ IR_NODE SEM_ID(ABS_ID abs_id, ENUM_specifier type) {
     IR_NODE node;
     cout << "SEM_ID(" << abs_id->id << ")" << endl;
     if (type != ENUM_VOID) {
-        curr_env->link(abs_id->id, type);
+        Symbol symbol = curr_env->link(abs_id->id, type);
+        if (symbol == NULL) {
+            cout << "Variable " << abs_id->id << "failed to link" << endl;
+            exit(1);
+        }
     } else {
-        curr_env->find(abs_id->id);
+        Symbol symbol = curr_env->find(abs_id->id);
+        if (symbol == NULL) {
+            cout << "Undefined variable: " << abs_id->id << endl;
+            exit(1);
+        }
     }
     node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_LEAF;
@@ -600,7 +608,7 @@ IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
 
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_FUNC;
-    node->list.push_back(SEM_ID(function_definition->id, ENUM_VOID));
+    node->list.push_back(SEM_ID(function_definition->id, type));
     if (function_definition->parameter_list != NULL) {
         curr_env->enterScope();
         node->list.push_back(SEM_parameter_list(function_definition->parameter_list));
