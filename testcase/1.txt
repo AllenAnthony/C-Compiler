@@ -7,10 +7,11 @@
     test test test
 */
 
+int f(int a){
+    return a;
+}
+
 int main(int argci, int b, float c, char d){
-    while(1){
-        int a=0;
-        a = a+1;
-        break;
-    }
+    int a;
+    a = f(c);
 }

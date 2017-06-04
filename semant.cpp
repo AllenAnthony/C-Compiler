@@ -540,6 +540,7 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
 
 IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
     cout << "SEM_jump_statement(" << ++func_depth << endl;
+    IR_NODE node;
     IR_NODE label;
     IR_NODE jump;
     switch (jump_statement->action_type) {
@@ -550,7 +551,8 @@ IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
             jump = (IR_NODE) check_malloc(sizeof(_IR_NODE));
             jump->ir_node_type = IR_NODE_JUMP;
             jump->left = label;
-            return jump;
+            node = jump;
+            break;
         case ENUM_BREAK:
             label = (IR_NODE) check_malloc(sizeof(_IR_NODE));
             label->ir_node_type = IR_NODE_LABEL;
@@ -558,16 +560,17 @@ IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
             jump = (IR_NODE) check_malloc(sizeof(_IR_NODE));
             jump->ir_node_type = IR_NODE_JUMP;
             jump->left = label;
-            return jump;
+            node = jump;
+            break;
         case ENUM_RETURN:
-            SEM_expression_statement(jump_statement->expression_statement);
+            node = SEM_expression_statement(jump_statement->expression_statement);
             break;
         default:
             cout << "Unknow jump_statement" << endl;
             exit(1);
     }
     cout << ")" << func_depth-- << endl;
-    return NULL;
+    return node;
 }
 
 IR_NODE SEM_program(ABS_program program) {
@@ -597,9 +600,7 @@ IR_NODE SEM_function_definition_list(ABS_function_definition_list function_defin
     vector<ABS_function_definition>::iterator function_definition_list_it = function_definition_list->function_definition_list.begin();
     for (; function_definition_list_it !=
            function_definition_list->function_definition_list.end(); function_definition_list_it++) {
-        curr_env->enterScope();
         node_list->list.push_back(SEM_function_definition(*function_definition_list_it));
-        curr_env->escapeScope();
     }
     cout << ")" << func_depth-- << endl;
     return node_list;
@@ -629,6 +630,7 @@ IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
             exit(1);
     }
     curr_func->link(func.id, func);
+
     IR_NODE node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node->ir_node_type = IR_NODE_FUNC;
     node->list.push_back(SEM_ID(function_definition->id, type));
