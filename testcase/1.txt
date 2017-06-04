@@ -8,11 +8,12 @@
 */
 
 int main(int argci, int b, float c, char d){
-    int i;
+    int i, a;
     for(i=0; i<5; i=i+1){
         a=a; b=3;
 
     }
     a = 1+2*3;
-    a = main(argci,b,c,d);
+    a = main(argci, b,c,d);
+
 }

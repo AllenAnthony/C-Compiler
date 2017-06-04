@@ -131,7 +131,7 @@ constant
 ;
 
 function_invoking
-    : ID argue_list RP SEMI {$$ = F_ABS_function_invoking(F_ABS_ID($1), $2);}
+    : ID argue_list RP {$$ = F_ABS_function_invoking(F_ABS_ID($1), $2);}
 ;
 
 argue_list
