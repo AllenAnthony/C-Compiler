@@ -8,8 +8,9 @@
 */
 
 int main(int argci, int b, float c, char d){
-    {
-    int a;
+    while(1){
+        int a=0;
+        a = a+1;
+        break;
     }
-    a = 0;
 }

@@ -504,6 +504,11 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
     jump2->ir_node_type = IR_NODE_JUMP;
     jump2->left = label1;
 
+    iter_label_head.push_back(curr_iter_label_head);
+    iter_label_tail.push_back(curr_iter_label_tail);
+    curr_iter_label_head = label1->label;
+    curr_iter_label_tail = label3->label;
+
     if (iteration_statement->expression_list_while != NULL) {
         node_list->list.push_back(label1);
         node_list->list.push_back(SEM_expression_list(iteration_statement->expression_list_while));
@@ -525,17 +530,35 @@ IR_NODE SEM_iteration_statement(ABS_iteration_statement iteration_statement) {
         node_list->list.push_back(jump2);
         node_list->list.push_back(label3);
     }
+    curr_iter_label_head = iter_label_head.back();
+    curr_iter_label_tail = iter_label_tail.back();
+    iter_label_head.pop_back();
+    iter_label_tail.pop_back();
     cout << ")" << func_depth-- << endl;
     return node_list;
 }
 
 IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
     cout << "SEM_jump_statement(" << ++func_depth << endl;
+    IR_NODE label;
+    IR_NODE jump;
     switch (jump_statement->action_type) {
         case ENUM_CONTINUE:
-            break;
+            label = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+            label->ir_node_type = IR_NODE_LABEL;
+            label->label = curr_iter_label_head;
+            jump = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+            jump->ir_node_type = IR_NODE_JUMP;
+            jump->left = label;
+            return jump;
         case ENUM_BREAK:
-            break;
+            label = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+            label->ir_node_type = IR_NODE_LABEL;
+            label->label = curr_iter_label_tail;
+            jump = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+            jump->ir_node_type = IR_NODE_JUMP;
+            jump->left = label;
+            return jump;
         case ENUM_RETURN:
             SEM_expression_statement(jump_statement->expression_statement);
             break;
