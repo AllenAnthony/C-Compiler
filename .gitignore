@@ -61,3 +61,7 @@ lex.yy.cpp
 *.output
 build/
 
+ir_tree.dot
+ir_tree.png
+~$port_11.docx
+

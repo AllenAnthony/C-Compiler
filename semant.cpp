@@ -563,7 +563,9 @@ IR_NODE SEM_jump_statement(ABS_jump_statement jump_statement) {
             node = jump;
             break;
         case ENUM_RETURN:
-            node = SEM_expression_statement(jump_statement->expression_statement);
+            node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+            node->ir_node_type = IR_NODE_RETURN;
+            node->left = SEM_expression_statement(jump_statement->expression_statement);
             break;
         default:
             cout << "Unknow jump_statement" << endl;
