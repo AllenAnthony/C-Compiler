@@ -55,10 +55,10 @@ void SymbolTable::enterScope() {
 void SymbolTable::escapeScope() {
     size_t current_size = record.size();
     while (current_size > 0 && record[current_size - 1]->depth >= current_depth) {
-        Symbol symbol = record.back();
+        Symbol &symbol = record.back();
         cout << "Remove symbole '" << symbol->id << "' from symbol table" << endl;
         size_t index = hash(symbol->id);
-        std::vector<Symbol> symbols = buckets[index].symbols;
+        std::vector<Symbol> &symbols = buckets[index].symbols;
         symbols.pop_back();
         record.pop_back();
         current_size--;
