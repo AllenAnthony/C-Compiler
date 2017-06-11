@@ -153,13 +153,15 @@ ABS_argue_list F_ABS_argue_list(ABS_argue_list argue_list, ABS_ID abs_id) {
 ABS_compound_expression F_ABS_compound_expression(
         ENUM_oper_type oper_type,
         ABS_primary_expression primary_expression,
-        ABS_compound_expression compound_exp
+        ABS_compound_expression compound_expression1,
+        ABS_compound_expression compound_expression2
 ) {
     ABS_compound_expression compound_expression = (ABS_compound_expression) check_malloc(
             sizeof(_ABS_compound_expression));
     compound_expression->oper_type = oper_type;
     compound_expression->primary_expression = primary_expression;
-    compound_expression->compound_expression = compound_exp;
+    compound_expression->compound_expression1 = compound_expression1;
+    compound_expression->compound_expression2 = compound_expression1;
     return compound_expression;
 }
 

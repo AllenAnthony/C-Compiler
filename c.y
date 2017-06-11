@@ -140,26 +140,26 @@ argue_list
 ;
 
 compound_expression
-    : primary_expression {$$ = F_ABS_compound_expression(ENUM_NONE, $1, NULL); }
+    : primary_expression {$$ = F_ABS_compound_expression(ENUM_NONE, $1, NULL, NULL); }
 
-    |   primary_expression MUL compound_expression{$$ = F_ABS_compound_expression(ENUM_MUL, $1, $3);}
-    |   primary_expression DIV compound_expression{$$ = F_ABS_compound_expression(ENUM_DIV, $1, $3);}
-    |   primary_expression MOD compound_expression{$$ = F_ABS_compound_expression(ENUM_MOD, $1, $3);}
+    |   compound_expression MUL compound_expression{$$ = F_ABS_compound_expression(ENUM_MUL, NULL, $1, $3);}
+    |   compound_expression DIV compound_expression{$$ = F_ABS_compound_expression(ENUM_DIV, NULL, $1, $3);}
+    |   compound_expression MOD compound_expression{$$ = F_ABS_compound_expression(ENUM_MOD, NULL, $1, $3);}
 
-    |   primary_expression PLUS compound_expression{$$ = F_ABS_compound_expression(ENUM_PLUS, $1, $3);}
-    |   primary_expression MINUS compound_expression{$$ = F_ABS_compound_expression(ENUM_MINUS, $1, $3);}
+    |   compound_expression PLUS compound_expression{$$ = F_ABS_compound_expression(ENUM_PLUS, NULL, $1, $3);}
+    |   compound_expression MINUS compound_expression{$$ = F_ABS_compound_expression(ENUM_MINUS, NULL, $1, $3);}
 
-    |   primary_expression LT compound_expression{$$ = F_ABS_compound_expression(ENUM_LT, $1, $3);}
-    |   primary_expression GT compound_expression{$$ = F_ABS_compound_expression(ENUM_GT, $1, $3);}
-    |   primary_expression LE compound_expression{$$ = F_ABS_compound_expression(ENUM_LE, $1, $3);}
-    |   primary_expression GE compound_expression{$$ = F_ABS_compound_expression(ENUM_GE, $1, $3);}
+    |   compound_expression LT compound_expression{$$ = F_ABS_compound_expression(ENUM_LT, NULL, $1, $3);}
+    |   compound_expression GT compound_expression{$$ = F_ABS_compound_expression(ENUM_GT, NULL, $1, $3);}
+    |   compound_expression LE compound_expression{$$ = F_ABS_compound_expression(ENUM_LE, NULL, $1, $3);}
+    |   compound_expression GE compound_expression{$$ = F_ABS_compound_expression(ENUM_GE, NULL, $1, $3);}
 
-    |   primary_expression EQ compound_expression{$$ = F_ABS_compound_expression(ENUM_EQ, $1, $3);}
-    |   primary_expression NE compound_expression{$$ = F_ABS_compound_expression(ENUM_NE, $1, $3);}
+    |   compound_expression EQ compound_expression{$$ = F_ABS_compound_expression(ENUM_EQ, NULL, $1, $3);}
+    |   compound_expression NE compound_expression{$$ = F_ABS_compound_expression(ENUM_NE, NULL, $1, $3);}
 
-    |   primary_expression AND compound_expression{$$ = F_ABS_compound_expression(ENUM_AND, $1, $3);}
+    |   compound_expression AND compound_expression{$$ = F_ABS_compound_expression(ENUM_AND, NULL, $1, $3);}
 
-    |   primary_expression OR compound_expression{$$ = F_ABS_compound_expression(ENUM_OR, $1, $3);}
+    |   compound_expression OR compound_expression{$$ = F_ABS_compound_expression(ENUM_OR, NULL, $1, $3);}
 ;
 
 declaration_list

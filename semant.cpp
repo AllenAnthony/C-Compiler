@@ -209,11 +209,11 @@ IR_NODE SEM_argue_list(ABS_argue_list argue_list) {
 IR_NODE SEM_compound_expression(ABS_compound_expression compound_expression) {
     cout << "SEM_compound_expression(" << endl;
     IR_NODE node;
-    if (compound_expression->compound_expression != NULL) {
+    if (compound_expression->compound_expression1 != NULL) {
         node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
         node->ir_node_type = toNodeType(compound_expression->oper_type);
-        node->left = SEM_compound_expression(compound_expression->compound_expression);
-        node->right = SEM_primary_expression(compound_expression->primary_expression);
+        node->left = SEM_compound_expression(compound_expression->compound_expression1);
+        node->right = SEM_compound_expression(compound_expression->compound_expression2);
         node->return_type = node->left->return_type;
     } else {
         node = SEM_primary_expression(compound_expression->primary_expression);

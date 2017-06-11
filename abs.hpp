@@ -1,4 +1,5 @@
 #include "util.hpp"
+
 using namespace std;
 
 #ifndef COMPILER_ABS_HPP
@@ -31,7 +32,6 @@ typedef enum {
     ENUM_FVAL,
     ENUM_CVAL
 } ENUM_node_type;
-
 
 
 typedef enum {
@@ -104,7 +104,7 @@ struct _ABS_CVAL {
 };
 
 struct _ABS_expression_list {
-    vector<ABS_expression> expression_list;
+    vector <ABS_expression> expression_list;
 };
 
 struct _ABS_expression {
@@ -146,17 +146,18 @@ struct _ABS_function_invoking {
 };
 
 struct _ABS_argue_list {
-    vector<ABS_ID> list;
+    vector <ABS_ID> list;
 };
 
 struct _ABS_compound_expression {
     ENUM_oper_type oper_type;
     ABS_primary_expression primary_expression;
-    ABS_compound_expression compound_expression;
+    ABS_compound_expression compound_expression1;
+    ABS_compound_expression compound_expression2;
 };
 
 struct _ABS_declaration_list {
-    vector<ABS_declaration> declaration_list;
+    vector <ABS_declaration> declaration_list;
 };
 
 struct _ABS_declaration {
@@ -169,7 +170,7 @@ struct _ABS_specifier {
 };
 
 struct _ABS_init_declarator_list {
-    vector<ABS_init_declarator> init_declarator_list;
+    vector <ABS_init_declarator> init_declarator_list;
 };
 
 struct _ABS_init_declarator {
@@ -178,7 +179,7 @@ struct _ABS_init_declarator {
 };
 
 struct _ABS_statement_list {
-    vector<ABS_statement> statement_list;
+    vector <ABS_statement> statement_list;
 };
 
 struct _ABS_statement {
@@ -229,7 +230,7 @@ struct _ABS_program {
 };
 
 struct _ABS_function_definition_list {
-    vector<ABS_function_definition> function_definition_list;
+    vector <ABS_function_definition> function_definition_list;
 };
 
 struct _ABS_function_definition {
@@ -240,7 +241,7 @@ struct _ABS_function_definition {
 };
 
 struct _ABS_parameter_list {
-    vector<ABS_parameter> parameter_list;
+    vector <ABS_parameter> parameter_list;
 };
 
 struct _ABS_parameter {
@@ -301,7 +302,8 @@ ABS_argue_list F_ABS_argue_list(
 ABS_compound_expression F_ABS_compound_expression(
         ENUM_oper_type oper_type,
         ABS_primary_expression primary_expression,
-        ABS_compound_expression compound_expression
+        ABS_compound_expression compound_expression1,
+        ABS_compound_expression compound_expression2
 );
 
 ABS_declaration_list F_ABS_declaration_list(
