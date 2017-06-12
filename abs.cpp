@@ -161,7 +161,7 @@ ABS_compound_expression F_ABS_compound_expression(
     compound_expression->oper_type = oper_type;
     compound_expression->primary_expression = primary_expression;
     compound_expression->compound_expression1 = compound_expression1;
-    compound_expression->compound_expression2 = compound_expression1;
+    compound_expression->compound_expression2 = compound_expression2;
     return compound_expression;
 }
 
