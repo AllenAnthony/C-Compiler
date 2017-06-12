@@ -2,7 +2,18 @@
 #include <stdlib.h>
 #define LINE 1
 
+//my compiler.
+/*
+    test test test
+*/
+
+int f(int a){
+    return a;
+}
+
 int main(int argci, int b, float c, char d){
     int a, b, c;
     a = a+b*c;
+    a = (a+b)*c;
+    a = a*b + c;
 }

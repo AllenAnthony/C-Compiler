@@ -48,7 +48,8 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
             count_node += 2;
             return;
         case IR_NODE_CALL:
-            fprintf(fp, "\tnode%d[shape=plaintext, label=\"CALL\", height=.3];\n\tnode%d->node%d;\n", count_node + 1, root, count_node + 1);
+            fprintf(fp, "\tnode%d[shape=plaintext, label=\"CALL\", height=.3];\n\tnode%d->node%d;\n", count_node + 1,
+                    root, count_node + 1);
             count_node++;
             break;
         case IR_NODE_FUNC:
