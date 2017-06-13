@@ -258,9 +258,6 @@ IR_NODE_type toNodeType(ENUM_oper_type op_type) {
 
 IR_NODE SEM_declaration_list(ABS_declaration_list declaration_list) {
     size_t list_size = declaration_list->declaration_list.size();
-    if (list_size == 1) {
-        return SEM_declaration(declaration_list->declaration_list[0]);
-    }
 
     cout << "SEM_declaration_list(" << endl;
     IR_NODE list = (IR_NODE) check_malloc(sizeof(_IR_NODE));

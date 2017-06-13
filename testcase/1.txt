@@ -9,7 +9,7 @@
 
 
 
-int main(int argci, int b, float c, char d){
-    int a;
-    a = a+b*c;
+int main(int argc){
+    int a, b, c;
+    a = a+c;
 }

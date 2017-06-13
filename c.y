@@ -22,6 +22,9 @@ int curr_iter_label_head = 0;
 int curr_iter_label_tail = 0;
 int curr_iter_label_count = 1;
 
+string x86_asm;
+string x86_asm_head;
+string x86_asm_body;
 %}
 
 %union{
@@ -281,7 +284,16 @@ int main(int argc, char** argv){
     IR_print(IR_root, fp, 0);
     fprintf(fp, "}\n");
     fclose(fp);
+
+    x86_asm_head = ".MODEL  SMALL\n.STACK  128\n.DATA\n";
+    x86_asm_body = ".CODE\nMAIN PROC FAR\n";
+
     IR_translate_program(IR_root);
+
+    x86_asm_body += "MAIN ENDP\nEND MAIN\n";
+
+    x86_asm = x86_asm_head + x86_asm_body;
+    cout << x86_asm << endl;
 
     cout << endl << "------------Semant check finish-------------" << endl;
 
