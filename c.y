@@ -290,6 +290,7 @@ int main(int argc, char** argv){
 
     IR_translate_program(IR_root);
 
+    x86_asm_body += "MOV AH, 02H\nINT 21H\n";
     x86_asm_body += "MAIN ENDP\nEND MAIN\n";
 
     x86_asm = x86_asm_head + x86_asm_body;

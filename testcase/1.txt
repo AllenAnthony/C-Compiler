@@ -11,5 +11,7 @@
 
 int main(int argc){
     int a, b, c;
+    a = 65;
+    b = 2;
     a = a+c;
 }

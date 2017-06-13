@@ -200,15 +200,18 @@ void IR_translate_program(IR_NODE ir_root) {
             switch (ir_root->leaf.leaf_type) {
                 case IR_LEAF_INT:
                     sprintf(tmp, "%d", ir_root->leaf.ival);
-                    x86_asm_body += string(tmp);
+                    x86_asm_body += string("MOV AX, ") + string(tmp) + "\n";
+                    x86_asm_body += string("PUSH AX\n");
                     break;
                 case IR_LEAF_FLOAT:
                     sprintf(tmp, "%f", ir_root->leaf.fval);
-                    x86_asm_body += string(tmp);
+                    x86_asm_body += string("MOV AX, ") + string(tmp) + "\n";
+                    x86_asm_body += string("PUSH AX\n");
                     break;
                 case IR_LEAF_CHAR:
                     sprintf(tmp, "%d", ir_root->leaf.cval);
-                    x86_asm_body += string(tmp);
+                    x86_asm_body = string("MOV AX, ") + string(tmp) + "\n";
+                    x86_asm_body += string("PUSH AX\n");
                     break;
                 case IR_LEAF_ID:
                     if (ir_state == AERA_DST) {
@@ -217,10 +220,10 @@ void IR_translate_program(IR_NODE ir_root) {
                         x86_asm_body += ir_root->leaf.id;
                     } else if (ir_state == AERA_DEC) {
                         x86_asm_head += ir_root->leaf.id;
-                        x86_asm_head += " DB ?\n";
+                        x86_asm_head += " DW ?\n";
                     } else {
-                        x86_asm_body += string("MOV AX,") + ir_root->leaf.id + "\n";
-                        x86_asm_body += "PUSH AX\n";
+                        x86_asm_body += string("MOV DX, ") + ir_root->leaf.id + "\n";
+                        x86_asm_body += "PUSH DX\n";
                     }
                     break;
                 default:
@@ -447,7 +450,6 @@ void IR_translate_program(IR_NODE ir_root) {
         case IR_NODE_NONE:
             IR_translate_program(ir_root->left);
             IR_translate_program(ir_root->right);
-            x86_asm_body += "None\n";
             break;
         case IR_NODE_DEC:
             ir_state = AERA_DEC;
