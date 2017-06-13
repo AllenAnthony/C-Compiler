@@ -281,6 +281,7 @@ int main(int argc, char** argv){
     IR_print(IR_root, fp, 0);
     fprintf(fp, "}\n");
     fclose(fp);
+    IR_translate_program(IR_root);
 
     cout << endl << "------------Semant check finish-------------" << endl;
 

@@ -648,10 +648,6 @@ IR_NODE SEM_function_definition(ABS_function_definition function_definition) {
 
 
 IR_NODE SEM_parameter_list(ABS_parameter_list parameter_list) {
-    if (parameter_list->parameter_list.size() == 1) {
-        return SEM_parameter(parameter_list->parameter_list[0]);
-    }
-
     cout << "SEM_parameter_list(" << endl;
     IR_NODE node_list = (IR_NODE) check_malloc(sizeof(_IR_NODE));
     node_list->ir_node_type = IR_NODE_LIST;

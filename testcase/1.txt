@@ -7,13 +7,9 @@
     test test test
 */
 
-int f(int a){
-    return a;
-}
+
 
 int main(int argci, int b, float c, char d){
-    int a, b, c;
+    int a;
     a = a+b*c;
-    a = (a+b)*c;
-    a = a*b + c;
 }

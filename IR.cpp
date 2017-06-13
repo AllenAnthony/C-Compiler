@@ -5,6 +5,7 @@
 using namespace std;
 
 int count_node = 0;
+int tmp_lable_count = 0;
 
 void IR_print(IR_NODE IR_root, FILE *fp, int root) {
     switch (IR_root->ir_node_type) {
@@ -174,52 +175,244 @@ void IR_print(IR_NODE IR_root, FILE *fp, int root) {
 void IR_translate_program(IR_NODE ir_root) {
     switch (ir_root->ir_node_type) {
         case IR_NODE_ASSIGN:
-            break;
-        case IR_NODE_CONST:
+            IR_translate_program(ir_root->right);
+            cout << "POP DX" << endl;
+            cout << "MOV ";
+            IR_translate_program(ir_root->left);
+            cout << ", DX" << endl;
             break;
         case IR_NODE_LEAF:
+            switch (ir_root->leaf.leaf_type) {
+                case IR_LEAF_INT:
+                    cout << ir_root->leaf.ival;
+                    break;
+                case IR_LEAF_FLOAT:
+                    cout << ir_root->leaf.fval;
+                    break;
+                case IR_LEAF_CHAR:
+                    cout << ir_root->leaf.cval;
+                    break;
+                case IR_LEAF_ID:
+                    cout << ir_root->leaf.id;
+                    break;
+                default:
+                    cout << "Error in IR_NODE_LEAF";
+            }
             break;
         case IR_NODE_FUNC:
+            cout << "LABEL_FUNC_";
+            IR_translate_program(ir_root->list[0]);
+            cout << ":" << endl;
+            IR_translate_program(ir_root->list[1]);
+            for (int i = 2; i < ir_root->list.size(); i++) {
+                IR_translate_program(ir_root->list[i]);
+            }
             break;
         case IR_NODE_LABEL:
+            cout << "LABEL_" << ir_root->label << ":" << endl;
             break;
         case IR_NODE_JUMP:
+            cout << "JMP ";
+            IR_translate_program(ir_root->left);
+            cout << endl;
             break;
         case IR_NODE_BRANCH:
             break;
         case IR_NODE_PLUS:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "ADD AX, DX" << endl;
+            cout << "PUSH AX" << endl;
             break;
         case IR_NODE_MINUS:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "SUB AX, DX" << endl;
+            cout << "PUSH AX" << endl;
             break;
         case IR_NODE_MUL:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "MUL AL" << endl;
+            cout << "PUSH AX" << endl;
             break;
         case IR_NODE_DIV:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "MOV AH, 0" << endl;
+            cout << "DIV AL" << endl;
+            cout << "MOV AH, 0" << endl;  //把余数清0
+            cout << "PUSH AX" << endl;
             break;
         case IR_NODE_MOD:
-            break;
-        case IR_NODE_GE:
-            break;
-        case IR_NODE_LE:
-            break;
-        case IR_NODE_NE:
-            break;
-        case IR_NODE_EQ:
-            break;
-        case IR_NODE_GT:
-            break;
-        case IR_NODE_LT:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "MOV AH, 0" << endl;
+            cout << "DIV AL" << endl;
+            cout << "MOV AL, AH" << endl;
+            cout << "MOV AH, 0" << endl;
+            cout << "PUSH AX" << endl;
             break;
         case IR_NODE_AND:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "AND AX, DX" << endl;
+            cout << "PUSH AX" << endl;
             break;
         case IR_NODE_OR:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "OR AX, DX" << endl;
+            cout << "PUSH AX" << endl;
             break;
         case IR_NODE_NOT:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP DX" << endl;
+            cout << "MOV AX, 0" << endl;
+            cout << "SUB AX, DX" << endl;
+            cout << "PUSH AX" << endl;
+            break;
+        case IR_NODE_GE:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "CMP DX, AX" << endl;
+            cout << "JGE LABEL_TMP_OK_" << tmp_lable_count << endl;
+            //不满足条件
+            cout << "MOV AX, 0" << endl;
+            cout << "JMP LABEL_TMP_EXIT_" << tmp_lable_count << endl;
+
+            cout << "LABEL_TMP_OK_" << tmp_lable_count << ":" << endl;
+            //满足条件
+            cout << "MOV AX, 1" << endl;
+
+            cout << "LABEL_TMP_EXIT_" << tmp_lable_count << ":" << endl;
+            cout << "PUSH AX" << endl;
+            tmp_lable_count++;
+            break;
+        case IR_NODE_LE:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "CMP DX, AX" << endl;
+            cout << "JLE LABEL_TMP_OK_" << tmp_lable_count << endl;
+            //不满足条件
+            cout << "MOV AX, 0" << endl;
+            cout << "JMP LABEL_TMP_EXIT_" << tmp_lable_count << endl;
+
+            cout << "LABEL_TMP_OK_" << tmp_lable_count << ":" << endl;
+            //满足条件
+            cout << "MOV AX, 1" << endl;
+
+            cout << "LABEL_TMP_EXIT_" << tmp_lable_count << ":" << endl;
+            cout << "PUSH AX" << endl;
+            tmp_lable_count++;
+            break;
+        case IR_NODE_NE:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "CMP DX, AX" << endl;
+            cout << "JNE LABEL_TMP_OK_" << tmp_lable_count << endl;
+            //不满足条件
+            cout << "MOV AX, 0" << endl;
+            cout << "JMP LABEL_TMP_EXIT_" << tmp_lable_count << endl;
+
+            cout << "LABEL_TMP_OK_" << tmp_lable_count << ":" << endl;
+            //满足条件
+            cout << "MOV AX, 1" << endl;
+
+            cout << "LABEL_TMP_EXIT_" << tmp_lable_count << ":" << endl;
+            cout << "PUSH AX" << endl;
+            tmp_lable_count++;
+            break;
+        case IR_NODE_EQ:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "CMP DX, AX" << endl;
+            cout << "JE LABEL_TMP_OK_" << tmp_lable_count << endl;
+            //不满足条件
+            cout << "MOV AX, 0" << endl;
+            cout << "JMP LABEL_TMP_EXIT_" << tmp_lable_count << endl;
+
+            cout << "LABEL_TMP_OK_" << tmp_lable_count << ":" << endl;
+            //满足条件
+            cout << "MOV AX, 1" << endl;
+
+            cout << "LABEL_TMP_EXIT_" << tmp_lable_count << ":" << endl;
+            cout << "PUSH AX" << endl;
+            tmp_lable_count++;
+            break;
+        case IR_NODE_GT:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "CMP DX, AX" << endl;
+            cout << "JG LABEL_TMP_OK_" << tmp_lable_count << endl;
+            //不满足条件
+            cout << "MOV AX, 0" << endl;
+            cout << "JMP LABEL_TMP_EXIT_" << tmp_lable_count << endl;
+
+            cout << "LABEL_TMP_OK_" << tmp_lable_count << ":" << endl;
+            //满足条件
+            cout << "MOV AX, 1" << endl;
+
+            cout << "LABEL_TMP_EXIT_" << tmp_lable_count << ":" << endl;
+            cout << "PUSH AX" << endl;
+            tmp_lable_count++;
+            break;
+        case IR_NODE_LT:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "POP AX" << endl;
+            cout << "POP DX" << endl;
+            cout << "CMP DX, AX" << endl;
+            cout << "JL LABEL_TMP_OK_" << tmp_lable_count << endl;
+            //不满足条件
+            cout << "MOV AX, 0" << endl;
+            cout << "JMP LABEL_TMP_EXIT_" << tmp_lable_count << endl;
+
+            cout << "LABEL_TMP_OK_" << tmp_lable_count << ":" << endl;
+            //满足条件
+            cout << "MOV AX, 1" << endl;
+
+            cout << "LABEL_TMP_EXIT_" << tmp_lable_count << ":" << endl;
+            cout << "PUSH AX" << endl;
+            tmp_lable_count++;
             break;
         case IR_NODE_LIST:
+            for (int i = 0; i < ir_root->list.size(); i++) {
+                IR_translate_program(ir_root->list[i]);
+            }
             break;
         case IR_NODE_NONE:
+            IR_translate_program(ir_root->left);
+            IR_translate_program(ir_root->right);
+            cout << "None" << endl;
             break;
         default:
+            cout << "Undefine Node type" << endl;
             break;
     }
 }
