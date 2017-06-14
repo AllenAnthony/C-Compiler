@@ -1,23 +1,8 @@
-int main(int a, char b, float c)
+int main(int argc)
 {
-    int d = 0, e;
-    float f;
-    char g = 'a';
-    int i;
-
-    for(i = 0; i < 5 ; i = i + 1){
-        a = b * c - a;
+    int i, sum, res;
+    for(i=0, sum=0; i<7; i=i+1){
+        sum = sum+i;
     }
-
-    while(1 == 3){
-        i = i + 2 * 3 - 4 / 5;
-    }
-
-    if(a || a && b){
-
-    }
-    else{
-        c = 0;
-    }
-    }
+    res = sum;
 }

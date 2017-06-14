@@ -12,6 +12,7 @@ typedef enum {
 } IR_state;
 
 IR_state ir_state = AERA_NONE;
+int has_comma = 1;
 
 extern string x86_asm;
 extern string x86_asm_head;
@@ -243,15 +244,27 @@ void IR_translate_program(IR_NODE ir_root) {
             break;
         case IR_NODE_LABEL:
             sprintf(tmp, "%d", ir_root->label);
-            x86_asm_body += string("LABEL_") + string(tmp) + ":";
+            x86_asm_body += string("LABEL_") + string(tmp);
+            if (has_comma == 1) {
+                x86_asm_body += ":\n";
+            }
             break;
         case IR_NODE_JUMP:
             x86_asm_body += "JMP ";
+            has_comma = 0;
             IR_translate_program(ir_root->left);
-            x86_asm_body += ";";
+            has_comma = 1;
+            x86_asm_body += "\n";
             break;
         case IR_NODE_BRANCH:
-
+            x86_asm_body += "POP AX\n";
+            x86_asm_body += "MOV DX, 1\n";
+            x86_asm_body += "CMP AX, DX\n";
+            x86_asm_body += "JE ";
+            has_comma = 0;
+            IR_translate_program(ir_root->left);
+            has_comma = 1;
+            x86_asm_body += "\n";
             break;
         case IR_NODE_PLUS:
             IR_translate_program(ir_root->left);
