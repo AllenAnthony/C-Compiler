@@ -1,23 +1,8 @@
-int main(int a, char b, float c)
+int f(int a){
+    return a;
+}
+int main(int argc)
 {
-    int d = 0, e;
-    float f;
-    char g = 'a';
-    int i;
-
-    for(i = 0; i < 5 ; i = i + 1){
-        a = b * c - a;
-    }
-
-    while(1 == 3){
-        i = i + 2 * 3 - 4 / 5;
-    }
-
-    if(a || a && b){
-
-    }
-    else{
-        c = 0;
-    }
-    }
+    int a, b, c;
+    a = f(5);
 }

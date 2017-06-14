@@ -1,8 +1,13 @@
 int main(int argc)
 {
     int i, sum, res;
-    for(i=0, sum=0; i<7; i=i+1){
-        sum = sum+i;
+    for(i=0, sum=0; i<16; i=i+1){
+        sum = sum + i;
+        if(i == 14) {
+            break;
+        }else{
+            i = i+1;
+        }
     }
-    res = sum;
+    res = sum;  //将需要显示的结果保存在特定的变量里
 }

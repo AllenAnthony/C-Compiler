@@ -1,6 +1,7 @@
 %{
 #include <cstdlib>
 #include <cstdio>
+#include <fstream>
 #include "util.hpp"
 #include "abs.hpp"
 #include "semant.hpp"
@@ -286,15 +287,16 @@ int main(int argc, char** argv){
     fclose(fp);
 
     x86_asm_head = ".MODEL  SMALL\n.STACK  128\n.DATA\n";
-    x86_asm_body = ".CODE\nMAIN PROC FAR\n";
+    x86_asm_body = ".CODE\nJMP LABEL_FUNC_main\n";
 
     IR_translate_program(IR_root);
 
-    x86_asm_body += "MOV DX, res\nMOV AH, 02H\nINT 21H\n";
-    x86_asm_body += "MAIN ENDP\nEND MAIN\n";
-
     x86_asm = x86_asm_head + x86_asm_body;
     cout << x86_asm << endl;
+
+    ofstream out;
+    out.open(argv[2]);
+    out << x86_asm;
 
     cout << endl << "------------Semant check finish-------------" << endl;
 

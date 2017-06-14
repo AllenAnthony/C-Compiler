@@ -8,9 +8,9 @@
 */
 
 int main(int argc){
-    int a, b, c;
+    int a, b, c, res;
     a = 65;
-    b = 2;
-    a = a+c;
+    b = 3;
+    a = a+b;
     res = a;
 }

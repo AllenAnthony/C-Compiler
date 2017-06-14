@@ -221,7 +221,7 @@ void IR_translate_program(IR_NODE ir_root) {
                         x86_asm_body += ir_root->leaf.id;
                     } else if (ir_state == AERA_DEC) {
                         x86_asm_head += ir_root->leaf.id;
-                        x86_asm_head += " DW ?\n";
+                        x86_asm_head += " DW 0\n";
                     } else {
                         x86_asm_body += string("MOV DX, ") + ir_root->leaf.id + "\n";
                         x86_asm_body += "PUSH DX\n";
@@ -232,14 +232,21 @@ void IR_translate_program(IR_NODE ir_root) {
             }
             break;
         case IR_NODE_FUNC:
-            x86_asm_body += "LABEL_FUNC_";
+            if (ir_root->list[0]->leaf.id == "main") {
+                x86_asm_body += "MAIN PROC FAR\n";
+            }
             ir_state = AERA_FUNC;
+            x86_asm_body += "LABEL_FUNC_";
             IR_translate_program(ir_root->list[0]);
             x86_asm_body += ":\n";
             ir_state = AERA_DEC;
             IR_translate_program(ir_root->list[1]);
             for (int i = 2; i < ir_root->list.size(); i++) {
                 IR_translate_program(ir_root->list[i]);
+            }
+            if (ir_root->list[0]->leaf.id == "main") {
+                x86_asm_body += "MOV DX, res\nMOV AH, 02H\nINT 21H\n";
+                x86_asm_body += "MAIN ENDP\nEND MAIN\n";
             }
             break;
         case IR_NODE_LABEL:

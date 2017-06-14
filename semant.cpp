@@ -400,8 +400,11 @@ IR_NODE SEM_block_statement(ABS_block_statement block_statement) {
         node->right = SEM_statement_list(block_statement->statement_list);
     } else if (block_statement->declaration_list != NULL) {
         node = SEM_declaration_list(block_statement->declaration_list);
-    } else {
+    } else if (block_statement->statement_list != NULL) {
         node = SEM_statement_list(block_statement->statement_list);
+    }else{
+        node = (IR_NODE) check_malloc(sizeof(_IR_NODE));
+        node->ir_node_type = IR_NODE_LIST;
     }
     curr_env->escapeScope();
 
